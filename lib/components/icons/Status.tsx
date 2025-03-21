@@ -1,21 +1,15 @@
 import Image from "next/image";
 
-interface SearchProps {
-    status:string
+interface StatusProps {
+	status: "attempted" | "completed";
+	isActive: boolean;
 }
 
-export default function Download({ status}: SearchProps) {
-  const getBookmarkSrc = () => {
-    if (status) return `/assets/svgs/Status_${status}.svg`;
-    return "/assets/svgs/Status_completed.svg";
-  };
+export default function Status({ status, isActive }: StatusProps) {
+	const getStatusSrc = () => {
+		if (isActive) return `/assets/svgs/Status_${status}_active.svg`;
+		return `/assets/svgs/Status_${status}_inactive.svg`;
+	};
 
-  return (
-    <Image
-      src={getBookmarkSrc()}
-      alt="Bookmark"
-      width={24} 
-      height={24}
-    />
-  );
+	return <Image src={getStatusSrc()} alt="Status" width={24} height={24} />;
 }

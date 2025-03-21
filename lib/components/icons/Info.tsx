@@ -1,24 +1,17 @@
 import Image from "next/image";
 
 interface InfoProps {
-  hover: boolean;
-  active: boolean;
+	hover: boolean;
+	active: boolean;
 }
 
 export default function Info({ hover, active }: InfoProps) {
-  const getBookmarkSrc = () => {
-    if (active && hover) return "/assets/svgs/download_hoffaon.svg";
-    if (active && !hover) return "/assets/svgs/download_honaon.svg";
-    if (!active && hover) return "/assets/svgs/download_hoffaoff.svg";
-    return "/assets/svgs/download_honaoff.svg";
-  };
+	const getInfoSrc = () => {
+		if (active && hover) return "/assets/svgs/info_hoffaon.svg";
+		if (active && !hover) return "/assets/svgs/info_honaon.svg";
+		if (!active && hover) return "/assets/svgs/info_hoffaoff.svg";
+		return "/assets/svgs/info_honaoff.svg";
+	};
 
-  return (
-    <Image
-      src={getBookmarkSrc()}
-      alt="Bookmark"
-      width={24} 
-      height={24}
-    />
-  );
+	return <Image src={getInfoSrc()} alt="Info" width={24} height={24} />;
 }
