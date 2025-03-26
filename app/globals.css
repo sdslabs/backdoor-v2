@@ -5,6 +5,8 @@
 
 @theme inline {
   --font-sans: var(--font-nunito-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-yukari);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
@@ -16,6 +18,7 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-primary: var(--primary);
+  --color-highlight: var(--highlight);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -48,13 +51,14 @@
   --border: hsl(22, 12%, 91%);
   --input: hsl(22, 12%, 91%);
   --primary: hsl(22, 65%, 48%);
+  --highlight: 	hsl(13, 78%, 52%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(22, 13%, 85%);
   --secondary-foreground: hsl(22, 13%, 25%);
   --accent: hsl(22, 13%, 85%);
   --accent-foreground: hsl(22, 13%, 25%);
   --destructive: hsl(9, 90%, 38%);
-  --destructive-foreground: hsl(9, 90%, 98%);
+  --destructive-foreground: hsl(12, 40%, 80%);
   --ring: hsl(22, 65%, 48%);
   --chart-1: hsl(22, 65%, 48%);
   --chart-2: hsl(22, 13%, 85%);
@@ -75,6 +79,7 @@
   --border: hsl(22, 12%, 12%);
   --input: hsl(22, 12%, 12%);
   --primary: hsl(22, 65%, 48%);
+  --highlight: 	hsl(13, 78%, 52%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(240, 4.76%, 14%);
   --secondary-foreground: hsl(300, 1.23%, 84.12%);
