@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -51,7 +51,7 @@
   --border: hsl(22, 12%, 91%);
   --input: hsl(22, 12%, 91%);
   --primary: hsl(22, 65%, 48%);
-  --highlight: 	hsl(13, 78%, 52%);
+  --highlight: hsl(13, 78%, 52%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(22, 13%, 85%);
   --secondary-foreground: hsl(22, 13%, 25%);
@@ -71,7 +71,7 @@
   --background: hsl(22, 34%, 1%);
   --foreground: hsl(22, 39%, 98%);
   --muted: hsl(240, 4.76%, 8.24%);
-  --muted-foreground: hsl(215.45, 20%, 48%);
+  --muted-foreground: hsl(215.45, 20%, 43%);
   --popover: hsl(22, 34%, 1%);
   --popover-foreground: hsl(22, 39%, 98%);
   --card: hsl(22, 34%, 1%);
@@ -79,13 +79,13 @@
   --border: hsl(22, 12%, 12%);
   --input: hsl(22, 12%, 12%);
   --primary: hsl(22, 65%, 48%);
-  --highlight: 	hsl(13, 78%, 52%);
+  --highlight: hsl(13, 78%, 52%);
   --primary-foreground: hsl(0, 0%, 100%);
   --secondary: hsl(240, 4.76%, 14%);
   --secondary-foreground: hsl(300, 1.23%, 84.12%);
   --accent: hsl(240, 4.76%, 8.24%);
   --accent-foreground: hsl(22, 1%, 78%);
-  --destructive: hsl(1.7, 69.29%, 49.8%);
+  --destructive: hsl(2, 87%, 52%);
   --destructive-foreground: hsl(0, 0%, 100%);
   --ring: hsl(22, 65%, 48%);
   --chart-1: hsl(22, 65%, 48%);

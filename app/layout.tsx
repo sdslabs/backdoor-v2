@@ -26,7 +26,7 @@ export default function RootLayout({
         </head>
       )}
       <body
-        className={`${geistMono.variable} ${nunitoSans.variable} ${yukari.className} antialiased font-sans`}
+        className={`${geistMono.variable} ${nunitoSans.variable} ${yukari.variable} antialiased font-sans`}
       >
         <ThemeProvider
           attribute="class"
