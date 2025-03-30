@@ -26,6 +26,8 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-progress: var(--progress);
   --color-ring: var(--ring);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
@@ -59,6 +61,8 @@
   --accent-foreground: hsl(22, 13%, 25%);
   --destructive: hsl(9, 90%, 38%);
   --destructive-foreground: hsl(12, 40%, 80%);
+  --success: hsl(138, 100%, 28%);
+  --progress: hsl(41, 100%, 50%);
   --ring: hsl(22, 65%, 48%);
   --chart-1: hsl(22, 65%, 48%);
   --chart-2: hsl(22, 13%, 85%);
@@ -87,6 +91,8 @@
   --accent-foreground: hsl(22, 1%, 78%);
   --destructive: hsl(2, 87%, 52%);
   --destructive-foreground: hsl(0, 0%, 100%);
+  --success: hsl(138, 100%, 28%);
+  --progress: hsl(41, 100%, 50%);
   --ring: hsl(22, 65%, 48%);
   --chart-1: hsl(22, 65%, 48%);
   --chart-2: hsl(60, 1.1%, 17.84%);
