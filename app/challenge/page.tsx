@@ -1,6 +1,8 @@
 'use client';
 
 import { ChallengeList, ChallengeModal } from '@/components/challenge';
+import { Navbar, NavbarProps } from '@/components/ui/navbar';
+import { Medal, Swords, User2Icon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 
@@ -18,6 +20,28 @@ import { useSearchParams } from 'next/navigation';
   3. Plus, we can add some cool microinteractions here for filtering.
 */
 
+const navProps: NavbarProps = {
+  pages: [
+    {
+      label: 'Challenges',
+      icon: Swords,
+      href: '/challenge',
+    },
+    {
+      label: 'Leaderboard',
+      icon: Medal,
+      href: '/leaderboard',
+    },
+  ],
+  sideActions: [
+    {
+      type: 'link',
+      icon: User2Icon,
+      href: '/profile',
+    },
+  ],
+};
+
 const ChallengePage = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
@@ -27,7 +51,8 @@ const ChallengePage = () => {
   const router = useRouter();
 
   return (
-    <div className="p-8">
+    <>
+      <Navbar {...navProps} />
       <h1 className="text-3xl font-bold mb-6">Challenges</h1>
       <ChallengeList />
       {/* 
@@ -40,7 +65,7 @@ const ChallengePage = () => {
           challengeId={id}
         />
       )}
-    </div>
+    </>
   );
 };
 

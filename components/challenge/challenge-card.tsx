@@ -38,12 +38,19 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
         >
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <h3 className="text-foreground font-display text-2xl">{name}</h3>
+              <h3 className="text-foreground font-display text-2xl line-clamp-1">
+                {name}
+              </h3>
               {getSolveStatusIcon(solveStatus)}
             </div>
             <div className="flex gap-1">
               {[...Array(3)].map((_, index) => (
                 <Star
+                  fill={
+                    index < ChallengeDifficulty[difficulty]
+                      ? 'currentColor'
+                      : 'none'
+                  }
                   key={index}
                   size={16}
                   className={

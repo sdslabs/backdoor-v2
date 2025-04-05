@@ -40,6 +40,7 @@ const ChallengeDetails: React.FC<{ challengeId: string }> = ({
     return Array.from({ length: 3 }, (_, i) => (
       <Star
         key={i}
+        fill={i < ChallengeDifficulty[difficulty] ? 'currentColor' : 'none'}
         size={18}
         className={
           i < ChallengeDifficulty[difficulty]
@@ -59,7 +60,7 @@ const ChallengeDetails: React.FC<{ challengeId: string }> = ({
       <div className="bg-accent text-secondary-foreground p-4 max-w-4xl w-full font-sans ">
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-2">
-            <h2 className="text-4xl font-display">{challenge.name}</h2>
+            <h2 className="text-2xl font-display">{challenge.name}</h2>
             <Bookmark
               size={22}
               className="text-muted-foreground cursor-pointer hover:text-primary transition"
