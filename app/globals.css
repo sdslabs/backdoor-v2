@@ -81,7 +81,7 @@
   --card: hsl(22, 34%, 1%);
   --card-foreground: hsl(22, 39%, 98%);
   --border: hsl(22, 12%, 12%);
-  --input: hsl(22, 12%, 12%);
+  --input: hsl(22, 4%, 12%);
   --primary: hsl(22, 65%, 48%);
   --highlight: hsl(13, 78%, 52%);
   --primary-foreground: hsl(0, 0%, 100%);

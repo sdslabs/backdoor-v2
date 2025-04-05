@@ -1,66 +1,45 @@
 'use client';
-import ChallengeCard from '@/components/challenge/ChallengeCard';
-import ChallengeDetails from '@/components/challenge/ChallengeDetails';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import { fetchChallengeMetadata } from '@/lib/data/challenge';
-import React, { useEffect, useState } from 'react';
-import { ChallengeMetadata } from '@/lib/types';
-import ChallengeCardSkeleton from '@/components/challenge/ChallengeSkeleton';
+
+import { ChallengeList, ChallengeModal } from '@/components/challenge';
+import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+
+/* 
+  This page is completely client side rendered.
+
+  Reasons:
+  1. We'll get all the metadata at once. Now we'll have to filter 
+  and paginate it - which requires state thus client side.
+
+  2. [IMPORTANT] The filters and categories must be sharable - 
+  i.e. the state of the filters used or the challenge opened must 
+  reflect in the user's URL - so that it's easier to share.
+
+  3. Plus, we can add some cool microinteractions here for filtering.
+*/
 
 const ChallengePage = () => {
-  const [selectedChallenge, setSelectedChallenge] = useState<string | null>(
-    null
-  );
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
 
-  const [challenges, setChallenges] = useState<ChallengeMetadata[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchChallengeMetadata().then((data) => {
-      setChallenges(data);
-      setLoading(false);
-    });
-  }, []);
+  // Router access is only available in app router, so had to pass as a prop
+  // to ChallengeModal.
+  const router = useRouter();
 
   return (
-    <div className="p-8 bg-black min-h-screen text-white">
+    <div className="p-8">
       <h1 className="text-3xl font-bold mb-6">Challenges</h1>
-      {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {Array.from({ length: 6 }).map((_, index) => (
-            <ChallengeCardSkeleton key={index} />
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {challenges.map((challenge) => (
-            <ChallengeCard
-              key={challenge.id}
-              {...challenge}
-              onClick={() => setSelectedChallenge(challenge.id)}
-            />
-          ))}
-        </div>
+      <ChallengeList />
+      {/* 
+        Model state is persisted with url with query params.
+      */}
+      {id && (
+        <ChallengeModal
+          open={true}
+          onOpenChange={() => router.back()}
+          challengeId={id}
+        />
       )}
-      <Dialog
-        open={!!selectedChallenge}
-        onOpenChange={(open) => !open && setSelectedChallenge(null)}
-      >
-        <DialogContent className="bg-muted dark">
-          <VisuallyHidden>
-            <DialogHeader>
-              <DialogTitle>Challenge Details</DialogTitle>
-            </DialogHeader>
-          </VisuallyHidden>
-          <ChallengeDetails challengeId={selectedChallenge!} />
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

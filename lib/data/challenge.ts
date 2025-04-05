@@ -2,7 +2,7 @@ import { Challenge, ChallengeCategory, ChallengeMetadata } from '@/lib/types';
 
 const challenges = [
   {
-    id: 'challenge-1',
+    id: '1',
     name: 'Buffer Overflow',
     tags: ['pwn'],
     points: 100,
@@ -23,7 +23,7 @@ const challenges = [
     dynamic: false,
   },
   {
-    id: 'challenge-2',
+    id: '2',
     name: 'SQL Injection',
     tags: ['web'],
     points: 50,
@@ -45,7 +45,7 @@ const challenges = [
     dynamic: true,
   },
   {
-    id: 'challenge-3',
+    id: '3',
     name: 'Reverse Engineering',
     tags: ['rev', 'binary'],
     points: 75,
