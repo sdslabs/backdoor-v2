@@ -9,6 +9,14 @@ import ChallengeDetailsSkeleton from './skeletons/challenge-details-skeleton';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
+
 const ChallengeDetails: React.FC<{ challengeId: string }> = ({
   challengeId,
 }) => {
@@ -103,19 +111,33 @@ const ChallengeDetails: React.FC<{ challengeId: string }> = ({
         )}
 
         {challenge.hints.length > 0 && (
-          <div className="mb-6">
-            <div className="flex items-center gap-2 mb-2">
-              <span>Hints</span>
-              {challenge.hints.map((_, index) => (
-                <span
-                  key={index}
-                  className="w-6 h-6 flex items-center justify-center bg-muted text-muted-foreground  rounded-md cursor-pointer"
-                >
-                  {index + 1}
-                </span>
-              ))}
+          <TooltipProvider>
+            <div className="mb-6">
+              <div className="flex items-center gap-2 mb-2">
+                <span>Hints</span>
+                {challenge.hints.map((hint, index) => (
+                  <Tooltip key={index}>
+                    <TooltipTrigger>
+                      <div
+                        className={cn(
+                          'font-mono text-xs size-5',
+                          'text-muted-foreground border border-muted-foreground'
+                        )}
+                      >
+                        {index + 1}
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      className="bg-muted-foreground [&_svg]:bg-muted-foreground [&_svg]:fill-muted-foreground"
+                      side="top"
+                    >
+                      <p>{hint}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                ))}
+              </div>
             </div>
-          </div>
+          </TooltipProvider>
         )}
 
         <form onSubmit={handleSubmit} className="flex mt-4">
@@ -127,7 +149,7 @@ const ChallengeDetails: React.FC<{ challengeId: string }> = ({
             onChange={(e) => setFlagInput(e.target.value)}
           />
           <Button type="submit" className="rounded-l-none">
-            SUBMIT
+            Submit
           </Button>
         </form>
       </div>
