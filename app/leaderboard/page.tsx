@@ -11,6 +11,7 @@ import { leaderboardEntries, LeaderboardEntry } from '@/lib/data/leaderboard';
 import Navbar from '@/components/navbar';
 import { DataTable } from '@/components/data-table';
 import { Pagination } from '@/components/pagination';
+import LeaderboardGraph from '@/components/leaderboard/leaderboard-graph';
 
 const columns: ColumnDef<LeaderboardEntry>[] = [
   {
@@ -63,39 +64,43 @@ export default function LeaderboardPage() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <div className="p-6 max-w-7xl mx-auto">
+      <div className="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto">
         <Navbar />
 
-        <div className="bg-secondary rounded-lg p-6 mb-6 w-3/4 mx-auto">
-          <div className="flex-1">
-            <h2 className="mb-2">Who are you looking for?</h2>
-            <div className="relative w-full">
-              <input
-                type="text"
-                placeholder="Type here"
-                value={filter}
-                onChange={(e) => setFilter(e.target.value)}
-                className="w-full bg-black/50 border border-gray-800 text-gray-300 py-2 px-4 pr-10 rounded focus:outline-none focus:ring-1 focus:ring-highlight focus:border-highlight"
-              />
-              <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                <Search className="h-4 w-4 text-gray-500" />
-              </div>
+        <LeaderboardGraph />
+
+        {/* Search Filter */}
+        <div className="bg-secondary rounded-2xl mt-12 p-6 sm:p-8 w-full sm:w-3/4 mx-auto">
+          <h2 className="text-lg font-semibold mb-3">
+            Who are you looking for?
+          </h2>
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Type here"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              className="w-full bg-black/50 border border-gray-800 text-gray-300 py-2 px-4 pr-10 rounded-md focus:outline-none focus:ring-2 focus:ring-highlight focus:border-highlight"
+            />
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+              <Search className="h-4 w-4 text-gray-500" />
             </div>
           </div>
         </div>
 
-        <div className="bg-secondary rounded-lg overflow-hidden">
-          <div className="flex justify-between items-center p-6">
-            <h2 className="text-xl font-bold mx-auto">Leaderboard</h2>
+        {/* Leaderboard Table */}
+        <div className="bg-secondary rounded-2xl mt-12 overflow-hidden">
+          <div className="flex justify-between items-center p-6 sm:p-8">
+            <h2 className="text-2xl font-bold mx-auto">Leaderboard</h2>
           </div>
-
           <DataTable table={table} />
-
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+          <div className="px-6 sm:px-8 pb-6">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>
         </div>
       </div>
     </div>
