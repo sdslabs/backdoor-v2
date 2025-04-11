@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Popover,
   PopoverTrigger,
@@ -17,28 +17,16 @@ type Notification = {
 
 export default function NotificationPopover() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [open, setOpen] = useState(false);
-  const [hasNew, setHasNew] = useState(false);
   const [loading, setLoading] = useState(false);
-  const openRef = useRef(open);
-
-  useEffect(() => {
-    openRef.current = open;
-  }, [open]);
+  const [hasNew, setHasNew] = useState(false);
 
   useEffect(() => {
     const evtSource = new EventSource('/api/notifications');
 
     evtSource.onmessage = (e) => {
       const data: Notification = JSON.parse(e.data);
-
-      toast(data.title, {
-        description: data.description,
-      });
-
-      if (!openRef.current) {
-        setHasNew(true);
-      }
+      setHasNew(true);
+      toast(data.title, { description: data.description });
     };
 
     evtSource.onerror = () => {
@@ -46,38 +34,26 @@ export default function NotificationPopover() {
       evtSource.close();
     };
 
-    return () => {
-      evtSource.close();
-    };
+    return () => evtSource.close();
   }, []);
 
-  const fetchRecentNotifications = async () => {
+  const fetchRecentNotifications = async (isOpen: boolean) => {
+    if (!isOpen) return;
     try {
       setLoading(true);
-
       const res = await fetch('/api/notifications/recent');
       const data = await res.json();
       setNotifications(data);
-
-      setTimeout(() => {
-        setLoading(false);
-      }, 500);
-    } catch (err) {
+      setHasNew(false);
+    } catch {
       toast.error('Failed to load notifications.');
+    } finally {
       setLoading(false);
     }
   };
 
-  const handleOpenChange = (value: boolean) => {
-    setOpen(value);
-    if (value) {
-      setHasNew(false);
-      fetchRecentNotifications();
-    }
-  };
-
   return (
-    <Popover open={open} onOpenChange={handleOpenChange}>
+    <Popover onOpenChange={fetchRecentNotifications}>
       <PopoverTrigger className="relative cursor-pointer">
         <Bell className="w-5 h-5" />
         {hasNew && (
@@ -86,32 +62,27 @@ export default function NotificationPopover() {
       </PopoverTrigger>
       <PopoverContent className="w-96 max-h-96 overflow-y-auto p-3">
         <h4 className="text-sm font-semibold mb-2">Notifications</h4>
-
         {loading ? (
           <ul className="space-y-2">
             {Array.from({ length: 5 }).map((_, i) => (
-              <li
-                key={i}
-                className="p-2 border rounded-md bg-muted animate-pulse"
-              >
-                <div className="h-4 bg-gray-300 rounded w-3/4 mb-2" />
-                <div className="h-3 bg-gray-200 rounded w-full mb-1" />
-                <div className="h-2 bg-gray-200 rounded w-1/2" />
+              <li key={i} className="p-2 border rounded-md bg-muted">
+                <div className="space-y-2">
+                  <div className="h-4 w-3/4 bg-secondary rounded-md skeleton" />
+                  <div className="h-3 w-full bg-secondary rounded-md skeleton" />
+                  <div className="h-2 w-1/2 bg-secondary rounded-md skeleton" />
+                </div>
               </li>
             ))}
           </ul>
         ) : notifications.length > 0 ? (
           <ul className="space-y-2">
             {notifications.map((notif, idx) => (
-              <li
-                key={idx}
-                className="p-2 border rounded-md shadow-sm bg-muted"
-              >
-                <p className="font-medium">{notif.title}</p>
-                <p className="text-sm text-muted-foreground">
+              <li key={idx} className="px-4 py-3 rounded-md shadow-sm bg-muted">
+                <p className="font-medium text-primary">{notif.title}</p>
+                <p className="text-sm text-secondary-foreground">
                   {notif.description}
                 </p>
-                <p className="text-xs text-right text-gray-500 mt-1">
+                <p className="text-xs text-right text-muted-foreground mt-1">
                   {new Date(notif.datetime).toLocaleString()}
                 </p>
               </li>
