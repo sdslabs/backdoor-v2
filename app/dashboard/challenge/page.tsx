@@ -6,17 +6,18 @@ import {
 } from '@/components/challenge';
 
 /* 
-  This page is completely client side rendered.
+  This is the main page for the challenge dashboard.
+  It contains the challenge list and the challenge tags sidebar.
+  The challenge list is filtered by the selected tags and status.
+  The challenge tags sidebar allows the user to filter the challenges by tags.
+  The challenge modal is used to display the challenge details when a challenge is clicked.
 
-  Reasons:
-  1. We'll get all the metadata at once. Now we'll have to filter 
-  and paginate it - which requires state thus client side.
-
-  2. [IMPORTANT] The filters and categories must be sharable - 
-  i.e. the state of the filters used or the challenge opened must 
-  reflect in the user's URL - so that it's easier to share.
-
-  3. Plus, we can add some cool microinteractions here for filtering.
+  All the states are in the URL.
+  URL Params - 
+  * @param id - challenge id
+  * @param tag - challenge tag (all, web, pwn, etc.)
+  * @param status - challenge status (solved, unsolved)
+  * @param difficulty - challenge difficulty (easy, medium, hard)
 */
 
 const ChallengePage = () => {

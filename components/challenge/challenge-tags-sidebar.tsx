@@ -1,8 +1,8 @@
 'use client';
 
+import { useChallengeParams } from '@/hooks/use-challenge-params';
 import { ChallengeTag } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { useSearchParams, useRouter } from 'next/navigation';
 
 const TAGS: ChallengeTag[] = [
   'all',
@@ -16,15 +16,8 @@ const TAGS: ChallengeTag[] = [
 ];
 
 const ChallengeTagsSidebar = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const selectedTag = searchParams.get('tag') || 'all';
+  const { tag: selectedTag, updateTag } = useChallengeParams();
 
-  const handleTagClick = (tag: ChallengeTag) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('tag', tag);
-    router.push(`?${params.toString()}`);
-  };
   return (
     <div className="w-36 pr-4 sticky top-0 h-full">
       <div className="h-16 flex items-center justify-end">
@@ -36,7 +29,7 @@ const ChallengeTagsSidebar = () => {
         {TAGS.map((tag) => (
           <div
             key={tag}
-            onClick={() => handleTagClick(tag)}
+            onClick={() => updateTag(tag)}
             className={cn(
               'h-8 px-4 flex flex-col justify-center uppercase text-sm text-right border-r-1',
               'transition-all duration-150 cursor-pointer',

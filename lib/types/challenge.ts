@@ -1,9 +1,10 @@
-// I have used numbers here so as to easily parse the stars in ui
-export enum ChallengeDifficulty {
-  easy = 1,
-  medium = 2,
-  hard = 3,
-}
+export type ChallengeDifficulty = 'easy' | 'medium' | 'hard';
+
+export const ChallengeDifficultyValue: Record<ChallengeDifficulty, number> = {
+  easy: 1,
+  medium: 2,
+  hard: 3,
+};
 
 export type ChallengeTag =
   | 'all'
@@ -19,14 +20,14 @@ export type ChallengeCategory = 'static' | 'bare' | 'web' | 'service';
 
 export type ChallengeDeployedStatus = 'deployed' | 'undeployed';
 
-export type ChallengeSolveStatus = 'solved' | 'unsolved' | 'attempted';
+export type ChallengeSolveStatus = 'solved' | 'unsolved';
 
 export interface ChallengeMetadata {
   id: string;
   name: string;
   tags: ChallengeTag[]; // 'pwn', 'web' etc.
   points: number;
-  difficulty: keyof typeof ChallengeDifficulty; // easy, medium, hard
+  difficulty: ChallengeDifficulty; // easy, medium, hard
   solvesNumber: number;
   solveStatus: ChallengeSolveStatus;
   deployedStatus: ChallengeDeployedStatus;

@@ -1,5 +1,8 @@
 import { Star, CheckCircle, Clock, AlertCircle } from 'lucide-react';
-import { ChallengeMetadata, ChallengeDifficulty } from '@/lib/types/challenge';
+import {
+  ChallengeMetadata,
+  ChallengeDifficultyValue,
+} from '@/lib/types/challenge';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 
@@ -47,14 +50,14 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
               {[...Array(3)].map((_, index) => (
                 <Star
                   fill={
-                    index < ChallengeDifficulty[difficulty]
+                    index < ChallengeDifficultyValue[difficulty]
                       ? 'currentColor'
                       : 'none'
                   }
                   key={index}
                   size={16}
                   className={
-                    index < ChallengeDifficulty[difficulty]
+                    index < ChallengeDifficultyValue[difficulty]
                       ? 'text-primary'
                       : 'text-accent-foreground'
                   }

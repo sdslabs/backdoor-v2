@@ -1,7 +1,11 @@
 'use client';
 
 import { fetchChallengeData } from '@/lib/data/challenge';
-import { Challenge, ChallengeDifficulty } from '@/lib/types';
+import {
+  Challenge,
+  ChallengeDifficulty,
+  ChallengeDifficultyValue,
+} from '@/lib/types';
 import { Star, Bookmark, DownloadIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
@@ -44,14 +48,16 @@ const ChallengeDetails: React.FC<{ challengeId: string }> = ({
     setFlagInput('');
   };
 
-  const renderStars = (difficulty: keyof typeof ChallengeDifficulty) => {
+  const renderStars = (difficulty: ChallengeDifficulty) => {
     return Array.from({ length: 3 }, (_, i) => (
       <Star
         key={i}
-        fill={i < ChallengeDifficulty[difficulty] ? 'currentColor' : 'none'}
+        fill={
+          i < ChallengeDifficultyValue[difficulty] ? 'currentColor' : 'none'
+        }
         size={18}
         className={
-          i < ChallengeDifficulty[difficulty]
+          i < ChallengeDifficultyValue[difficulty]
             ? 'text-primary'
             : 'text-muted-foreground'
         }
