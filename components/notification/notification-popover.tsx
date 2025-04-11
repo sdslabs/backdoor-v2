@@ -8,6 +8,8 @@ import {
 } from '@/components/ui/popover';
 import { Bell } from 'lucide-react';
 import { toast } from 'sonner';
+import { useQuery } from '@tanstack/react-query';
+import { Button } from '@/components/ui/button';
 
 type Notification = {
   title: string;
@@ -16,8 +18,6 @@ type Notification = {
 };
 
 export default function NotificationPopover() {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [loading, setLoading] = useState(false);
   const [hasNew, setHasNew] = useState(false);
 
   useEffect(() => {
@@ -37,32 +37,43 @@ export default function NotificationPopover() {
     return () => evtSource.close();
   }, []);
 
-  const fetchRecentNotifications = async (isOpen: boolean) => {
-    if (!isOpen) return;
-    try {
-      setLoading(true);
-      const res = await fetch('/api/notifications/recent');
-      const data = await res.json();
-      setNotifications(data);
-      setHasNew(false);
-    } catch {
-      toast.error('Failed to load notifications.');
-    } finally {
-      setLoading(false);
+  const fetchRecentNotifications = async () => {
+    const res = await fetch('/api/notifications/recent');
+    if (!res.ok) {
+      throw new Error('Failed to fetch notifications');
+    }
+    const data = (await res.json()) as Notification[];
+    return data;
+  };
+
+  const {
+    data: notificationsData,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ['recentNotifications'],
+    queryFn: fetchRecentNotifications,
+  });
+
+  const fetchRecentNotificationsHandler = (isOpen: boolean) => {
+    if (isOpen) {
+      refetch();
     }
   };
 
   return (
     <Popover onOpenChange={fetchRecentNotifications}>
       <PopoverTrigger className="relative cursor-pointer">
-        <Bell className="w-5 h-5" />
-        {hasNew && (
-          <span className="absolute top-0 right-0 h-2 w-2 bg-highlight rounded-full" />
-        )}
+        <Button size="icon" variant={'navSideAction'} className="rounded-lg">
+          <Bell className="size-4" />
+          {hasNew && (
+            <span className="absolute top-2 right-2 h-2 w-2 bg-highlight rounded-full" />
+          )}
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="w-96 max-h-96 overflow-y-auto p-3">
         <h4 className="text-sm font-semibold mb-2">Notifications</h4>
-        {loading ? (
+        {isLoading ? (
           <ul className="space-y-2">
             {Array.from({ length: 5 }).map((_, i) => (
               <li key={i} className="p-2 border rounded-md bg-muted">
@@ -74,9 +85,9 @@ export default function NotificationPopover() {
               </li>
             ))}
           </ul>
-        ) : notifications.length > 0 ? (
+        ) : (notificationsData ?? []).length > 0 ? (
           <ul className="space-y-2">
-            {notifications.map((notif, idx) => (
+            {notificationsData?.map((notif, idx) => (
               <li key={idx} className="px-4 py-3 rounded-md shadow-sm bg-muted">
                 <p className="font-medium text-primary">{notif.title}</p>
                 <p className="text-sm text-secondary-foreground">
