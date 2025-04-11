@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { ThemeProvider } from '@/components/theme-provider';
 import { geistMono, nunitoSans, yukari } from './fonts';
 import { ENVIROMENT } from '@/lib/constants';
+import Providers from './providers';
 
 export const metadata: Metadata = {
   title: 'Backdoor',
@@ -28,14 +28,9 @@ export default function RootLayout({
       <body
         className={`${geistMono.variable} ${nunitoSans.variable} ${yukari.variable} antialiased font-sans`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <main className="container mx-auto dark">{children}</main>
-        </ThemeProvider>
+        <Providers>
+          <main className="container mx-auto">{children}</main>
+        </Providers>
       </body>
     </html>
   );

@@ -1,14 +1,21 @@
+'use client';
+
 import ChallengeDetails from './challenge-details';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { useChallengeParams } from '@/hooks/use-challenge-params';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import { useRouter } from 'next/navigation';
 
-import * as DialogPrimitive from '@radix-ui/react-dialog';
+const ChallengeModal: React.FC = () => {
+  const { id } = useChallengeParams();
+  const router = useRouter();
 
-const ChallengeModal: React.FC<
-  { challengeId: string } & React.ComponentProps<typeof DialogPrimitive.Root>
-> = ({ challengeId, ...props }) => {
   return (
-    <Dialog {...props}>
+    <Dialog
+      open={!!id}
+      // If router.back() fails, fallback to the challenge page
+      onOpenChange={() => router.back() ?? router.push('/dashboard/challenge')}
+    >
       <DialogContent className="bg-muted">
         {/* 
           The following element is visually hidden so as to 
@@ -17,10 +24,10 @@ const ChallengeModal: React.FC<
         <VisuallyHidden>
           <DialogTitle>Challenge Details</DialogTitle>
         </VisuallyHidden>
-        <ChallengeDetails challengeId={challengeId} />
+        {id && <ChallengeDetails challengeId={id} />}
       </DialogContent>
     </Dialog>
   );
 };
 
-export default ChallengeModal;
+export { ChallengeModal };
