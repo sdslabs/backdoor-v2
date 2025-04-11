@@ -3,6 +3,7 @@ import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { geistMono, nunitoSans, yukari } from './fonts';
 import { ENVIROMENT } from '@/lib/constants';
+import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
   title: 'Backdoor',
@@ -34,6 +35,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Toaster />
           <main className="container mx-auto dark">{children}</main>
         </ThemeProvider>
       </body>

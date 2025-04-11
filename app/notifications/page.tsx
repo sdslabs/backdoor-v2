@@ -1,4 +1,4 @@
-import NotificationPopover from '@/components/notification/NotificationPopover';
+import NotificationPopover from '@/components/notification/notification-popover';
 
 export default function NotificationsPage() {
   return (
