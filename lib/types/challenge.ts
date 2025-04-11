@@ -5,16 +5,26 @@ export enum ChallengeDifficulty {
   hard = 3,
 }
 
+export type ChallengeTag =
+  | 'all'
+  | 'general'
+  | 'web'
+  | 'forensics'
+  | 'pwn'
+  | 'rev'
+  | 'crypto'
+  | 'osint';
+
 export type ChallengeCategory = 'static' | 'bare' | 'web' | 'service';
 
 export type ChallengeDeployedStatus = 'deployed' | 'undeployed';
 
-export type ChallengeSolveStatus = 'solved' | 'unsolved';
+export type ChallengeSolveStatus = 'solved' | 'unsolved' | 'attempted';
 
 export interface ChallengeMetadata {
   id: string;
   name: string;
-  tags: string[]; // 'pwn', 'web' etc.
+  tags: ChallengeTag[]; // 'pwn', 'web' etc.
   points: number;
   difficulty: keyof typeof ChallengeDifficulty; // easy, medium, hard
   solvesNumber: number;

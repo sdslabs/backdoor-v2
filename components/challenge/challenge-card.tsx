@@ -31,7 +31,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
 }) => {
   return (
     <>
-      <Link href={`/challenge?id=${id}`}>
+      <Link href={`/dashboard/challenge?id=${id}`}>
         <div
           className="p-6 bg-accent rounded-xl flex flex-col gap-4 cursor-pointer"
           onClick={onClick}

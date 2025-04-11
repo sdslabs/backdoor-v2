@@ -1,11 +1,19 @@
 'use client';
-import { LucideIcon } from 'lucide-react';
+
+import {
+  LucideIcon,
+  Medal,
+  Swords,
+  User2Icon,
+  UserCircle2Icon,
+} from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 import { Button } from './button';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
+// Types
 interface NavPages {
   label: string;
   icon: LucideIcon;
@@ -20,16 +28,71 @@ type SideActionBase<T extends 'component' | 'link'> = {
   : { href: string });
 type SideAction = SideActionBase<'component'> | SideActionBase<'link'>;
 
-interface NavbarProps {
+interface NavbarActions {
   pages: NavPages[];
   sideActions: SideAction[];
 }
 
-const Navbar: React.FC<NavbarProps> = ({ pages, sideActions }) => {
+// User and admin configs
+const USER_ACTIONS: NavbarActions = {
+  pages: [
+    {
+      label: 'Challenges',
+      icon: Swords,
+      href: '/dashboard/challenge',
+    },
+    {
+      label: 'Leaderboard',
+      icon: Medal,
+      href: '/dashboard/leaderboard',
+    },
+  ],
+  sideActions: [
+    {
+      type: 'link',
+      icon: User2Icon,
+      href: '/dashboard/profile',
+    },
+  ],
+};
+
+const ADMIN_ACTIONS: NavbarActions = {
+  pages: [
+    {
+      label: 'Challenges',
+      icon: Swords,
+      href: '/dashboard/challenge',
+    },
+    {
+      label: 'Leaderboard',
+      icon: Medal,
+      href: '/dashboard/leaderboard',
+    },
+    {
+      label: 'Users',
+      icon: UserCircle2Icon,
+      href: '/dashboard/users',
+    },
+    // TODO: ... add other later
+  ],
+  sideActions: [
+    {
+      type: 'link',
+      icon: User2Icon,
+      href: '/profile',
+    },
+  ],
+};
+
+const Navbar: React.FC<{ admin?: boolean }> = ({ admin }) => {
   const pathname = usePathname();
+  const { pages, sideActions } = admin ? ADMIN_ACTIONS : USER_ACTIONS;
+
   return (
-    <div className="flex flex-row items-center gap-8 py-4">
-      <h1 className="text-2xl font-display text-primary">backdoor</h1>
+    <div className="flex flex-row items-center py-4 gap-4 bg-background/70 backdrop-blur-md shadow-lg">
+      <h1 className="text-2xl font-display text-primary w-36 text-right pr-4">
+        backdoor
+      </h1>
       <div className="flex flex-row items-center gap-2">
         {pages.map((page) => (
           <Link href={page.href} key={page.label}>
@@ -70,5 +133,4 @@ const Navbar: React.FC<NavbarProps> = ({ pages, sideActions }) => {
   );
 };
 
-export type { NavbarProps };
 export { Navbar };
