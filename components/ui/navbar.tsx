@@ -12,6 +12,7 @@ import React from 'react';
 import { Button } from './button';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import NotificationPopover from '@/components/notification/notification-popover';
 
 // Types
 interface NavPages {
@@ -22,10 +23,9 @@ interface NavPages {
 
 type SideActionBase<T extends 'component' | 'link'> = {
   type: T;
-  icon: LucideIcon;
 } & (T extends 'component'
   ? { component: React.ComponentType }
-  : { href: string });
+  : { href: string; icon: LucideIcon });
 type SideAction = SideActionBase<'component'> | SideActionBase<'link'>;
 
 interface NavbarActions {
@@ -48,6 +48,10 @@ const USER_ACTIONS: NavbarActions = {
     },
   ],
   sideActions: [
+    {
+      type: 'component',
+      component: () => <NotificationPopover />,
+    },
     {
       type: 'link',
       icon: User2Icon,
@@ -76,6 +80,10 @@ const ADMIN_ACTIONS: NavbarActions = {
     // TODO: ... add other later
   ],
   sideActions: [
+    {
+      type: 'component',
+      component: () => <NotificationPopover />,
+    },
     {
       type: 'link',
       icon: User2Icon,

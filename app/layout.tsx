@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { geistMono, nunitoSans, yukari } from './fonts';
 import { ENVIROMENT } from '@/lib/constants';
+import { Toaster } from 'sonner';
 import Providers from './providers';
 
 export const metadata: Metadata = {
@@ -31,6 +32,7 @@ export default function RootLayout({
         <Providers>
           <main className="container mx-auto">{children}</main>
         </Providers>
+        <Toaster />
       </body>
     </html>
   );
