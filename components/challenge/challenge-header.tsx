@@ -1,6 +1,5 @@
 'use client';
 
-import { CheckCircle, Clock } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -10,7 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { ChallengeSolveStatus } from '@/lib/types';
 import { useChallengeParams } from '@/hooks/use-challenge-params';
 import { DifficultyRating } from '@/components/ui/difficulty-rating';
 import { SolveStatusIcon } from '@/components/ui/solve-status-icon';

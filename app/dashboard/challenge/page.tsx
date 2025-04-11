@@ -8,7 +8,7 @@ import {
 /* 
   This is the main page for the challenge dashboard.
   It contains the challenge list and the challenge tags sidebar.
-  The challenge list is filtered by the selected tags and status.
+  The challenge list is filtered by the selected tags, status and difficulty.
   The challenge tags sidebar allows the user to filter the challenges by tags.
   The challenge modal is used to display the challenge details when a challenge is clicked.
 
@@ -30,9 +30,6 @@ const ChallengePage = () => {
           <ChallengeList />
         </div>
       </div>
-      {/* 
-        Model state is persisted with url with query params.
-      */}
       <ChallengeModal />
     </>
   );

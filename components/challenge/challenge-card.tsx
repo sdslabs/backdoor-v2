@@ -1,8 +1,11 @@
+'use client';
+
 import { ChallengeMetadata } from '@/lib/types/challenge';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { DifficultyRating } from '@/components/ui/difficulty-rating';
-import { SolveStatusIcon } from '../ui/solve-status-icon';
+import { SolveStatusIcon } from '@/components/ui/solve-status-icon';
+import { useChallengeParams } from '@/hooks/use-challenge-params';
 
 const ChallengeCard: React.FC<ChallengeMetadata> = ({
   id,
@@ -14,31 +17,33 @@ const ChallengeCard: React.FC<ChallengeMetadata> = ({
   solveStatus,
   deployedStatus,
 }) => {
+  const { updateId } = useChallengeParams();
   return (
     <>
-      <Link href={`/dashboard/challenge?id=${id}`}>
-        <div className="p-6 bg-accent rounded-xl flex flex-col gap-4 cursor-pointer">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <h3 className="text-foreground font-display text-2xl line-clamp-1">
-                {name}
-              </h3>
-              <SolveStatusIcon status={solveStatus} />
-            </div>
-            <DifficultyRating difficulty={difficulty} />
+      <div
+        className="p-6 bg-accent rounded-xl flex flex-col gap-4 cursor-pointer"
+        onClick={() => updateId(id)}
+      >
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <h3 className="text-foreground font-display text-2xl line-clamp-1">
+              {name}
+            </h3>
+            <SolveStatusIcon status={solveStatus} />
           </div>
-          <div className="flex justify-between items-center">
-            <div className="flex gap-2">
-              {tags.map((tag) => (
-                <Badge key={tag}>{tag}</Badge>
-              ))}
-            </div>
-            <p className="text-accent-foreground text-sm">
-              {solvesNumber} solves
-            </p>
-          </div>
+          <DifficultyRating difficulty={difficulty} />
         </div>
-      </Link>
+        <div className="flex justify-between items-center">
+          <div className="flex gap-2">
+            {tags.map((tag) => (
+              <Badge key={tag}>{tag}</Badge>
+            ))}
+          </div>
+          <p className="text-accent-foreground text-sm">
+            {solvesNumber} solves
+          </p>
+        </div>
+      </div>
     </>
   );
 };

@@ -1,47 +1,32 @@
 'use client';
 
 import { fetchChallengeData } from '@/lib/data/challenge';
-import {
-  Challenge,
-  ChallengeDifficulty,
-  ChallengeDifficultyValue,
-} from '@/lib/types';
-import { Star, Bookmark, DownloadIcon } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { Bookmark, DownloadIcon } from 'lucide-react';
+import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import ChallengeDetailsSkeleton from './skeletons/challenge-details-skeleton';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { DifficultyRating } from '@/components/ui/difficulty-rating';
 import { cn } from '@/lib/utils';
-import { DifficultyRating } from '../ui/difficulty-rating';
+import { useQuery } from '@tanstack/react-query';
 
 const ChallengeDetails: React.FC<{ challengeId: string }> = ({
   challengeId,
 }) => {
   const [flagInput, setFlagInput] = useState('');
-  const [challenge, setChallenge] = useState<Challenge | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    setLoading(true);
-    fetchChallengeData(challengeId)
-      .then((response) => {
-        setChallenge(response);
-      })
-      .catch((error) => {
-        console.error('Error fetching challenge:', error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [challengeId]);
+  const { data: challenge, isLoading } = useQuery({
+    queryKey: ['challenge', challengeId],
+    queryFn: () => fetchChallengeData(challengeId),
+    refetchOnWindowFocus: false,
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,7 +34,7 @@ const ChallengeDetails: React.FC<{ challengeId: string }> = ({
     setFlagInput('');
   };
 
-  if (loading) {
+  if (isLoading) {
     return <ChallengeDetailsSkeleton />;
   } else if (!challenge) {
     return <div className="text-red-500">Challenge not found</div>;
@@ -132,6 +117,7 @@ const ChallengeDetails: React.FC<{ challengeId: string }> = ({
           <Input
             type="text"
             placeholder="Enter flag"
+            autoFocus
             className="rounded-r-none !border-r-none text-center"
             value={flagInput}
             onChange={(e) => setFlagInput(e.target.value)}
