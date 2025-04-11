@@ -2,13 +2,13 @@
 
 import ChallengeDetails from './challenge-details';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { useChallengeParams } from '@/hooks/use-challenge-params';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const ChallengeModal: React.FC = () => {
+  const { id } = useChallengeParams();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const id = searchParams.get('id');
 
   return (
     <Dialog
