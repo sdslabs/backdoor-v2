@@ -20,6 +20,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import { DifficultyRating } from '../ui/difficulty-rating';
 
 const ChallengeDetails: React.FC<{ challengeId: string }> = ({
   challengeId,
@@ -48,23 +49,6 @@ const ChallengeDetails: React.FC<{ challengeId: string }> = ({
     setFlagInput('');
   };
 
-  const renderStars = (difficulty: ChallengeDifficulty) => {
-    return Array.from({ length: 3 }, (_, i) => (
-      <Star
-        key={i}
-        fill={
-          i < ChallengeDifficultyValue[difficulty] ? 'currentColor' : 'none'
-        }
-        size={18}
-        className={
-          i < ChallengeDifficultyValue[difficulty]
-            ? 'text-primary'
-            : 'text-muted-foreground'
-        }
-      />
-    ));
-  };
-
   if (loading) {
     return <ChallengeDetailsSkeleton />;
   } else if (!challenge) {
@@ -80,9 +64,7 @@ const ChallengeDetails: React.FC<{ challengeId: string }> = ({
               className="text-muted-foreground cursor-pointer hover:text-primary transition"
             />
           </div>
-          <div className="flex items-center gap-1">
-            {renderStars(challenge.difficulty)}
-          </div>
+          <DifficultyRating difficulty={challenge.difficulty} />
         </div>
 
         <div className="flex justify-between align-center">

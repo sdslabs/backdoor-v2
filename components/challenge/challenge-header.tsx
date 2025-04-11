@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckCircle, Clock, Star } from 'lucide-react';
+import { CheckCircle, Clock } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -10,12 +10,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  ChallengeDifficulty,
-  ChallengeDifficultyValue,
-  ChallengeSolveStatus,
-} from '@/lib/types';
+import { ChallengeSolveStatus } from '@/lib/types';
 import { useChallengeParams } from '@/hooks/use-challenge-params';
+import { DifficultyRating } from '@/components/ui/difficulty-rating';
+import { SolveStatusIcon } from '@/components/ui/solve-status-icon';
 
 export const ChallengeHeader = () => {
   const { tag } = useChallengeParams();
@@ -35,15 +33,6 @@ export const ChallengeHeader = () => {
 const StatusSelect: React.FC = () => {
   const { status, updateStatus } = useChallengeParams();
 
-  const getSolveStatusIcon = (solveStatus: ChallengeSolveStatus) => {
-    switch (solveStatus) {
-      case 'solved':
-        return <CheckCircle className="text-success" size={10} />;
-      case 'unsolved':
-        return <Clock className="text-progress" size={10} />;
-    }
-  };
-
   return (
     <Select value={status} onValueChange={updateStatus}>
       <SelectTrigger className="w-42 text-sm rounded-lg border-b">
@@ -53,10 +42,10 @@ const StatusSelect: React.FC = () => {
         <SelectGroup>
           <SelectLabel>Status</SelectLabel>
           <SelectItem value="unsolved">
-            {getSolveStatusIcon('unsolved')} Unsolved
+            <SolveStatusIcon status="unsolved" /> Unsolved
           </SelectItem>
           <SelectItem value="solved">
-            {getSolveStatusIcon('solved')} Solved
+            <SolveStatusIcon status="solved" /> Solved
           </SelectItem>
         </SelectGroup>
       </SelectContent>
@@ -67,27 +56,6 @@ const StatusSelect: React.FC = () => {
 const DifficultySelect: React.FC = () => {
   const { difficulty, updateDifficulty } = useChallengeParams();
 
-  const renderStars = (difficulty: ChallengeDifficulty) => {
-    return (
-      <div className="flex flex-row gap-1 mr-1">
-        {Array.from({ length: 3 }, (_, i) => (
-          <Star
-            key={i}
-            fill={
-              i < ChallengeDifficultyValue[difficulty] ? 'currentColor' : 'none'
-            }
-            size={10}
-            className={
-              i < ChallengeDifficultyValue[difficulty]
-                ? 'text-primary'
-                : 'text-muted-foreground'
-            }
-          />
-        ))}
-      </div>
-    );
-  };
-
   return (
     <Select value={difficulty} onValueChange={updateDifficulty}>
       <SelectTrigger className="w-42 text-sm rounded-lg border-b">
@@ -96,9 +64,15 @@ const DifficultySelect: React.FC = () => {
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Difficulty</SelectLabel>
-          <SelectItem value="easy">{renderStars('easy')} Easy</SelectItem>
-          <SelectItem value="medium">{renderStars('medium')} Medium</SelectItem>
-          <SelectItem value="hard">{renderStars('hard')} Hard</SelectItem>
+          <SelectItem value="easy">
+            <DifficultyRating difficulty="easy" /> Easy
+          </SelectItem>
+          <SelectItem value="medium">
+            <DifficultyRating difficulty="medium" /> Medium
+          </SelectItem>
+          <SelectItem value="hard">
+            <DifficultyRating difficulty="hard" /> Hard
+          </SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>
