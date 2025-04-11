@@ -34,6 +34,8 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-primary-text: var(--primary-text);
+  --color-secondary-text: var(--secondary-text);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -96,6 +98,8 @@
   --chart-3: hsl(22, 13%, 85%);
   --chart-4: hsl(22, 13%, 88%);
   --chart-5: hsl(22, 68%, 48%);
+  --primary-text: hsl(240, 50%, 99%);
+  --secondary-text: hsl(300, 1%, 64%);
 }
 
 .dark {
@@ -126,6 +130,8 @@
   --chart-3: hsl(22, 1%, 18%);
   --chart-4: hsl(22, 1%, 21%);
   --chart-5: hsl(22, 68%, 48%);
+  --primary-text: hsl(240, 50%, 99%);
+  --secondary-text: hsl(300, 1%, 64%);
 }
 
 @layer base {

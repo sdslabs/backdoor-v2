@@ -1,0 +1,77 @@
+import Image from 'next/image';
+import { fetchUserProfile } from '@/lib/data/profile';
+
+async function UserInformation() {
+  const userProfile = await fetchUserProfile();
+
+  return (
+    <div className="flex items-start mb-8 my-4">
+      <div className="mr-7 mt-2">
+        <Image
+          src="/profile-placeholder.svg"
+          height={80}
+          width={80}
+          alt="profile"
+        />
+      </div>
+      <div className="flex-grow">
+        <div className="flex justify-between items-start">
+          <div>
+            <div className="flex items-center">
+              <h1 className="text-3xl font-bold mr-4 my-2">
+                {userProfile.username}
+              </h1>
+              <Image
+                src="/hide-user.svg"
+                height={30}
+                width={30}
+                alt="profile"
+              />
+            </div>
+            <p className="text-xl font-semibold text-primary-text my-3">
+              {userProfile.name}
+            </p>
+            <div className="text-base font-semibold text-secondary-text">
+              <p className="my-2">
+                Date joined -{' '}
+                {userProfile.createdAt.toLocaleDateString('en-GB', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </p>
+              <p className="my-2">
+                Last Active -{' '}
+                {userProfile.lastActive.toLocaleDateString('en-GB', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-6">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-highlight my-2">
+                {userProfile.stats.rank}
+              </div>
+              <div className="text-xl text-secondary-text font-semibold my-2">
+                Rank
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold my-2">
+                {userProfile.stats.totalPoints}
+              </div>
+              <div className="text-xl text-secondary-text font-semibold my-2">
+                Points
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default UserInformation;
