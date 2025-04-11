@@ -5,10 +5,11 @@ import {
   ColumnDef,
   getCoreRowModel,
   useReactTable,
+  getPaginationRowModel,
 } from '@tanstack/react-table';
 import { submissions, Submission } from '@/lib/data/submissions';
 import Navbar from '@/components/navbar';
-import { DataTable } from '@/components/data-table';
+import { DataTable } from '@/components/ui/data-table';
 import { Pagination } from '@/components/pagination';
 
 const columns: ColumnDef<Submission>[] = [
@@ -41,7 +42,7 @@ const columns: ColumnDef<Submission>[] = [
     header: 'Submitted Flag',
     cell: ({ row }) => {
       const flag = row.getValue('flag') as string;
-      return <span className="font-mono text-sm">{flag}</span>;
+      return <span className="font-mono text-sm text-foreground">{flag}</span>;
     },
   },
   {
@@ -50,10 +51,10 @@ const columns: ColumnDef<Submission>[] = [
     cell: ({ row }) => {
       const status = row.getValue('status') as string;
       const statusColors = {
-        correct: 'text-green-500',
-        incorrect: 'text-red-500',
-        flagged: 'text-orange-500',
-        suspicious: 'text-yellow-500',
+        correct: 'text-primary',
+        incorrect: 'text-destructive',
+        flagged: 'text-highlight',
+        suspicious: 'text-muted-foreground',
       };
       return (
         <span className={statusColors[status as keyof typeof statusColors]}>
@@ -78,7 +79,7 @@ const columns: ColumnDef<Submission>[] = [
 
 export default function SubmissionsPage() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const rowsPerPage = 20;
 
   const filteredData = useMemo(() => {
@@ -88,34 +89,36 @@ export default function SubmissionsPage() {
     );
   }, [statusFilter]);
 
-  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-  const paginatedData = useMemo(() => {
-    const startIndex = (currentPage - 1) * rowsPerPage;
-    return filteredData.slice(startIndex, startIndex + rowsPerPage);
-  }, [currentPage, filteredData]);
-
   const table = useReactTable({
-    data: paginatedData,
+    data: filteredData,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    state: {
+      pagination: {
+        pageIndex: currentPage,
+        pageSize: rowsPerPage,
+      },
+    },
+    onPaginationChange: (updater) => {
+      const next =
+        typeof updater === 'function'
+          ? updater({ pageIndex: currentPage, pageSize: rowsPerPage })
+          : updater;
+      setCurrentPage(next.pageIndex);
+    },
+    manualPagination: false,
   });
 
-  const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <div className="p-6 max-w-7xl mx-auto">
         <Navbar />
-
         <div className="bg-secondary rounded-lg p-6 mb-6 w-3/4 mx-auto">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold">Submissions Log</h1>
             <select
-              className="bg-black/50 text-white rounded-md py-2 px-4"
+              className="bg-popover text-popover-foreground rounded-md py-2 px-4"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             >
@@ -127,15 +130,9 @@ export default function SubmissionsPage() {
             </select>
           </div>
         </div>
-
         <div className="bg-secondary rounded-lg overflow-hidden">
           <DataTable table={table} />
-
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+          <Pagination table={table} />
         </div>
       </div>
     </div>

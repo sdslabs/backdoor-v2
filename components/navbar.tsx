@@ -15,7 +15,7 @@ export default function Navbar() {
         className="h-8 w-auto"
       />
       <div className="flex items-center space-x-8">
-        <div className="flex items-center text-gray-400">
+        <div className="flex items-center text-muted-foreground">
           <svg
             className="w-5 h-5 mr-2"
             viewBox="0 0 24 24"
@@ -39,7 +39,7 @@ export default function Navbar() {
           </svg>
           Challenges
         </div>
-        <div className="flex items-center text-white">
+        <div className="flex items-center text-foreground">
           <svg
             className="w-5 h-5 mr-2"
             viewBox="0 0 24 24"
@@ -60,7 +60,7 @@ export default function Navbar() {
           </svg>
           Leaderboard
         </div>
-        <div className="flex items-center text-gray-400">
+        <div className="flex items-center text-muted-foreground">
           <svg
             className="w-5 h-5 mr-2"
             viewBox="0 0 24 24"
@@ -99,16 +99,16 @@ export default function Navbar() {
       <div className="flex items-center space-x-2">
         <Button
           variant="outline"
-          className="rounded-full p-2 h-10 w-10 bg-secondary border-gray-700 hover:bg-gray-800"
+          className="rounded-full p-2 h-10 w-10 border border-border hover:bg-accent"
         >
-          <Search className="h-5 w-5 text-gray-400" />
+          <Search className="h-5 w-5 text-muted-foreground" />
         </Button>
         <Button
           variant="outline"
-          className="rounded-full p-2 h-10 w-10 bg-secondary border-gray-700 hover:bg-gray-800"
+          className="rounded-full p-2 h-10 w-10 border border-border hover:bg-accent"
         >
           <svg
-            className="h-5 w-5 text-gray-400"
+            className="h-5 w-5 text-muted-foreground"
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -123,7 +123,7 @@ export default function Navbar() {
             />
           </svg>
         </Button>
-        <div className="rounded-full bg-orange-500 text-white font-bold h-10 w-10 flex items-center justify-center">
+        <div className="rounded-full bg-primary text-primary-foreground font-bold h-10 w-10 flex items-center justify-center">
           R
         </div>
       </div>

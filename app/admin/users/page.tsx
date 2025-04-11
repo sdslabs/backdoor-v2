@@ -7,13 +7,14 @@ import {
   getSortedRowModel,
   SortingState,
   useReactTable,
+  getPaginationRowModel,
 } from '@tanstack/react-table';
 import { ChevronDown, Search, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { users, User } from '@/lib/data/users';
 import Navbar from '@/components/navbar';
-import { DataTable } from '@/components/data-table';
+import { DataTable } from '@/components/ui/data-table';
 import { Pagination } from '@/components/pagination';
 
 const columns: ColumnDef<User>[] = [
@@ -24,7 +25,7 @@ const columns: ColumnDef<User>[] = [
         checked={table.getIsAllPageRowsSelected()}
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
-        className="border-gray-600 ml-4"
+        className="custom-checkbox ml-4"
       />
     ),
     cell: ({ row }) => (
@@ -32,7 +33,7 @@ const columns: ColumnDef<User>[] = [
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
-        className="border-gray-600 ml-4"
+        className="custom-checkbox ml-4"
       />
     ),
     enableSorting: false,
@@ -120,7 +121,7 @@ export default function UsersPage() {
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const rowsPerPage = 20;
 
   const uniqueCategories = useMemo(() => {
@@ -155,35 +156,41 @@ export default function UsersPage() {
 
       return matchesSearch && matchesCategory;
     });
-    if (filter) setCurrentPage(1);
+    if (filter) setCurrentPage(0);
     return filtered;
   }, [filter, categoryFilter]);
 
-  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-  const paginatedData = useMemo(() => {
-    const startIndex = (currentPage - 1) * rowsPerPage;
-    return filteredData.slice(startIndex, startIndex + rowsPerPage);
-  }, [currentPage, filteredData]);
-
   const table = useReactTable({
-    data: paginatedData,
+    data: filteredData, // ✅ pass the full dataset
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onSortingChange: setSorting,
     onRowSelectionChange: setRowSelection,
+    getPaginationRowModel: getPaginationRowModel(),
     state: {
+      pagination: {
+        pageIndex: currentPage,
+        pageSize: rowsPerPage,
+      },
       sorting,
       rowSelection,
     },
+    onPaginationChange: (updater) => {
+      const next =
+        typeof updater === 'function'
+          ? updater({ pageIndex: currentPage, pageSize: rowsPerPage })
+          : updater;
+      setCurrentPage(next.pageIndex);
+    },
+    manualPagination: false,
   });
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <div className="p-6 max-w-7xl mx-auto">
         <Navbar />
-
-        <div className="bg-secondary rounded-lg p-6 mb-6 w-3/4 mx-auto">
+        <div className="bg-muted rounded-lg p-6 mb-6 w-3/4 mx-auto">
           <div className="flex flex-col md:flex-row md:justify-between md:space-x-4 space-y-4 md:space-y-0">
             <div className="flex-1">
               <h2 className="mb-2">Who are you looking for?</h2>
@@ -193,10 +200,10 @@ export default function UsersPage() {
                   placeholder="Type here"
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
-                  className="w-full bg-black/50 border border-gray-800 text-gray-300 py-2 px-4 pr-10 rounded focus:outline-none focus:ring-1 focus:ring-highlight focus:border-highlight"
+                  className="w-full bg-background border border-border text-muted-foreground py-2 px-4 pr-10 rounded focus:outline-none focus:ring-1 focus:ring-ring focus:border-ring"
                 />
                 <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-                  <Search className="h-4 w-4 text-gray-500" />
+                  <Search className="h-4 w-4 text-muted-foreground" />
                 </div>
               </div>
             </div>
@@ -204,7 +211,7 @@ export default function UsersPage() {
               <h2 className="mb-2">Category</h2>
               <div className="flex space-x-3">
                 <select
-                  className="bg-black/50 text-white rounded-md py-2 px-4 flex-1 h-11"
+                  className="bg-background text-foreground border border-border rounded-md py-2 px-4 flex-1 h-11"
                   value={categoryFilter}
                   onChange={(e) => setCategoryFilter(e.target.value)}
                 >
@@ -214,7 +221,7 @@ export default function UsersPage() {
                     </option>
                   ))}
                 </select>
-                <Button className="bg-primary hover:bg-orange-600 px-4 h-11 rounded-md">
+                <Button className="bg-primary hover:bg-primary/90 px-4 h-11 rounded-md">
                   SEARCH
                 </Button>
               </div>
@@ -222,34 +229,24 @@ export default function UsersPage() {
           </div>
         </div>
 
-        <div className="bg-secondary rounded-lg overflow-hidden">
+        <div className="bg-muted rounded-lg overflow-hidden">
           <div className="flex justify-between items-center p-6">
             <h2 className="text-xl font-bold">Player Data</h2>
             <div className="flex space-x-2">
-              <Button variant="outline" className="text-gray-400">
+              <Button variant="outline" className="text-muted-foreground">
                 BAN SELECTED
               </Button>
-              <Button className="bg-primary hover:bg-orange-800 flex items-center">
+              <Button className="bg-primary hover:bg-primary/80 flex items-center">
                 EXPORT PLAYER DATA (PDF/CSV)
                 <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
-              <Button variant="ghost" className="text-gray-300 p-2">
+              <Button variant="ghost" className="text-muted-foreground p-2">
                 <MoreVertical className="h-5 w-5" />
               </Button>
             </div>
           </div>
-
           <DataTable table={table} />
-
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={(page) => {
-              if (page >= 1 && page <= totalPages) {
-                setCurrentPage(page);
-              }
-            }}
-          />
+          <Pagination table={table} />
         </div>
       </div>
     </div>

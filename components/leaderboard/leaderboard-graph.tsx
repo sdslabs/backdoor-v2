@@ -12,18 +12,20 @@ import {
 } from 'recharts';
 import { leaderboardGraphData } from '@/lib/data/leaderboard-graph';
 
-// Utility functions
-const flattenHourlyData = () => {
+interface FlattenedGraphEntry {
+  hour: string;
+  [playerId: string]: string | number;
+}
+
+const flattenHourlyData = (): FlattenedGraphEntry[] => {
   const allHoursSet = new Set<string>();
   const playerMap: { [key: string]: { [hour: string]: number } } = {};
 
   leaderboardGraphData.forEach((entry) => {
     const progressMap: { [hour: string]: number } = {};
-    let lastPoints = 0;
 
     entry.hourlyProgress.forEach((progress) => {
       allHoursSet.add(progress.hour);
-      lastPoints = progress.points;
       progressMap[progress.hour] = progress.points;
     });
 
@@ -34,12 +36,12 @@ const flattenHourlyData = () => {
     (a, b) => new Date(a).getTime() - new Date(b).getTime()
   );
 
-  const result: any[] = [];
+  const result: FlattenedGraphEntry[] = [];
   const playerIds = leaderboardGraphData.map((entry) => entry.playerId);
   const lastSeenPoints: { [playerId: string]: number } = {};
 
   allHours.forEach((hour) => {
-    const entry: any = { hour };
+    const entry: FlattenedGraphEntry = { hour };
     playerIds.forEach((id) => {
       const currentPoints = playerMap[id][hour];
       if (currentPoints !== undefined) {
@@ -57,7 +59,10 @@ const flattenHourlyData = () => {
 
 const formatHour = (iso: string) => {
   const date = new Date(iso);
-  return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+  return `${date.getHours().toString().padStart(2, '0')}:${date
+    .getMinutes()
+    .toString()
+    .padStart(2, '0')}`;
 };
 
 export default function LeaderboardGraph() {
@@ -74,7 +79,11 @@ export default function LeaderboardGraph() {
           <XAxis
             dataKey="hour"
             tickFormatter={formatHour}
-            label={{ value: 'Hour', position: 'insideBottomRight', offset: -5 }}
+            label={{
+              value: 'Hour',
+              position: 'insideBottomRight',
+              offset: -5,
+            }}
           />
           <YAxis />
           <Tooltip
@@ -82,15 +91,15 @@ export default function LeaderboardGraph() {
               if (!active || !payload || !payload.length) return null;
 
               return (
-                <div className="bg-black/80 backdrop-blur-md rounded-lg px-4 py-3 border border-gray-700 shadow-md">
+                <div className="bg-popover backdrop-blur-md rounded-lg px-4 py-3 border border-border shadow-md">
                   {payload.map((entry, index) => (
-                    <div key={index} className="text-gray-200 text-sm">
+                    <div key={index} className="text-muted-foreground text-sm">
                       <span
                         className="inline-block w-2 h-2 rounded-full mr-2"
                         style={{ backgroundColor: entry.color }}
                       ></span>
                       {entry.name}:{' '}
-                      <span className="text-highlight font-semibold">
+                      <span className="text-primary font-semibold">
                         {entry.value}
                       </span>
                     </div>

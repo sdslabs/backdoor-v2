@@ -15,11 +15,11 @@ interface DataTableProps<T> {
 export function DataTable<T>({ table }: DataTableProps<T>) {
   return (
     <Table>
-      <TableHeader className="bg-black/40">
+      <TableHeader className="bg-popover">
         {table.getHeaderGroups().map((headerGroup) => (
           <TableRow key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
-              <TableHead key={header.id} className="text-gray-300 py-3">
+              <TableHead key={header.id} className="text-muted-foreground py-3">
                 {flexRender(
                   header.column.columnDef.header,
                   header.getContext()
@@ -33,8 +33,8 @@ export function DataTable<T>({ table }: DataTableProps<T>) {
         {table.getRowModel().rows.map((row) => (
           <TableRow
             key={row.id}
-            className={`hover:bg-primary/10 ${
-              row.getIsSelected() ? 'bg-primary' : ''
+            className={`hover:bg-accent ${
+              row.getIsSelected() ? 'bg-accent/50' : ''
             }`}
           >
             {row.getVisibleCells().map((cell) => (
