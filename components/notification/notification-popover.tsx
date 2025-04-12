@@ -8,14 +8,9 @@ import {
 } from '@/components/ui/popover';
 import { Bell } from 'lucide-react';
 import { toast } from 'sonner';
-import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
-
-type Notification = {
-  title: string;
-  description: string;
-  datetime: string;
-};
+import { useRecentNotifications } from '@/lib/api/notifications/queries';
+import { Notification } from '@/lib/types';
 
 export default function NotificationPopover() {
   const [hasNew, setHasNew] = useState(false);
@@ -37,23 +32,11 @@ export default function NotificationPopover() {
     return () => evtSource.close();
   }, []);
 
-  const fetchRecentNotifications = async () => {
-    const res = await fetch('/api/notifications/recent');
-    if (!res.ok) {
-      throw new Error('Failed to fetch notifications');
-    }
-    const data = (await res.json()) as Notification[];
-    return data;
-  };
-
   const {
     data: notificationsData,
     isLoading,
     refetch,
-  } = useQuery({
-    queryKey: ['recentNotifications'],
-    queryFn: fetchRecentNotifications,
-  });
+  } = useRecentNotifications();
 
   const fetchRecentNotificationsHandler = (isOpen: boolean) => {
     if (isOpen) {
@@ -62,8 +45,8 @@ export default function NotificationPopover() {
   };
 
   return (
-    <Popover onOpenChange={fetchRecentNotifications}>
-      <PopoverTrigger className="relative cursor-pointer">
+    <Popover onOpenChange={fetchRecentNotificationsHandler}>
+      <PopoverTrigger asChild className="relative cursor-pointer">
         <Button size="icon" variant={'navSideAction'} className="rounded-lg">
           <Bell className="size-4" />
           {hasNew && (

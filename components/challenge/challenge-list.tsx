@@ -1,20 +1,16 @@
 'use client';
 
-import { fetchChallengeMetadata } from '@/lib/data/challenge';
 import ChallengeCardSkeleton from './skeletons/challenge-card-skeleton';
 import ChallengeCard from './challenge-card';
-import { useQuery } from '@tanstack/react-query';
 import { ChallengeTag } from '@/lib/types';
 import { useChallengeParams } from '@/hooks/use-challenge-params';
 import { ChallengePagination } from './challenge-pagination';
+import { useAllChallengesMetadata } from '@/lib/api/challenge/queries';
 
 const PAGE_SIZE = 12;
 
 const ChallengeList = () => {
-  const { data: challenges, isLoading } = useQuery({
-    queryKey: ['challenges'],
-    queryFn: fetchChallengeMetadata,
-  });
+  const { data: challenges, isLoading } = useAllChallengesMetadata();
 
   const { tag, status, difficulty, page } = useChallengeParams();
 
