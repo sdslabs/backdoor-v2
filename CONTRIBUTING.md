@@ -25,52 +25,50 @@ For the `/components` folder -
 ```
 /components
 │
-├── /ui
-│   └── Common and reusable UI components
-│       ├── button.tsx
-│       ├── input.tsx
-│       └── ... (other base components + shadcn)
+├── /ui                           # Common and reusable UI components (base + shadcn)
+│   ├── button.tsx
+│   ├── input.tsx
+│   └── ...                       # Other base UI components
 │
-├── /providers
-│   └── Application-level context providers
-│       ├── query-client-provider.tsx
-│       ├── theme-provider.tsx
-│       └── ... (additional providers)
+├── /providers                    # Application-level context providers
+│   ├── query-client-provider.tsx
+│   ├── theme-provider.tsx
+│   └── ...                       # Additional global providers
 │
-├── /<feature>
-│   └── Feature-specific components
-│       ├── /skeletons
-│       │   └── <feature>-skeleton.tsx
-│       ├── <component-1>.tsx
-│       ├── <component-2>.tsx
-│       └── index.ts        <-- Export relevant components for cleaner imports
+├── /<feature>                    # Feature-specific component folder
+│   ├── /skeletons                # Loading skeletons specific to this feature
+│   │   └── <feature>-skeleton.tsx
+│   ├── <component-1>.tsx
+│   ├── <component-2>.tsx
+│   └── index.ts                  # Export relevant components for cleaner and modular imports
 ```
 
 For the `/lib` folder - 
 ```
 /lib
 │
-├── /data
-│   └── Centralized data fetching logic
-│   ├── /<feature>
-│   │   ├── actions.ts        <-- Server Actions (server-only functions)
-│   │   ├── queries.ts        <-- TanStack Query fetchers, mutations, and client-safe logic
-│   │   └── mock-data.ts      <-- (optional) Mock data for component testing or previews
+├── /api                            # Centralized data fetching logic
+│   └── /<feature>
+│       ├── actions.ts              # Server Actions (server-only functions)
+│       ├── queries.ts              # TanStack Query fetchers, mutations, and client-safe logic
+│       └── mock-data.ts            # (optional) Mock data for component testing or previews
 │
-├── /hooks
-│   └── Custom reusable React hooks
-│       ├── use-challenge-params.ts
-│       └── ... (feature or utility-based hooks)
-|
-├── /types
-│   └── Application-wide type definitions
-│       ├── auth.ts
-│       ├── challenge.ts
-│       └── ... (feature-specific types)
-│       └── index.ts         <-- Exports all the types (for cleaner and modular imports)
+├── /axios                          # Authenticated Axios instances
+│   ├── client-axios.ts             # createClientAxios(): For TanStack queries/mutations (client-side)
+│   └── server-axios.ts             # createServerAxios(): For server actions (server-side)
 │
-├── constants.ts              <-- Centralized environment constants (env-based)
-├── utils.ts                  <-- Shared utility/helper functions
+├── /hooks                          # Custom reusable React hooks
+│   ├── use-challenge-params.ts     
+│   └── ...                         # Other feature or utility-based hooks
+│
+├── /types                          # Application-wide type definitions
+│   ├── auth.ts
+│   ├── challenge.ts
+│   ├── ...                         # Other feature-specific types
+│   └── index.ts                    # Exports all types for modular imports
+│
+├── constants.ts                    # Centralized environment constants (env-based)
+├── utils.ts                        # Shared utility/helper functions
 ```
 
 ## Guidelines
@@ -80,6 +78,6 @@ You can follow this [guide](https://www.sufle.io/blog/naming-conventions-in-reac
 ### Component Composition Patterns
 - If something doesn't require user interaction - make it a server component and make sure to wrap it in a `<Suspense />` and `<ErrorBoundary />`.
 - You can checkout this [guide](https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns) for server and client composition patterns.
-- Also, if using client components within a server component (which is most of the use cases) - you can take advantage of [server side prefetching]() in tanstack.
+- Also, if using client components within a server component (which is most of the use cases) - you can take advantage of [server side prefetching](https://tanstack.com/query/latest/docs/framework/react/guides/advanced-ssr) in tanstack.
 - This is quite good method as we can take advantage of streaming as well as prefetching the data for our client components using tanstack. Here's a [video](https://www.youtube.com/watch?v=XcUpTPbY4Wg) to wrap your head around it.
 

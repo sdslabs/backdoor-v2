@@ -1,11 +1,12 @@
 # Backdoor v2
-  
-## Run Locally
+This is the frontend for beast.
+
+## Setup Locally
 ```bash
 # Update the .env
 mv sample.env .env
 yarn
 yarn dev
 ```
-## Contribution
+## How to Contribute?
 Checkout [CONTRIBUTING.md](./CONTRIBUTING.md) for details.

@@ -17,7 +17,6 @@ const TAGS: ChallengeTag[] = [
 
 const ChallengeTagsSidebar = () => {
   const { tag: selectedTag, updateTag } = useChallengeParams();
-
   return (
     <div className="w-36 pr-4 sticky top-0 h-full">
       <div className="h-16 flex items-center justify-end">

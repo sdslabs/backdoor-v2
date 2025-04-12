@@ -1,6 +1,6 @@
 import { Challenge, ChallengeCategory, ChallengeMetadata } from '@/lib/types';
 
-const challenges = [
+export const MOCK_CHALLENGES = [
   {
     id: '1',
     name: 'Buffer Overflow',
@@ -561,40 +561,25 @@ const challenges = [
   },
 ] as Challenge[];
 
-export const challengesMetadata = challenges.map(
-  ({
-    id,
-    name,
-    tags,
-    points,
-    difficulty,
-    solvesNumber,
-    solveStatus,
-    deployedStatus,
-  }) => ({
-    id,
-    name,
-    tags,
-    points,
-    difficulty,
-    solvesNumber,
-    solveStatus,
-    deployedStatus,
-  })
-);
-
-export const fetchChallengeMetadata = (): Promise<ChallengeMetadata[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(challengesMetadata);
-    }, 1000);
-  });
-};
-
-export const fetchChallengeData = (id: string): Promise<Challenge> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(challenges.find((challenge) => challenge.id === id)!);
-    }, 1000);
-  });
-};
+export const MOCK_CHALLENGES_METADATA: ChallengeMetadata[] =
+  MOCK_CHALLENGES.map(
+    ({
+      id,
+      name,
+      tags,
+      points,
+      difficulty,
+      solvesNumber,
+      solveStatus,
+      deployedStatus,
+    }) => ({
+      id,
+      name,
+      tags,
+      points,
+      difficulty,
+      solvesNumber,
+      solveStatus,
+      deployedStatus,
+    })
+  );

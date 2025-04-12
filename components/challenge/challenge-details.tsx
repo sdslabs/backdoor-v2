@@ -1,8 +1,7 @@
 'use client';
 
-import { fetchChallengeData } from '@/lib/data/challenge';
 import { Bookmark, DownloadIcon } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useActionState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import ChallengeDetailsSkeleton from './skeletons/challenge-details-skeleton';
 import { Input } from '@/components/ui/input';
@@ -15,24 +14,15 @@ import {
 } from '@/components/ui/tooltip';
 import { DifficultyRating } from '@/components/ui/difficulty-rating';
 import { cn } from '@/lib/utils';
-import { useQuery } from '@tanstack/react-query';
+import { useChallengeDetails } from '@/lib/api/challenge/queries';
+import { submitFlag } from '@/lib/api/challenge/actions';
 
 const ChallengeDetails: React.FC<{ challengeId: string }> = ({
   challengeId,
 }) => {
-  const [flagInput, setFlagInput] = useState('');
-
-  const { data: challenge, isLoading } = useQuery({
-    queryKey: ['challenge', challengeId],
-    queryFn: () => fetchChallengeData(challengeId),
-    refetchOnWindowFocus: false,
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Submitting flag:', flagInput);
-    setFlagInput('');
-  };
+  const { data: challenge, isLoading } = useChallengeDetails(challengeId);
+  const [flagSubmitState, handleFlagSubmission, flagSubmissionPending] =
+    useActionState(submitFlag, null);
 
   if (isLoading) {
     return <ChallengeDetailsSkeleton />;
@@ -113,19 +103,41 @@ const ChallengeDetails: React.FC<{ challengeId: string }> = ({
           </TooltipProvider>
         )}
 
-        <form onSubmit={handleSubmit} className="flex mt-4">
+        <form action={handleFlagSubmission} className="flex mt-4">
           <Input
             type="text"
+            name="flag"
+            id="flag"
             placeholder="Enter flag"
             autoFocus
             className="rounded-r-none !border-r-none text-center"
-            value={flagInput}
-            onChange={(e) => setFlagInput(e.target.value)}
+            disabled={flagSubmissionPending}
           />
-          <Button type="submit" className="rounded-l-none">
-            Submit
+          <input
+            hidden
+            name="challengeId"
+            id="challengeId"
+            defaultValue={challengeId}
+          />
+          <Button
+            type="submit"
+            className="rounded-l-none"
+            disabled={flagSubmissionPending}
+          >
+            {flagSubmissionPending ? 'Submitting...' : 'Submit'}
           </Button>
         </form>
+
+        {flagSubmitState?.error && (
+          <div className="mt-2 text-red-500 text-sm">
+            {flagSubmitState.error}
+          </div>
+        )}
+        {flagSubmitState?.success && (
+          <div className="mt-2 text-green-500 text-sm">
+            Flag submitted successfully!
+          </div>
+        )}
       </div>
     );
   }
