@@ -1,8 +1,16 @@
+import { UserProfile } from '@/lib/types/profile';
 import Image from 'next/image';
-import { fetchUserProfile } from '@/lib/data/profile';
+import { Button } from '../ui/button';
+import { getCurrentUser } from '@/lib/api/profile-page/actions';
 
-async function UserInformation() {
-  const userProfile = await fetchUserProfile();
+interface UserInformationProps {
+  userProfile: UserProfile;
+}
+
+async function UserInformation({ userProfile }: UserInformationProps) {
+  // Get the currently logged-in user
+  const currentUser = await getCurrentUser();
+  const isAdmin = currentUser.role === 'admin';
 
   return (
     <div className="flex items-start mb-8 my-4">
@@ -21,12 +29,22 @@ async function UserInformation() {
               <h1 className="text-3xl font-bold mr-4 my-2">
                 {userProfile.username}
               </h1>
-              <Image
-                src="/hide-user.svg"
-                height={30}
-                width={30}
-                alt="profile"
-              />
+              {/* Show admin controls only if the current user is an admin */}
+              {isAdmin && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  style={{ cursor: 'pointer' }}
+                  title="Hide user"
+                >
+                  <Image
+                    src="/hide-user.svg"
+                    height={30}
+                    width={30}
+                    alt="hide user"
+                  />
+                </Button>
+              )}
             </div>
             <p className="text-xl font-semibold text-primary-text my-3">
               {userProfile.name}

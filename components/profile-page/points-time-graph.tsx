@@ -7,9 +7,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { fetchPointsOverTime } from '@/lib/data/profile';
-import { PointsOverTime } from '@/lib/types/profile';
-import { useEffect, useState } from 'react';
+import { usePointsOverTime } from '@/lib/api/profile-page/queries';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import PointsTimeGraphSkeleton from './skeletons/points-time-graph-skeleton';
 
@@ -20,22 +18,14 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-function PointsTimeGraph() {
-  const [loading, setLoading] = useState(true);
-  const [chartData, setChartData] = useState<PointsOverTime[]>([]);
+interface PointsTimeGraphProps {
+  username?: string;
+}
 
-  useEffect(() => {
-    setLoading(true);
-    fetchPointsOverTime()
-      .then((data) => {
-        setChartData(data);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+function PointsTimeGraph({ username }: PointsTimeGraphProps) {
+  const { data: chartData, isLoading } = usePointsOverTime(username);
 
-  if (loading) {
+  if (isLoading) {
     return <PointsTimeGraphSkeleton />;
   }
 

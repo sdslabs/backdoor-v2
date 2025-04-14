@@ -8,144 +8,30 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { fetchCTFParticipation, fetchSolveHistory } from '@/lib/data/profile';
-import type { CTFParticipation, SolveHistory } from '@/lib/types/profile';
-import { useEffect, useState } from 'react';
+import {
+  useCTFParticipation,
+  useSolveHistory,
+} from '@/lib/api/profile-page/queries';
 import SolveHistorySkeleton from './skeletons/solve-history-skeleton';
+import { transformData } from './util';
 
-interface ChallengeDetails {
-  id: string;
-  name: string;
-  type: 'challenge' | 'ctf';
-  time?: string;
-  points: number;
-  timestamp: string;
-  timeTaken?: string;
-  flagsSubmitted?: number;
-  position?: number;
-  category: string;
+interface SolveHistoryComponentProps {
+  username?: string;
 }
 
-interface DateGroup {
-  date: string;
-  solves: ChallengeDetails[];
-}
+function SolveHistoryComponent({ username }: SolveHistoryComponentProps) {
+  const { data: solveHistory, isLoading } = useSolveHistory(username);
+  const { data: ctfParticipation, isLoading: isCtfLoading } =
+    useCTFParticipation();
 
-interface MonthGroup {
-  month: string;
-  dates: DateGroup[];
-}
-
-interface CTFItem {
-  id: string;
-  challengeId: string;
-  challengeName: string;
-  points: number;
-  solvedAt: Date;
-  category: string;
-  type: 'ctf';
-  flagsSubmitted: number;
-  position: number;
-}
-
-type CombinedItem = SolveHistory | CTFItem;
-
-function isCTFItem(item: CombinedItem): item is CTFItem {
-  return 'type' in item && item.type === 'ctf';
-}
-
-function transformData(
-  solves: SolveHistory[],
-  ctfs: CTFParticipation[]
-): MonthGroup[] {
-  // Group by month and date
-  const combinedData: CombinedItem[] = [
-    ...solves,
-    ...ctfs.map((ctf) => ({
-      id: ctf.id,
-      challengeId: ctf.id,
-      challengeName: ctf.name,
-      points: ctf.points,
-      solvedAt: ctf.timestampStart,
-      category: 'ctf',
-      type: 'ctf' as const,
-      flagsSubmitted: ctf.flagsSubmitted,
-      position: ctf.position,
-    })),
-  ];
-
-  const groupedByMonth = combinedData.reduce(
-    (acc, item) => {
-      const date = new Date(item.solvedAt);
-      const monthKey = date.toLocaleString('default', {
-        month: 'long',
-        year: 'numeric',
-      });
-      const dateKey = date.toLocaleString('default', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      });
-
-      if (!acc[monthKey]) {
-        acc[monthKey] = {};
-      }
-
-      if (!acc[monthKey][dateKey]) {
-        acc[monthKey][dateKey] = [];
-      }
-
-      const isCTF = isCTFItem(item);
-      acc[monthKey][dateKey].push({
-        id: item.id,
-        name: item.challengeName,
-        type: isCTF ? 'ctf' : 'challenge',
-        points: item.points,
-        timestamp: isCTF
-          ? `${date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} - ${new Date(ctfs.find((ctf) => ctf.id === item.id)?.timestampEnd || date).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`
-          : date.toLocaleTimeString('en-US', {
-              hour: 'numeric',
-              minute: '2-digit',
-            }),
-        flagsSubmitted: isCTF ? item.flagsSubmitted : undefined,
-        position: isCTF ? item.position : undefined,
-        category: item.category,
-      });
-
-      return acc;
-    },
-    {} as Record<string, Record<string, ChallengeDetails[]>>
-  );
-
-  // Convert to the required format
-  return Object.entries(groupedByMonth).map(([month, dates]) => ({
-    month,
-    dates: Object.entries(dates).map(([date, solves]) => ({
-      date,
-      solves,
-    })),
-  }));
-}
-
-function SolveHistoryComponent() {
-  const [loading, setLoading] = useState(true);
-  const [solveHistory, setSolveHistory] = useState<MonthGroup[]>([]);
-
-  useEffect(() => {
-    setLoading(true);
-    Promise.all([fetchSolveHistory(), fetchCTFParticipation()])
-      .then(([solves, ctfs]) => {
-        const transformedData = transformData(solves, ctfs);
-        setSolveHistory(transformedData);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) {
+  if (isLoading || isCtfLoading) {
     return <SolveHistorySkeleton />;
   }
+
+  const combinedSolveHistory = transformData(
+    solveHistory || [],
+    ctfParticipation || []
+  );
 
   return (
     <div className="border border-secondary rounded-lg px-3 text-base my-4">
@@ -155,7 +41,7 @@ function SolveHistoryComponent() {
             Show solve history
           </AccordionTrigger>
           <AccordionContent className="px-4 pb-4 pt-0 text-base">
-            {solveHistory.map((monthGroup) => (
+            {combinedSolveHistory.map((monthGroup) => (
               <Accordion
                 key={monthGroup.month}
                 type="single"

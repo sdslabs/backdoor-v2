@@ -3,7 +3,11 @@ import { useState } from 'react';
 import SolveHistoryComponent from './solve-history';
 import PointsTimeGraph from './points-time-graph';
 
-function YearlyActivity() {
+interface YearlyActivityProps {
+  username?: string;
+}
+
+function YearlyActivity({ username }: YearlyActivityProps) {
   const [selectedYear, setSelectedYear] = useState(
     new Date().getFullYear().toString()
   );
@@ -31,10 +35,10 @@ function YearlyActivity() {
         {/* <div className="border border-secondary rounded-lg p-4"></div> */}
       </div>
       {/* Solve history */}
-      <SolveHistoryComponent />
+      <SolveHistoryComponent username={username} />
 
       {/* Points history graph */}
-      <PointsTimeGraph />
+      <PointsTimeGraph username={username} />
     </div>
   );
 }
