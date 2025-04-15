@@ -8,12 +8,17 @@ export const otpSchema = z.object({
   otp: z.string().length(6, { message: 'OTP must be 6 digits' }),
 });
 
-export const newPasswordSchema = z.object({
-  username: z.string().min(3, { message: 'Username too short' }),
-  password: z
-    .string()
-    .min(6, { message: 'Password must be at least 6 characters' }),
-});
+export const newPasswordSchema = z
+  .object({
+    newPassword: z
+      .string()
+      .min(6, { message: 'Password must be at least 6 characters' }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    path: ['confirmPassword'],
+    message: 'Passwords do not match',
+  });
 
 export const steps = ['email', 'otp', 'newPassword'] as const;
 export type StepKey = (typeof steps)[number];
@@ -27,7 +32,7 @@ export const initialState: FormState = { step: 0 };
 
 const EXPECTED_OTP = '123456';
 
-export async function handleSignupStep(
+export async function handleResetPasswordStep(
   prevState: FormState,
   formData: FormData
 ): Promise<FormState> {
@@ -55,7 +60,7 @@ export async function handleSignupStep(
 
     if (step === 2) {
       newPasswordSchema.parse(formObj);
-      console.log('Creating user:', formObj.username);
+      console.log('Resetting password');
       return { step: step + 1 };
     }
   } catch (err: any) {

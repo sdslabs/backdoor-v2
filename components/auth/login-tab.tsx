@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { AuthInput } from '@/components/auth/auth-input';
-import { loginAction } from '@/app/actions/loginActions';
+import { loginAction } from '@/lib/auth/actions/login-actions';
 import { z } from 'zod';
 
 const loginSchema = z.object({
@@ -70,35 +70,39 @@ export default function LoginTab() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-      <h2 className="text-center text-lg font-semibold">Welcome Back</h2>
+    <div className="flex flex-col items-center w-full">
+      <div className="min-h-[280px] max-w-xs w-full">
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+          <h2 className="text-center text-lg font-semibold">Welcome Back</h2>
 
-      <AuthInput
-        name="username"
-        label="Username"
-        value={formData.username}
-        onChange={handleChange}
-        error={errors.username}
-        required
-      />
+          <AuthInput
+            name="username"
+            label="Username"
+            value={formData.username}
+            onChange={handleChange}
+            error={errors.username}
+            required
+          />
 
-      <AuthInput
-        name="password"
-        label="Password"
-        type="password"
-        value={formData.password}
-        onChange={handleChange}
-        error={errors.password}
-        required
-      />
+          <AuthInput
+            name="password"
+            label="Password"
+            type="password"
+            value={formData.password}
+            onChange={handleChange}
+            error={errors.password}
+            required
+          />
 
-      {errors.general && (
-        <p className="text-sm text-destructive">{errors.general}</p>
-      )}
+          {errors.general && (
+            <p className="text-sm text-destructive">{errors.general}</p>
+          )}
 
-      <Button type="submit" className="w-full" disabled={isSubmitting}>
-        {isSubmitting ? 'Logging in...' : 'Login'}
-      </Button>
-    </form>
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            {isSubmitting ? 'Logging in...' : 'Login'}
+          </Button>
+        </form>
+      </div>
+    </div>
   );
 }
