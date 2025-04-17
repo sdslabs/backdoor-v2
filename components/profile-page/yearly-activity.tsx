@@ -1,44 +1,44 @@
-'use client';
-import { useState } from 'react';
-import SolveHistoryComponent from './solve-history';
+import {
+  ctfParticipationQuery,
+  pointsOverTimeQuery,
+  solveHistoryQuery,
+} from '@/lib/api/profile-page/queries';
+import { getQueryClient } from '@/lib/utils/get-query-client';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { Suspense } from 'react';
 import PointsTimeGraph from './points-time-graph';
+import PointsTimeGraphSkeleton from './skeletons/points-time-graph-skeleton';
+import SolveHistorySkeleton from './skeletons/solve-history-skeleton';
+import SolveHistoryComponent from './solve-history';
+import YearlyActivityHeader from './yearly-activity-header';
 
 interface YearlyActivityProps {
   username?: string;
 }
 
-function YearlyActivity({ username }: YearlyActivityProps) {
-  const [selectedYear, setSelectedYear] = useState(
-    new Date().getFullYear().toString()
-  );
+async function YearlyActivity({ username }: YearlyActivityProps) {
+  const queryClient = getQueryClient();
+
+  queryClient.prefetchQuery(pointsOverTimeQuery(username));
+  queryClient.prefetchQuery(solveHistoryQuery(username));
+  queryClient.prefetchQuery(ctfParticipationQuery());
+
   return (
     <div>
-      <div className="my-4">
-        <div className="flex justify-between items-center mb-2">
-          <h2 className="text-2xl font-semibold">Yearly activity:</h2>
-          <select
-            className="bg-background text-foreground border border-secondary rounded px-2 py-1"
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value)}
-          >
-            {Array.from({ length: new Date().getFullYear() - 2019 }, (_, i) => (
-              <option
-                key={new Date().getFullYear() - i}
-                value={String(new Date().getFullYear() - i)}
-              >
-                {new Date().getFullYear() - i}
-              </option>
-            ))}
-          </select>
-        </div>
-        {/* Space for Github Activity Component */}
-        {/* <div className="border border-secondary rounded-lg p-4"></div> */}
-      </div>
+      <YearlyActivityHeader />
       {/* Solve history */}
-      <SolveHistoryComponent username={username} />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <Suspense fallback={<SolveHistorySkeleton />}>
+          <SolveHistoryComponent username={username} />
+        </Suspense>
+      </HydrationBoundary>
 
       {/* Points history graph */}
-      <PointsTimeGraph username={username} />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <Suspense fallback={<PointsTimeGraphSkeleton />}>
+          <PointsTimeGraph username={username} />
+        </Suspense>
+      </HydrationBoundary>
     </div>
   );
 }

@@ -9,10 +9,10 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import {
-  useCTFParticipation,
-  useSolveHistory,
+  ctfParticipationQuery,
+  solveHistoryQuery,
 } from '@/lib/api/profile-page/queries';
-import SolveHistorySkeleton from './skeletons/solve-history-skeleton';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { transformData } from './util';
 
 interface SolveHistoryComponentProps {
@@ -20,13 +20,8 @@ interface SolveHistoryComponentProps {
 }
 
 function SolveHistoryComponent({ username }: SolveHistoryComponentProps) {
-  const { data: solveHistory, isLoading } = useSolveHistory(username);
-  const { data: ctfParticipation, isLoading: isCtfLoading } =
-    useCTFParticipation();
-
-  if (isLoading || isCtfLoading) {
-    return <SolveHistorySkeleton />;
-  }
+  const { data: solveHistory } = useSuspenseQuery(solveHistoryQuery(username));
+  const { data: ctfParticipation } = useSuspenseQuery(ctfParticipationQuery());
 
   const combinedSolveHistory = transformData(
     solveHistory || [],

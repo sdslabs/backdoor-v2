@@ -92,23 +92,23 @@ export const useUserStats = (username?: string) => {
   });
 };
 
-export const useSolveHistory = (username?: string) => {
-  return useQuery({
+export const solveHistoryQuery = (username?: string) => {
+  return {
     queryKey: ['profile', 'solveHistory', username],
     queryFn: () => fetchSolveHistory(username),
-  });
+  };
 };
 
-export const usePointsOverTime = (username?: string) => {
-  return useQuery({
+export const pointsOverTimeQuery = (username?: string) => {
+  return {
     queryKey: ['profile', 'pointsOverTime', username],
     queryFn: () => fetchPointsOverTime(username),
-  });
+  };
 };
 
-export const useCTFParticipation = () => {
-  return useQuery({
+export const ctfParticipationQuery = () => {
+  return {
     queryKey: ['profile', 'ctfParticipation'],
     queryFn: fetchCTFParticipation,
-  });
+  };
 };

@@ -7,9 +7,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { usePointsOverTime } from '@/lib/api/profile-page/queries';
+import { pointsOverTimeQuery } from '@/lib/api/profile-page/queries';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
-import PointsTimeGraphSkeleton from './skeletons/points-time-graph-skeleton';
 
 const chartConfig = {
   points: {
@@ -23,11 +23,9 @@ interface PointsTimeGraphProps {
 }
 
 function PointsTimeGraph({ username }: PointsTimeGraphProps) {
-  const { data: chartData, isLoading } = usePointsOverTime(username);
+  // const { data: chartData, isLoading } = usePointsOverTime(username);
 
-  if (isLoading) {
-    return <PointsTimeGraphSkeleton />;
-  }
+  const { data: chartData } = useSuspenseQuery(pointsOverTimeQuery(username));
 
   return (
     <Card className="my-4">

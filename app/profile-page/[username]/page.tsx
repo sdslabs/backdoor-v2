@@ -6,14 +6,15 @@ import YearlyActivity from '@/components/profile-page/yearly-activity';
 import { getUserProfile } from '@/lib/api/profile-page/actions';
 
 interface ProfilePageProps {
-  params: {
+  params: Promise<{
     username: string;
-  };
+  }>;
 }
 
 export default async function ProfilePage({ params }: ProfilePageProps) {
+  const { username } = await params;
   // Check if the user exists
-  const userProfile = await getUserProfile(params.username);
+  const userProfile = await getUserProfile(username);
 
   // If user not found, show the not-found page
   if (userProfile === null) {
@@ -28,7 +29,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       </Suspense>
 
       {/* Yearly activity with solve history and points graph */}
-      <YearlyActivity username={params.username} />
+      <YearlyActivity username={username} />
     </div>
   );
 }

@@ -1,7 +1,7 @@
+import { getCurrentUser } from '@/lib/api/profile-page/actions';
 import { UserProfile } from '@/lib/types/profile';
 import Image from 'next/image';
 import { Button } from '../ui/button';
-import { getCurrentUser } from '@/lib/api/profile-page/actions';
 
 interface UserInformationProps {
   userProfile: UserProfile;
