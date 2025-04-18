@@ -1,25 +1,5 @@
 import { z } from 'zod';
-
-export const emailSchema = z.object({
-  email: z.string().email({ message: 'Invalid email address' }),
-});
-
-export const otpSchema = z.object({
-  otp: z.string().length(6, { message: 'OTP must be 6 digits' }),
-});
-
-export const newPasswordSchema = z
-  .object({
-    newPassword: z
-      .string()
-      .min(6, { message: 'Password must be at least 6 characters' }),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    path: ['confirmPassword'],
-    message: 'Passwords do not match',
-  });
-
+import { EmailSchema, OtpSchema, NewPasswordSchema } from '@/lib/schemas/auth';
 export const steps = ['email', 'otp', 'newPassword'] as const;
 export type StepKey = (typeof steps)[number];
 
@@ -32,6 +12,7 @@ export const initialState: FormState = { step: 0 };
 
 const EXPECTED_OTP = '123456';
 
+// TODO: Implement the logic just like sign-up step
 export async function handleResetPasswordStep(
   prevState: FormState,
   formData: FormData
@@ -41,13 +22,13 @@ export async function handleResetPasswordStep(
 
   try {
     if (step === 0) {
-      emailSchema.parse(formObj);
+      EmailSchema.parse(formObj);
       console.log('Sending OTP to:', formObj.email);
       return { step: step + 1 };
     }
 
     if (step === 1) {
-      otpSchema.parse(formObj);
+      OtpSchema.parse(formObj);
       const otp = formObj.otp;
       if (otp !== EXPECTED_OTP) {
         return {
@@ -59,7 +40,7 @@ export async function handleResetPasswordStep(
     }
 
     if (step === 2) {
-      newPasswordSchema.parse(formObj);
+      NewPasswordSchema.parse(formObj);
       console.log('Resetting password');
       return { step: step + 1 };
     }

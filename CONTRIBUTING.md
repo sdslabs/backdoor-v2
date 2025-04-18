@@ -49,9 +49,10 @@ For the `/lib` folder -
 │
 ├── /api                            # Centralized data fetching logic
 │   └── /<feature>
-│       ├── actions.ts              # Server Actions (server-only functions)
-│       ├── queries.ts              # TanStack Query fetchers, mutations, and client-safe logic
-│       └── mock-data.ts            # (optional) Mock data for component testing or previews
+│       ├── <feature>-actions.ts    # Server Actions (server-only functions)
+│       ├── <feature>-queries.ts    # TanStack Query fetchers, mutations, and client-safe logic
+│       └── <feature>-mock-data.ts  # (optional) Mock data for component testing or previews
+│       └── index.ts                # Exports all stuff for modular imports
 │
 ├── /axios                          # Authenticated Axios instances
 │   ├── client-axios.ts             # createClientAxios(): For TanStack queries/mutations (client-side)
@@ -60,6 +61,14 @@ For the `/lib` folder -
 ├── /hooks                          # Custom reusable React hooks
 │   ├── use-challenge-params.ts     
 │   └── ...                         # Other feature or utility-based hooks
+│
+├── /stores                         # Zustand Stores
+│   ├── auth-store.ts*              # Stores auth info (role, isLoggedIn and logout())      
+│   └── ...                         
+│
+├── /schemas                        # Zod Schemas
+│   ├── auth.ts
+│   └── ... 
 │
 ├── /types                          # Application-wide type definitions
 │   ├── auth.ts

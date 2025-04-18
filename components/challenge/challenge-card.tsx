@@ -2,10 +2,9 @@
 
 import { ChallengeMetadata } from '@/lib/types/challenge';
 import { Badge } from '@/components/ui/badge';
-import Link from 'next/link';
 import { DifficultyRating } from '@/components/ui/difficulty-rating';
 import { SolveStatusIcon } from '@/components/ui/solve-status-icon';
-import { useChallengeParams } from '@/hooks/use-challenge-params';
+import { useChallengeParams } from '@/lib/hooks/use-challenge-params';
 
 const ChallengeCard: React.FC<ChallengeMetadata> = ({
   id,

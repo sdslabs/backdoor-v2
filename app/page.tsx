@@ -1,31 +1,41 @@
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import LoginTab from '@/components/auth/login-tab';
+import SignupTab from '@/components/auth/signup-tab';
+import ResetTab from '@/components/auth/reset-tab';
 
-export default function Home() {
+const TABS = [
+  { value: 'login', label: 'Login', Component: LoginTab },
+  { value: 'signup', label: 'Sign Up', Component: SignupTab },
+  { value: 'reset', label: 'Reset Pass', Component: ResetTab },
+];
+
+export default function HomePage() {
   return (
-    <div className="flex flex-col h-screen w-full items-center justify-center gap-4">
-      <h1 className="text-6xl font-display text-primary">backdoor</h1>
-      <p>Here are the buttons and badges as per the design.</p>
-      <div className="flex flex-row gap-4">
-        <div className="flex flex-col gap-4">
-          <p className="text-xl uppercase">Button</p>
-          <Button>Default</Button>
-          <Button variant={'highlight'}>Highlight</Button>
-          <Button variant={'secondary'}>Secondary</Button>
-          <Button variant={'outline'}>Outline</Button>
-          <Button variant={'outline-highlight'}>Outline highlight</Button>
-          <Button variant={'destructive'}>Destructive</Button>
-        </div>
-        <div className="flex flex-col gap-4">
-          <p className="text-xl uppercase">Badge</p>
-          <Badge>Default</Badge>
-          <Badge variant={'primary'}>Primary</Badge>
-          <Badge variant={'highlight'}>Highlight</Badge>
-          <Badge variant={'outline'}>Outline</Badge>
-          <Badge variant={'destructive'}>Destructive</Badge>
-        </div>
+    <section className="h-screen flex flex-col items-center justify-center gap-8">
+      <div className="space-y-4 text-center">
+        <h1 className="text-6xl font-display text-primary">backdoor</h1>
+        <p className="text-xl italic">For when the windows are shut</p>
       </div>
-      <p>Make a route for testing your components :)</p>
-    </div>
+      <div className="w-full max-w-sm px-4">
+        <Tabs defaultValue="login" className="w-full">
+          <TabsList className="flex gap-2 w-full">
+            {TABS.map(({ value, label }) => (
+              <TabsTrigger key={value} value={value} className="cursor-pointer">
+                {label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {TABS.map(({ value, Component }) => (
+            <TabsContent
+              key={value}
+              value={value}
+              className="mt-6 min-h-[300px]"
+            >
+              <Component />
+            </TabsContent>
+          ))}
+        </Tabs>
+      </div>
+    </section>
   );
 }

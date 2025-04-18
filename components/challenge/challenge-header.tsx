@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useChallengeParams } from '@/hooks/use-challenge-params';
+import { useChallengeParams } from '@/lib/hooks/use-challenge-params';
 import { DifficultyRating } from '@/components/ui/difficulty-rating';
 import { SolveStatusIcon } from '@/components/ui/solve-status-icon';
 

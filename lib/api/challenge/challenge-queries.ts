@@ -1,5 +1,8 @@
 import { Challenge, ChallengeMetadata } from '@/lib/types';
-import { MOCK_CHALLENGES, MOCK_CHALLENGES_METADATA } from './mock-data';
+import {
+  MOCK_CHALLENGES,
+  MOCK_CHALLENGES_METADATA,
+} from './challenge-mock-data';
 import { useQuery } from '@tanstack/react-query';
 
 // Fetchers (mock-data) //

@@ -2,7 +2,7 @@
 
 import { useActionState } from 'react';
 import { Button } from '@/components/ui/button';
-import { AuthInput } from '@/components/auth/auth-input';
+import { AuthInput } from '@/components/ui/auth-input';
 import {
   InputOTP,
   InputOTPGroup,
@@ -12,7 +12,7 @@ import {
   handleResetPasswordStep,
   steps,
   initialState,
-} from '@/lib/auth/actions/reset-actions';
+} from '@/lib/api/auth/reset-password';
 
 export default function ResetTab() {
   const [state, formAction] = useActionState(

@@ -5,7 +5,7 @@ import {
   PaginationContent,
   PaginationItem,
 } from '@/components/ui/pagination';
-import { useChallengeParams } from '@/hooks/use-challenge-params';
+import { useChallengeParams } from '@/lib/hooks/use-challenge-params';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 

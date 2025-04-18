@@ -2,7 +2,7 @@
 
 import ChallengeDetails from './challenge-details';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { useChallengeParams } from '@/hooks/use-challenge-params';
+import { useChallengeParams } from '@/lib/hooks/use-challenge-params';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { useRouter } from 'next/navigation';
 

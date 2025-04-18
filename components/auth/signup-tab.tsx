@@ -1,156 +1,24 @@
 'use client';
 
-import { useActionState } from 'react';
-import { Button } from '@/components/ui/button';
-import { AuthInput } from '@/components/auth/auth-input';
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from '@/components/ui/input-otp';
-import {
-  handleSignupStep,
-  steps,
-  initialState,
-} from '@/lib/auth/actions/signup-actions';
+import React from 'react';
+import { Stepper, StepperProgress, Step } from '@/components/ui/stepper';
+import { UserEmail, VerifyOtp, RegisterUser } from './sign-up-steps';
 
-export function SignupTab() {
-  const [state, formAction] = useActionState(handleSignupStep, initialState);
-  const activeStep = state.errors
-    ? state.step
-    : Math.min(state.step, steps.length);
-  const resetSteps = () => window.location.reload();
+const SIGNUP_STEPS = [
+  { step: 0, Component: UserEmail },
+  { step: 1, Component: VerifyOtp },
+  { step: 2, Component: RegisterUser },
+];
 
+export default function SignupTab() {
   return (
-    <div className="flex flex-col items-center w-full">
-      <div className="h-16 mb-6">
-        <div className="flex justify-between items-center gap-12 relative">
-          {steps.map((step, index) => (
-            <div
-              key={step}
-              className="relative flex items-center justify-center"
-            >
-              <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center border-2 font-semibold transition-all duration-300 ease-in-out transform ${
-                  index === activeStep
-                    ? 'border-primary bg-primary text-white shadow-lg scale-110'
-                    : index < activeStep
-                      ? 'border-primary bg-primary text-white'
-                      : 'border-muted-foreground bg-transparent text-muted-foreground'
-                }`}
-              >
-                {index + 1}
-              </div>
-
-              {index < steps.length - 1 && (
-                <div
-                  className={`absolute left-full top-1/2 w-12 h-1 transform -translate-y-1/2 transition-all duration-300 rounded-md ${
-                    index < activeStep ? 'bg-primary' : 'bg-muted-foreground'
-                  }`}
-                />
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="min-h-[280px] max-w-xs w-full">
-        {activeStep === 0 && (
-          <form action={formAction} className="space-y-4 mx-auto">
-            <AuthInput
-              name="email"
-              label="Email"
-              type="text"
-              error={state.errors?.email?.[0]}
-              required
-            />
-            {state.errors?.general && (
-              <p className="text-sm text-destructive">
-                {state.errors.general[0]}
-              </p>
-            )}
-            <Button type="submit" className="w-full">
-              Send OTP
-            </Button>
-          </form>
-        )}
-
-        {activeStep === 1 && (
-          <form
-            action={formAction}
-            className="space-y-4 flex flex-col items-center"
-          >
-            <InputOTP maxLength={6} name="otp">
-              <InputOTPGroup>
-                {[...Array(6)].map((_, i) => (
-                  <InputOTPSlot key={i} index={i} />
-                ))}
-              </InputOTPGroup>
-            </InputOTP>
-            {state.errors?.otp && (
-              <p className="text-sm text-destructive mt-2">
-                {state.errors.otp[0]}
-              </p>
-            )}
-            {state.errors?.general && (
-              <p className="text-sm text-destructive">
-                {state.errors.general[0]}
-              </p>
-            )}
-            <Button type="submit" className="w-full">
-              Verify OTP
-            </Button>
-          </form>
-        )}
-
-        {activeStep === 2 && (
-          <form action={formAction} className="space-y-4 mx-auto">
-            <AuthInput
-              name="fullName"
-              label="Full Name"
-              type="text"
-              error={state.errors?.fullName?.[0]}
-              required
-            />
-            <AuthInput
-              name="username"
-              label="Username"
-              type="text"
-              error={state.errors?.username?.[0]}
-              required
-            />
-            <AuthInput
-              name="password"
-              label="Password"
-              type="password"
-              error={state.errors?.password?.[0]}
-              required
-            />
-            <AuthInput
-              name="confirmPassword"
-              label="Confirm Password"
-              type="password"
-              error={state.errors?.confirmPassword?.[0]}
-              required
-            />
-            {state.errors?.general && (
-              <p className="text-sm text-destructive">
-                {state.errors.general[0]}
-              </p>
-            )}
-            <Button type="submit" className="w-full">
-              Finish Signup
-            </Button>
-          </form>
-        )}
-
-        {activeStep === steps.length && (
-          <div className="text-center space-y-4">
-            <h2 className="text-sm">Signup completed successfully!</h2>
-            <Button onClick={resetSteps}>Reset</Button>
-          </div>
-        )}
-      </div>
-    </div>
+    <Stepper totalSteps={SIGNUP_STEPS.length}>
+      <StepperProgress />
+      {SIGNUP_STEPS.map(({ step, Component }) => (
+        <Step key={step} index={step}>
+          <Component />
+        </Step>
+      ))}
+    </Stepper>
   );
 }
