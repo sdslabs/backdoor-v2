@@ -115,7 +115,7 @@ function SolveHistoryComponent({ username }: SolveHistoryComponentProps) {
                                       </span>
                                     </div>
                                   </AccordionTrigger>
-                                  <AccordionContent className="pl-8 py-2 text-base font-semibold text-primary-text">
+                                  <AccordionContent className="pl-8 py-2 text-base font-semibold text-foreground">
                                     {challenge.timeTaken && (
                                       <div className="flex flex-row gap-4 mb-1">
                                         <span>Time taken :</span>

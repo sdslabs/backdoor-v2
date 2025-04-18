@@ -1,7 +1,8 @@
 'use client';
+
 import { UserProfile } from '@/lib/types/profile';
 import Image from 'next/image';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/lib/stores/auth-store';
 
 interface UserInformationProps {
@@ -46,10 +47,10 @@ function UserInformation({ userProfile }: UserInformationProps) {
                 </Button>
               )}
             </div>
-            <p className="text-xl font-semibold text-primary-text my-3">
+            <p className="text-xl font-semibold text-foreground my-3">
               {userProfile.name}
             </p>
-            <div className="text-base font-semibold text-secondary-text">
+            <div className="text-base font-semibold text-secondary-foreground">
               <p className="my-2">
                 Date joined -{' '}
                 {userProfile.createdAt.toLocaleDateString('en-GB', {
@@ -73,7 +74,7 @@ function UserInformation({ userProfile }: UserInformationProps) {
               <div className="text-3xl font-bold text-highlight my-2">
                 {userProfile.stats.rank}
               </div>
-              <div className="text-xl text-secondary-text font-semibold my-2">
+              <div className="text-xl text-secondary-foreground font-semibold my-2">
                 Rank
               </div>
             </div>
@@ -81,7 +82,7 @@ function UserInformation({ userProfile }: UserInformationProps) {
               <div className="text-3xl font-bold my-2">
                 {userProfile.stats.totalPoints}
               </div>
-              <div className="text-xl text-secondary-text font-semibold my-2">
+              <div className="text-xl text-secondary-foreground font-semibold my-2">
                 Points
               </div>
             </div>

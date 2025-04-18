@@ -1,8 +1,8 @@
-import { UserInformation } from '@/components/profile-page';
+import { UserInformation } from '@/components/profile';
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
-import UserInformationSkeleton from '@/components/profile-page/skeletons/user-information-skeleton';
-import YearlyActivity from '@/components/profile-page/yearly-activity';
+import UserInformationSkeleton from '@/components/profile/skeletons/user-information-skeleton';
+import YearlyActivity from '@/components/profile/yearly-activity';
 import { getUserProfile } from '@/lib/api/profile/actions';
 
 interface ProfilePageProps {

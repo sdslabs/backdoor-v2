@@ -14,7 +14,7 @@ function UserInformationSkeleton() {
               <Skeleton className="h-15 w-15 rounded-full" />
             </div>
             <Skeleton className="h-6 w-32 my-3" />
-            <div className="text-base font-semibold text-secondary-text">
+            <div className="text-base font-semibold text-secondary-foreground">
               <Skeleton className="h-4 w-50 my-2 rounded-sm" />
               <Skeleton className="h-4 w-50 my-2 rounded-sm" />
             </div>
@@ -24,7 +24,7 @@ function UserInformationSkeleton() {
               <div className="text-3xl font-bold text-highlight my-2">
                 <Skeleton className="h-10 w-10 rounded-md" />
               </div>
-              <div className="text-xl text-secondary-text font-semibold my-2">
+              <div className="text-xl text-secondary-foreground font-semibold my-2">
                 <Skeleton className="h-4 w-10 rounded-sm" />
               </div>
             </div>
@@ -32,7 +32,7 @@ function UserInformationSkeleton() {
               <div className="text-3xl font-bold my-2">
                 <Skeleton className="h-10 w-10 rounded-md" />
               </div>
-              <div className="text-xl text-secondary-text font-semibold my-2">
+              <div className="text-xl text-secondary-foreground font-semibold my-2">
                 <Skeleton className="h-4 w-10 rounded-sm" />
               </div>
             </div>
