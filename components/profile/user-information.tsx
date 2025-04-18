@@ -1,16 +1,16 @@
-import { getCurrentUser } from '@/lib/api/profile-page/actions';
+'use client';
 import { UserProfile } from '@/lib/types/profile';
 import Image from 'next/image';
 import { Button } from '../ui/button';
+import { useAuthStore } from '@/lib/stores/auth-store';
 
 interface UserInformationProps {
   userProfile: UserProfile;
 }
 
-async function UserInformation({ userProfile }: UserInformationProps) {
-  // Get the currently logged-in user
-  const currentUser = await getCurrentUser();
-  const isAdmin = currentUser.role === 'admin';
+function UserInformation({ userProfile }: UserInformationProps) {
+  const { isLoggedIn, role } = useAuthStore();
+  const isAdmin = isLoggedIn && role === 'admin';
 
   return (
     <div className="flex items-start mb-8 my-4">

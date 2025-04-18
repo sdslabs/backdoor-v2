@@ -2,7 +2,7 @@ import {
   ctfParticipationQuery,
   pointsOverTimeQuery,
   solveHistoryQuery,
-} from '@/lib/api/profile-page/queries';
+} from '@/lib/api/profile/queries';
 import { getQueryClient } from '@/lib/utils/get-query-client';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { Suspense } from 'react';

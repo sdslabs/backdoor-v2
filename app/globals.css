@@ -98,8 +98,6 @@
   --chart-3: hsl(22, 13%, 85%);
   --chart-4: hsl(22, 13%, 88%);
   --chart-5: hsl(22, 68%, 48%);
-  --primary-text: hsl(240, 50%, 99%);
-  --secondary-text: hsl(300, 1%, 64%);
 }
 
 .dark {

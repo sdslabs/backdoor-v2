@@ -11,7 +11,7 @@ import {
 import {
   ctfParticipationQuery,
   solveHistoryQuery,
-} from '@/lib/api/profile-page/queries';
+} from '@/lib/api/profile/queries';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { transformData } from './util';
 
