@@ -1,6 +1,6 @@
 'use client';
 
-import { useChallengeParams } from '@/hooks/use-challenge-params';
+import { useChallengeParams } from '@/lib/hooks/use-challenge-params';
 import { ChallengeTag } from '@/lib/types';
 import { cn } from '@/lib/utils';
 

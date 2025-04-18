@@ -14,8 +14,7 @@ import {
 } from '@/components/ui/tooltip';
 import { DifficultyRating } from '@/components/ui/difficulty-rating';
 import { cn } from '@/lib/utils';
-import { useChallengeDetails } from '@/lib/api/challenge/queries';
-import { submitFlag } from '@/lib/api/challenge/actions';
+import { useChallengeDetails, submitFlag } from '@/lib/api/challenge';
 
 const ChallengeDetails: React.FC<{ challengeId: string }> = ({
   challengeId,

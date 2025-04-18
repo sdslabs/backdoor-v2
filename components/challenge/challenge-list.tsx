@@ -3,9 +3,9 @@
 import ChallengeCardSkeleton from './skeletons/challenge-card-skeleton';
 import ChallengeCard from './challenge-card';
 import { ChallengeTag } from '@/lib/types';
-import { useChallengeParams } from '@/hooks/use-challenge-params';
+import { useChallengeParams } from '@/lib/hooks/use-challenge-params';
 import { ChallengePagination } from './challenge-pagination';
-import { useAllChallengesMetadata } from '@/lib/api/challenge/queries';
+import { useAllChallengesMetadata } from '@/lib/api/challenge';
 
 const PAGE_SIZE = 12;
 

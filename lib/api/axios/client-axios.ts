@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import { API_BASE_URL } from '@/lib/constants';
 import axios from 'axios';
 
-export default function createClientAxios() {
+export function createAuthenticatedClientAxios() {
   const clientAxios = axios.create({
     baseURL: API_BASE_URL,
     timeout: 5000,
@@ -14,10 +14,30 @@ export default function createClientAxios() {
   });
 
   clientAxios.interceptors.request.use((config) => {
-    const { jwtToken } = Cookies.get();
-    config.headers.Authorization = `Bearer ${jwtToken}`;
+    const { auth } = Cookies.get();
+    config.headers.Authorization = `Bearer ${auth}`;
     return config;
   });
 
+  clientAxios.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response && error.response.status === 403) {
+        Cookies.remove('auth');
+        window.location.href = '/';
+      }
+      return Promise.reject(error);
+    }
+  );
+
   return clientAxios;
+}
+
+export function createUnauthenticatedAxios() {
+  const axiosInstance = axios.create({
+    baseURL: API_BASE_URL,
+    timeout: 5000,
+  });
+
+  return axiosInstance;
 }
