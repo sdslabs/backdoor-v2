@@ -10,26 +10,32 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from 'recharts';
-import { leaderboardGraphData } from '@/lib/data/leaderboard-graph';
+
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { leaderboardGraphQuery } from '@/lib/api/leaderboard/queries';
+import { MOCK_LEADERBOARD_GRAPH_DATA } from '@/lib/api/leaderboard/mock-data';
 
 interface FlattenedGraphEntry {
   hour: string;
   [playerId: string]: string | number;
 }
 
-const flattenHourlyData = (): FlattenedGraphEntry[] => {
+const flattenHourlyData = (
+  graphData: typeof MOCK_LEADERBOARD_GRAPH_DATA
+): FlattenedGraphEntry[] => {
   const allHoursSet = new Set<string>();
-  const playerMap: { [key: string]: { [hour: string]: number } } = {};
 
-  leaderboardGraphData.forEach((entry) => {
-    const progressMap: { [hour: string]: number } = {};
+  const playerMap = new Map<string, Map<string, number>>();
+
+  graphData.forEach((entry) => {
+    const progressMap = new Map<string, number>();
 
     entry.hourlyProgress.forEach((progress) => {
       allHoursSet.add(progress.hour);
-      progressMap[progress.hour] = progress.points;
+      progressMap.set(progress.hour, progress.points);
     });
 
-    playerMap[entry.playerId] = progressMap;
+    playerMap.set(entry.playerId, progressMap);
   });
 
   const allHours = Array.from(allHoursSet).sort(
@@ -37,18 +43,19 @@ const flattenHourlyData = (): FlattenedGraphEntry[] => {
   );
 
   const result: FlattenedGraphEntry[] = [];
-  const playerIds = leaderboardGraphData.map((entry) => entry.playerId);
-  const lastSeenPoints: { [playerId: string]: number } = {};
+  const playerIds = graphData.map((entry) => entry.playerId);
+  const lastSeenPoints = new Map<string, number>();
 
   allHours.forEach((hour) => {
     const entry: FlattenedGraphEntry = { hour };
     playerIds.forEach((id) => {
-      const currentPoints = playerMap[id][hour];
+      const playerProgress = playerMap.get(id);
+      const currentPoints = playerProgress?.get(hour);
       if (currentPoints !== undefined) {
         entry[id] = currentPoints;
-        lastSeenPoints[id] = currentPoints;
+        lastSeenPoints.set(id, currentPoints);
       } else {
-        entry[id] = lastSeenPoints[id] ?? 0;
+        entry[id] = lastSeenPoints.get(id) ?? 0;
       }
     });
     result.push(entry);
@@ -65,11 +72,21 @@ const formatHour = (iso: string) => {
     .padStart(2, '0')}`;
 };
 
-export default function LeaderboardGraph() {
-  const data = flattenHourlyData();
+// Pre-generate colors for each player
+const playerColors = (graphData: typeof MOCK_LEADERBOARD_GRAPH_DATA) =>
+  graphData.map(
+    () =>
+      `#${Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, '0')}`
+  );
+
+export const LeaderboardGraph = () => {
+  const { data: graphData } = useSuspenseQuery(leaderboardGraphQuery());
+  const data = flattenHourlyData(graphData);
 
   return (
-    <div className="bg-secondary rounded-2xl mt-12 p-6 sm:p-8">
+    <div className="bg-accent rounded-2xl mt-12 p-6 sm:p-8">
       <h2 className="text-2xl font-bold text-center mb-6">
         Top 10 Players Over Time
       </h2>
@@ -109,12 +126,12 @@ export default function LeaderboardGraph() {
             }}
           />
           <Legend />
-          {leaderboardGraphData.map((entry) => (
+          {graphData.map((entry, index) => (
             <Line
               key={entry.playerId}
               type="monotone"
               dataKey={entry.playerId}
-              stroke={`#${Math.floor(Math.random() * 16777215).toString(16)}`}
+              stroke={playerColors(graphData)[index]}
               dot={false}
             />
           ))}
@@ -122,4 +139,4 @@ export default function LeaderboardGraph() {
       </ResponsiveContainer>
     </div>
   );
-}
+};

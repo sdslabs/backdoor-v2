@@ -3,7 +3,7 @@ import {
   pointsOverTimeQuery,
   solveHistoryQuery,
 } from '@/lib/api/profile/queries';
-import { getQueryClient } from '@/lib/utils/get-query-client';
+import { getQueryClient } from '@/lib/get-query-client';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { Suspense } from 'react';
 import PointsTimeGraph from './points-time-graph';

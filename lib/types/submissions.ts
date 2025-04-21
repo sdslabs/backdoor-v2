@@ -10,3 +10,18 @@ export interface SubmissionResp {
   points: number;
   solvedAt: Date;
 }
+
+// TODO: Update the submission interfaces into one.
+export type SubmissionAdmin = {
+  id: string;
+  playerId: string;
+  challengeTitle: string;
+  category: string;
+  points: number;
+  timestamp: string;
+  status: 'correct' | 'incorrect' | 'flagged' | 'suspicious';
+  flag: string;
+  ipAddress: string;
+  userAgent: string;
+  timeTaken: number; // in seconds
+};

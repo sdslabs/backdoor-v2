@@ -1,18 +1,6 @@
-export type Submission = {
-  id: string;
-  playerId: string;
-  challengeTitle: string;
-  category: string;
-  points: number;
-  timestamp: string;
-  status: 'correct' | 'incorrect' | 'flagged' | 'suspicious';
-  flag: string;
-  ipAddress: string;
-  userAgent: string;
-  timeTaken: number; // in seconds
-};
+import { SubmissionAdmin } from '@/lib/types';
 
-export const submissions: Submission[] = [
+export const SUBMISSIONS: SubmissionAdmin[] = [
   {
     id: 'sub_001',
     playerId: 'c4pt4in_h00k_1818',
