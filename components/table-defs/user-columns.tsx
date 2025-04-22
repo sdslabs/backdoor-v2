@@ -1,9 +1,10 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ChevronDown } from 'lucide-react';
-import { User } from '@/lib/data/users';
+import { UserInfo, UserStatus } from '@/lib/types';
+import { Badge } from '../ui/badge';
 
-export const userColumns: ColumnDef<User>[] = [
+export const userColumns: ColumnDef<UserInfo>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -26,13 +27,13 @@ export const userColumns: ColumnDef<User>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: 'playerId',
+    accessorKey: 'username',
     header: ({ column }) => (
       <div
         className="flex items-center cursor-pointer"
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        Player ID
+        Username
         <ChevronDown className="ml-2 h-4 w-4" />
       </div>
     ),
@@ -44,7 +45,7 @@ export const userColumns: ColumnDef<User>[] = [
         className="flex items-center cursor-pointer"
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        Email ID
+        Email
         <ChevronDown className="ml-2 h-4 w-4" />
       </div>
     ),
@@ -62,43 +63,31 @@ export const userColumns: ColumnDef<User>[] = [
     ),
   },
   {
-    accessorKey: 'totalPoints',
+    accessorKey: 'score',
     header: ({ column }) => (
       <div
         className="flex items-center cursor-pointer"
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        Points
+        Score
         <ChevronDown className="ml-2 h-4 w-4" />
       </div>
     ),
   },
   {
-    accessorKey: 'solvedChallenges',
+    accessorKey: 'status',
     header: ({ column }) => (
       <div
         className="flex items-center cursor-pointer"
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        Qty. Solved
+        Status
         <ChevronDown className="ml-2 h-4 w-4" />
       </div>
     ),
-    cell: ({ row }) => row.original.solvedChallenges.length,
-    sortingFn: (rowA, rowB) =>
-      rowA.original.solvedChallenges.length -
-      rowB.original.solvedChallenges.length,
-  },
-  {
-    accessorKey: 'dateJoined',
-    header: ({ column }) => (
-      <div
-        className="flex items-center cursor-pointer"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Date Joined
-        <ChevronDown className="ml-2 h-4 w-4" />
-      </div>
-    ),
+    cell: ({ row }) => {
+      const status = row.original.status;
+      return <Badge> {UserStatus[status]} </Badge>;
+    },
   },
 ];

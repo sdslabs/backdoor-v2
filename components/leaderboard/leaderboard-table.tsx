@@ -3,9 +3,8 @@
 import React, { useState } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { leaderboardTableQuery } from '@/lib/api/leaderboard/queries';
-import { DataTable } from '../ui/data-table';
-import { TablePagination } from '../pagination';
-import { leaderboardColumns } from '../table-defs/leaderboard-columns';
+import { DataTable } from '@/components/ui/data-table';
+import { TablePagination } from '@/components/ui/table-pagination';
 import {
   ColumnFiltersState,
   getCoreRowModel,
@@ -13,8 +12,8 @@ import {
   PaginationState,
   useReactTable,
 } from '@tanstack/react-table';
-
 import { LEADERBOARD_TABLE_PAGE_LIMIT } from '@/lib/constants';
+import { leaderboardColumns } from '../table-defs/leaderboard-columns';
 
 export const LeaderboardTable = () => {
   const [pagination, setPagination] = useState<PaginationState>({

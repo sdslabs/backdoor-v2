@@ -2,11 +2,11 @@ import { ChallengeSolveResp } from './challenge';
 
 export type UserRole = 'admin' | 'contestant' | 'author' | 'maintainer';
 
-export enum UserStatus {
-  normal = 0,
-  ban = 1,
-  hide = 2,
-}
+export const UserStatus: Record<number, string> = {
+  0: 'normal',
+  1: 'ban',
+  2: 'hide',
+};
 
 export interface User {
   id: number;
@@ -18,3 +18,5 @@ export interface User {
   email: string;
   challenges: ChallengeSolveResp[];
 }
+
+export type UserInfo = Omit<User, 'challenges'>;

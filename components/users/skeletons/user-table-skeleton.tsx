@@ -20,7 +20,7 @@ const TableRowSkeleton = () => (
   </tr>
 );
 
-export const LeaderboardTableSkeleton = () => {
+export const UserTableSkeleton = () => {
   return (
     <div className="bg-accent rounded-2xl p-6 sm:p-8">
       <div className="flex items-center justify-between mb-6">

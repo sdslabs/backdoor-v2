@@ -74,19 +74,19 @@ const formatHour = (iso: string) => {
 
 // Pre-generate colors for each player
 const playerColors = (graphData: typeof MOCK_LEADERBOARD_GRAPH_DATA) =>
-  graphData.map(
-    () =>
-      `#${Math.floor(Math.random() * 16777215)
-        .toString(16)
-        .padStart(6, '0')}`
-  );
+  graphData.map((_, index) => {
+    const hue = (index * 360) / graphData.length;
+    const saturation = 85;
+    const lightness = 60;
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+  });
 
 export const LeaderboardGraph = () => {
   const { data: graphData } = useSuspenseQuery(leaderboardGraphQuery());
   const data = flattenHourlyData(graphData);
 
   return (
-    <div className="bg-accent rounded-2xl mt-12 p-6 sm:p-8">
+    <div className="bg-accent rounded-lg mt-12 p-6 sm:p-8">
       <h2 className="text-2xl font-bold text-center mb-6">
         Top 10 Players Over Time
       </h2>

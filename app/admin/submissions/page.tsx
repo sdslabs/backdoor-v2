@@ -9,7 +9,7 @@ import {
 import { submissions, Submission } from '@/lib/data/submissions';
 import Navbar from '@/components/navbar';
 import { DataTable } from '@/components/ui/data-table';
-import { Pagination } from '@/components/pagination';
+import { Pagination } from '@/components/ui/table-pagination';
 import { submissionColumns } from '@/components/table-defs/submission-columns';
 
 export default function SubmissionsPage() {
