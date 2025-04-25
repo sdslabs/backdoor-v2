@@ -12,18 +12,19 @@ export async function GET(request: Request) {
     writer.write(encoder.encode(`data: ${data}\n\n`));
   };
 
-  const interval = setInterval(() => {
-    const now = new Date();
-    send(
-      'New Notification',
-      `This is a message sent at ${now.toLocaleTimeString()}`
-    );
-  }, 5000);
+  // Example of sending a notification every 5 seconds
+  // const interval = setInterval(() => {
+  //   const now = new Date();
+  //   send(
+  //     'New Notification',
+  //     `This is a message sent at ${now.toLocaleTimeString()}`
+  //   );
+  // }, 5000);
 
-  request.signal.addEventListener('abort', () => {
-    clearInterval(interval);
-    writer.close();
-  });
+  // request.signal.addEventListener('abort', () => {
+  //   clearInterval(interval);
+  //   writer.close();
+  // });
 
   return new Response(readable, {
     headers: {
