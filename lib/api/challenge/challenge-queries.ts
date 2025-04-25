@@ -24,12 +24,10 @@ const fetchChallengeDetails = (id: string): Promise<Challenge> => {
 };
 
 // Query functions
-export const useAllChallengesMetadata = () => {
-  return useQuery({
-    queryKey: ['challenges'],
-    queryFn: fetchAllChallengesMetadata,
-  });
-};
+export const allChallengesMetadataQuery = () => ({
+  queryKey: ['challenges'],
+  queryFn: fetchAllChallengesMetadata,
+});
 
 export const useChallengeDetails = (id: string) => {
   return useQuery({

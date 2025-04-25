@@ -3,7 +3,12 @@ import {
   ChallengeModal,
   ChallengeTagsSidebar,
   ChallengeHeader,
+  ChallengeListSkeleton,
 } from '@/components/challenge';
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { getQueryClient } from '@/lib/get-query-client';
+import { allChallengesMetadataQuery } from '@/lib/api/challenge/challenge-queries';
+import { Suspense } from 'react';
 
 /* 
   This is the main page for the challenge dashboard.
@@ -21,17 +26,23 @@ import {
 */
 
 const ChallengePage = () => {
+  const queryClient = getQueryClient();
+
+  queryClient.prefetchQuery(allChallengesMetadataQuery());
+
   return (
-    <>
-      <div className="flex flex-row gap-8 w-full">
-        <ChallengeTagsSidebar />
-        <div className="flex flex-1 flex-col">
-          <ChallengeHeader />
-          <ChallengeList />
-        </div>
+    <div className="flex flex-row gap-8 w-full">
+      <ChallengeTagsSidebar />
+      <div className="flex flex-1 flex-col">
+        <ChallengeHeader />
+        <Suspense fallback={<ChallengeListSkeleton />}>
+          <HydrationBoundary state={dehydrate(queryClient)}>
+            <ChallengeList />
+          </HydrationBoundary>
+        </Suspense>
       </div>
       <ChallengeModal />
-    </>
+    </div>
   );
 };
 
