@@ -1,23 +1,21 @@
-// app/(your-folder)/submission-columns.tsx or wherever it's appropriate
-
 import { ColumnDef } from '@tanstack/react-table';
-import { Submission } from '@/lib/data/submissions';
+import { SubmissionResp } from '@/lib/types';
 
-export const submissionColumns: ColumnDef<Submission>[] = [
+export const submissionColumns: ColumnDef<SubmissionResp>[] = [
   {
-    accessorKey: 'timestamp',
+    accessorKey: 'solvedAt',
     header: 'Time',
     cell: ({ row }) => {
-      const date = new Date(row.getValue('timestamp'));
+      const date = row.getValue('solvedAt') as Date;
       return date.toLocaleString();
     },
   },
   {
-    accessorKey: 'playerId',
+    accessorKey: 'username',
     header: 'Player',
   },
   {
-    accessorKey: 'challengeTitle',
+    accessorKey: 'name',
     header: 'Challenge',
   },
   {
@@ -29,41 +27,19 @@ export const submissionColumns: ColumnDef<Submission>[] = [
     header: 'Points',
   },
   {
-    accessorKey: 'flag',
-    header: 'Submitted Flag',
+    accessorKey: 'tags',
+    header: 'Tags',
     cell: ({ row }) => {
-      const flag = row.getValue('flag') as string;
-      return <span className="font-mono text-sm text-foreground">{flag}</span>;
-    },
-  },
-  {
-    accessorKey: 'status',
-    header: 'Status',
-    cell: ({ row }) => {
-      const status = row.getValue('status') as string;
-      const statusColors = {
-        correct: 'text-primary',
-        incorrect: 'text-destructive',
-        flagged: 'text-highlight',
-        suspicious: 'text-muted-foreground',
-      };
+      const tags = row.getValue('tags') as string[];
       return (
-        <span className={statusColors[status as keyof typeof statusColors]}>
-          {status.toUpperCase()}
-        </span>
+        <div className="flex gap-1">
+          {tags.map((tag) => (
+            <span key={tag} className="text-xs bg-secondary px-2 py-1 rounded">
+              {tag}
+            </span>
+          ))}
+        </div>
       );
     },
-  },
-  {
-    accessorKey: 'timeTaken',
-    header: 'Time Taken',
-    cell: ({ row }) => {
-      const seconds = row.getValue('timeTaken') as number;
-      return `${seconds}s`;
-    },
-  },
-  {
-    accessorKey: 'ipAddress',
-    header: 'IP Address',
   },
 ];

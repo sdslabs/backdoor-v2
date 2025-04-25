@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  FilePenLineIcon,
   LucideIcon,
   Medal,
   Swords,
@@ -78,7 +79,11 @@ const ADMIN_ACTIONS: NavbarActions = {
       icon: UserCircle2Icon,
       href: '/dashboard/users',
     },
-    // TODO: ... add other later
+    {
+      label: 'Submissions',
+      icon: FilePenLineIcon,
+      href: '/dashboard/submissions',
+    },
   ],
   sideActions: [
     {
