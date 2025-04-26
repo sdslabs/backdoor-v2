@@ -3,6 +3,9 @@ import {
   ChallengeSubmissionsStatistics,
   ChallengeSubmissionsTable,
 } from '@/components/challenge';
+import { ChallengeDetailsWithActionsSkeleton } from '@/components/challenge/skeletons/challenge-details-with-actions-skeleton';
+import { ChallengeSubmissionTableSkeleton } from '@/components/challenge/skeletons/challenge-submission-table-skeleton';
+import { ChallengeSubmissionsStatisticsSkeleton } from '@/components/challenge/skeletons/challenge-submissions-statistics-skeleton';
 import { challengeDetailsQuery } from '@/lib/api/challenge';
 import { getQueryClient } from '@/lib/get-query-client';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
@@ -16,21 +19,21 @@ const ChallengeDetailsPage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="w-full flex flex-col gap-4 p-5">
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<ChallengeDetailsWithActionsSkeleton />}>
         <HydrationBoundary state={dehydrate(queryClient)}>
           <ChallengeDetailsWithActions id={id} />
         </HydrationBoundary>
       </Suspense>
       <div className="flex flex-row gap-4">
         <div className="basis-1/2">
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<ChallengeSubmissionTableSkeleton />}>
             <HydrationBoundary state={dehydrate(queryClient)}>
               <ChallengeSubmissionsTable id={id} />
             </HydrationBoundary>
           </Suspense>
         </div>
         <div className="basis-1/2">
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<ChallengeSubmissionsStatisticsSkeleton />}>
             <HydrationBoundary state={dehydrate(queryClient)}>
               <ChallengeSubmissionsStatistics id={id} />
             </HydrationBoundary>

@@ -1,5 +1,7 @@
+import { DataTableSkeleton } from '@/components/ui/data-table-skeleton';
+
 const ChallengeSubmissionTableSkeleton = () => {
-  return <div>ChallengeSubmissionTableSkeleton</div>;
+  return <DataTableSkeleton rows={10} />;
 };
 
 export { ChallengeSubmissionTableSkeleton };
