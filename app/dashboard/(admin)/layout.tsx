@@ -1,13 +1,12 @@
 'use client';
 
 import { useAuthStore } from '@/lib/stores/auth-store';
-import { useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { toast } from 'sonner';
 import { Spinner } from '@/components/ui/spinner';
 
 const AdminRouteLayout = ({ children }: { children: React.ReactNode }) => {
   const { role, isLoggedIn } = useAuthStore();
-  const router = useRouter();
 
   if (isLoggedIn === undefined) {
     return (
@@ -19,8 +18,7 @@ const AdminRouteLayout = ({ children }: { children: React.ReactNode }) => {
 
   if (!isLoggedIn || role !== 'admin') {
     toast.error('You are not authorized to access this page');
-    router.push('/dashboard');
-    return null;
+    return redirect('/dashboard');
   }
 
   return <>{children}</>;
