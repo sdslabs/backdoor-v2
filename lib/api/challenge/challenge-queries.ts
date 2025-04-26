@@ -1,9 +1,9 @@
-import { Challenge, ChallengeMetadata } from '@/lib/types';
+import { Challenge, ChallengeDetails, ChallengeMetadata } from '@/lib/types';
 import {
+  MOCK_CHALLENGES_DETAILS,
   MOCK_CHALLENGES,
   MOCK_CHALLENGES_METADATA,
 } from './challenge-mock-data';
-import { useQuery } from '@tanstack/react-query';
 
 // Fetchers (mock-data) //
 // * Comment these when using real API *//
@@ -15,11 +15,21 @@ const fetchAllChallengesMetadata = (): Promise<ChallengeMetadata[]> => {
   });
 };
 
-const fetchChallengeDetails = (id: string): Promise<Challenge> => {
+const fetchChallenge = (id: string): Promise<Challenge> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(MOCK_CHALLENGES.find((challenge) => challenge.id === id)!);
     }, 1000);
+  });
+};
+
+const fetchChallengeDetails = (id: string): Promise<ChallengeDetails> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(
+        MOCK_CHALLENGES_DETAILS.find((challenge) => challenge.id === id)!
+      );
+    }, 2000);
   });
 };
 
@@ -29,8 +39,13 @@ export const allChallengesMetadataQuery = () => ({
   queryFn: fetchAllChallengesMetadata,
 });
 
-export const challengeDetailsQuery = (id: string) => ({
+export const challengeQuery = (id: string) => ({
   queryKey: ['challenge', id],
-  queryFn: () => fetchChallengeDetails(id),
+  queryFn: () => fetchChallenge(id),
   refetchOnWindowFocus: false,
+});
+
+export const challengeDetailsQuery = (id: string) => ({
+  queryKey: ['challenge-details', id],
+  queryFn: () => fetchChallengeDetails(id),
 });

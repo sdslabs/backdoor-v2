@@ -14,14 +14,12 @@ import {
 import { DifficultyRating } from '@/components/ui/difficulty-rating';
 import { cn } from '@/lib/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { challengeDetailsQuery, submitFlag } from '@/lib/api/challenge';
+import { challengeQuery, submitFlag } from '@/lib/api/challenge';
 
 const ChallengeModalContent: React.FC<{ challengeId: string }> = ({
   challengeId,
 }) => {
-  const { data: challenge } = useSuspenseQuery(
-    challengeDetailsQuery(challengeId)
-  );
+  const { data: challenge } = useSuspenseQuery(challengeQuery(challengeId));
   const [flagSubmitState, handleFlagSubmission, flagSubmissionPending] =
     useActionState(submitFlag, null);
 

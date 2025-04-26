@@ -19,4 +19,12 @@ export interface User {
   challenges: ChallengeSolveResp[];
 }
 
+export interface UserSolveResp {
+  id: number;
+  username: string;
+  solvedAt: Date;
+  flag: string;
+  correct: boolean;
+}
+
 export type UserInfo = Omit<User, 'challenges'>;
