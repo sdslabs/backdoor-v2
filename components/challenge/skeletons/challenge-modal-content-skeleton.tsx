@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton';
 
-const ChallengeDetailsSkeleton = () => {
+const ChallengeModalContentSkeleton = () => {
   return (
     <div className="bg-accent text-secondary-foreground p-4 max-w-4xl w-full font-sans">
       <div className="flex justify-between items-center mb-4">
@@ -44,4 +44,4 @@ const ChallengeDetailsSkeleton = () => {
   );
 };
 
-export default ChallengeDetailsSkeleton;
+export { ChallengeModalContentSkeleton };

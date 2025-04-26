@@ -1,6 +1,6 @@
 'use client';
 
-import ChallengeCard from './challenge-card';
+import { ChallengeCard } from './challenge-card';
 import { ChallengeTag } from '@/lib/types';
 import { useChallengeParams } from '@/lib/hooks/use-challenge-params';
 import { ChallengePagination } from './challenge-pagination';

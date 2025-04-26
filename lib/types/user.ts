@@ -12,7 +12,7 @@ export interface User {
   id: number;
   username: string;
   role: UserRole;
-  status: number; // This number should be parsed using UserStatus
+  status: keyof typeof UserStatus;
   score: number;
   rank: number;
   email: string;

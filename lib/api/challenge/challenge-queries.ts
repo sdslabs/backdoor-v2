@@ -29,10 +29,8 @@ export const allChallengesMetadataQuery = () => ({
   queryFn: fetchAllChallengesMetadata,
 });
 
-export const useChallengeDetails = (id: string) => {
-  return useQuery({
-    queryKey: ['challenge', id],
-    queryFn: () => fetchChallengeDetails(id),
-    refetchOnWindowFocus: false,
-  });
-};
+export const challengeDetailsQuery = (id: string) => ({
+  queryKey: ['challenge', id],
+  queryFn: () => fetchChallengeDetails(id),
+  refetchOnWindowFocus: false,
+});
