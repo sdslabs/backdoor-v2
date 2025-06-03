@@ -1,17 +1,16 @@
 'use client';
 
-import ChallengeCardSkeleton from './skeletons/challenge-card-skeleton';
-import ChallengeCard from './challenge-card';
+import { ChallengeCard } from './challenge-card';
 import { ChallengeTag } from '@/lib/types';
 import { useChallengeParams } from '@/lib/hooks/use-challenge-params';
 import { ChallengePagination } from './challenge-pagination';
-import { useAllChallengesMetadata } from '@/lib/api/challenge';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { allChallengesMetadataQuery } from '@/lib/api/challenge/challenge-queries';
 
 const PAGE_SIZE = 12;
 
 const ChallengeList = () => {
-  const { data: challenges, isLoading } = useAllChallengesMetadata();
-
+  const { data: challenges } = useSuspenseQuery(allChallengesMetadataQuery());
   const { tag, status, difficulty, page } = useChallengeParams();
 
   const filteredChallenges = challenges?.filter(
@@ -31,24 +30,22 @@ const ChallengeList = () => {
 
   const totalPages = Math.ceil((filteredChallenges?.length || 0) / PAGE_SIZE);
 
+  if (filteredChallenges?.length === 0) {
+    return (
+      <div className="col-span-full">
+        <div className="text-center text-muted-foreground">
+          No challenges found :(
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {isLoading ? (
-          Array.from({ length: 9 }).map((_, index) => (
-            <ChallengeCardSkeleton key={index} />
-          ))
-        ) : filteredChallenges?.length === 0 ? (
-          <div className="col-span-full">
-            <div className="text-center text-muted-foreground">
-              No challenges found :(
-            </div>
-          </div>
-        ) : (
-          paginatedChallenges?.map((challenge, i) => (
-            <ChallengeCard key={i} {...challenge} />
-          ))
-        )}
+        {paginatedChallenges?.map((challenge, i) => (
+          <ChallengeCard key={i} {...challenge} />
+        ))}
       </div>
       {filteredChallenges && filteredChallenges.length > PAGE_SIZE && (
         <ChallengePagination totalPages={totalPages} />

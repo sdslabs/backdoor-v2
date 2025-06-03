@@ -46,7 +46,7 @@ export const LeaderboardTable = () => {
 
   return (
     <div className="bg-card text-card-foreground">
-      <div className="flex justify-between items-center p-6 sm:p-8">
+      <div className="flex justify-between items-center p-5 sm:p-8">
         <h2 className="text-2xl font-bold mx-auto">Leaderboard</h2>
       </div>
       <DataTable table={table} />

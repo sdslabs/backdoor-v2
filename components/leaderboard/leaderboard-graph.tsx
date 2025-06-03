@@ -86,7 +86,7 @@ export const LeaderboardGraph = () => {
   const data = flattenHourlyData(graphData);
 
   return (
-    <div className="bg-accent rounded-lg mt-12 p-6 sm:p-8">
+    <div className="bg-accent rounded-lg mt-12 p-5 sm:p-8">
       <h2 className="text-2xl font-bold text-center mb-6">
         Top 10 Players Over Time
       </h2>

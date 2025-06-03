@@ -5,6 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { DifficultyRating } from '@/components/ui/difficulty-rating';
 import { SolveStatusIcon } from '@/components/ui/solve-status-icon';
 import { useChallengeParams } from '@/lib/hooks/use-challenge-params';
+import { useAuthStore } from '@/lib/stores/auth-store';
+import { useRouter } from 'next/navigation';
 
 const ChallengeCard: React.FC<ChallengeMetadata> = ({
   id,
@@ -17,11 +19,22 @@ const ChallengeCard: React.FC<ChallengeMetadata> = ({
   deployedStatus,
 }) => {
   const { updateId } = useChallengeParams();
+  const { role } = useAuthStore();
+  const router = useRouter();
+
+  const handleClick = () => {
+    if (role === 'admin') {
+      router.push(`/dashboard/challenge-details/${id}`);
+    } else {
+      updateId(id);
+    }
+  };
+
   return (
     <>
       <div
         className="p-6 bg-accent rounded-xl flex flex-col gap-4 cursor-pointer"
-        onClick={() => updateId(id)}
+        onClick={handleClick}
       >
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
@@ -47,4 +60,4 @@ const ChallengeCard: React.FC<ChallengeMetadata> = ({
   );
 };
 
-export default ChallengeCard;
+export { ChallengeCard };

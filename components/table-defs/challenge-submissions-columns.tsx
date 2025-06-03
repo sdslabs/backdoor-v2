@@ -1,0 +1,55 @@
+import { UserSolveResp } from '@/lib/types';
+import { cn } from '@/lib/utils';
+import { ColumnDef } from '@tanstack/react-table';
+import { ChevronDown } from 'lucide-react';
+
+export const challengeSubmissionsColumns: ColumnDef<UserSolveResp>[] = [
+  {
+    accessorKey: 'username',
+    header: () => (
+      <div className="flex items-center">
+        Username
+        <ChevronDown className="ml-2 h-4 w-4" />
+      </div>
+    ),
+  },
+  {
+    accessorKey: 'flag',
+    header: () => (
+      <div className="flex items-center">
+        Flag
+        <ChevronDown className="ml-2 h-4 w-4" />
+      </div>
+    ),
+    cell: ({ row }) => {
+      const { correct, flag } = row.original;
+      return (
+        <span
+          className={cn(
+            correct ? 'text-emerald-500' : 'text-destructive',
+            'font-semibold'
+          )}
+        >
+          {flag}
+        </span>
+      );
+    },
+  },
+  {
+    accessorKey: 'solvedAt',
+    header: () => (
+      <div className="flex items-center">
+        Solved At
+        <ChevronDown className="ml-2 h-4 w-4" />
+      </div>
+    ),
+    cell: ({ row }) => {
+      const date = row.getValue('solvedAt') as Date;
+      return date.toLocaleDateString('en-US', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      });
+    },
+  },
+];

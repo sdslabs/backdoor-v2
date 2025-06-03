@@ -17,9 +17,12 @@ export function DataTable<T>({ table }: DataTableProps<T>) {
     <Table>
       <TableHeader className="bg-popover">
         {table.getHeaderGroups().map((headerGroup) => (
-          <TableRow key={headerGroup.id}>
+          <TableRow key={headerGroup.id} className="bg-accent/50">
             {headerGroup.headers.map((header) => (
-              <TableHead key={header.id} className="text-muted-foreground py-3">
+              <TableHead
+                key={header.id}
+                className="text-foreground font-bold py-3"
+              >
                 {flexRender(
                   header.column.columnDef.header,
                   header.getContext()
@@ -33,8 +36,10 @@ export function DataTable<T>({ table }: DataTableProps<T>) {
         {table.getRowModel().rows.map((row) => (
           <TableRow
             key={row.id}
-            className={`hover:bg-accent ${
-              row.getIsSelected() ? 'bg-accent/50' : ''
+            className={`border-none bg-muted rounded ${
+              row.getIsSelected()
+                ? 'bg-primary text-primary-foreground'
+                : 'hover:bg-accent'
             }`}
           >
             {row.getVisibleCells().map((cell) => (

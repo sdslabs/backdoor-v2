@@ -43,7 +43,7 @@ const UsersTable = () => {
   });
 
   return (
-    <div className="w-full p-6">
+    <div className="w-full p-5">
       <UserActions table={table} />
       <DataTable table={table} />
       {table.getFilteredRowModel().rows.length > USERS_TABLE_PAGE_LIMIT && (

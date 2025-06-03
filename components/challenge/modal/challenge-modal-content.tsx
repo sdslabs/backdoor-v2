@@ -3,7 +3,6 @@
 import { Bookmark, DownloadIcon } from 'lucide-react';
 import React, { useActionState } from 'react';
 import { Badge } from '@/components/ui/badge';
-import ChallengeDetailsSkeleton from './skeletons/challenge-details-skeleton';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,18 +13,17 @@ import {
 } from '@/components/ui/tooltip';
 import { DifficultyRating } from '@/components/ui/difficulty-rating';
 import { cn } from '@/lib/utils';
-import { useChallengeDetails, submitFlag } from '@/lib/api/challenge';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { challengeQuery, submitFlag } from '@/lib/api/challenge';
 
-const ChallengeDetails: React.FC<{ challengeId: string }> = ({
+const ChallengeModalContent: React.FC<{ challengeId: string }> = ({
   challengeId,
 }) => {
-  const { data: challenge, isLoading } = useChallengeDetails(challengeId);
+  const { data: challenge } = useSuspenseQuery(challengeQuery(challengeId));
   const [flagSubmitState, handleFlagSubmission, flagSubmissionPending] =
     useActionState(submitFlag, null);
 
-  if (isLoading) {
-    return <ChallengeDetailsSkeleton />;
-  } else if (!challenge) {
+  if (!challenge) {
     return <div className="text-red-500">Challenge not found</div>;
   } else {
     return (
@@ -142,4 +140,4 @@ const ChallengeDetails: React.FC<{ challengeId: string }> = ({
   }
 };
 
-export default ChallengeDetails;
+export { ChallengeModalContent };

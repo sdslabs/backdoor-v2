@@ -1,3 +1,5 @@
+import { UserSolveResp } from './user';
+
 export type ChallengeDifficulty = 'easy' | 'medium' | 'hard';
 
 export const ChallengeDifficultyValue: Record<ChallengeDifficulty, number> = {
@@ -45,8 +47,12 @@ export interface Challenge extends ChallengeMetadata {
   assets: string[]; // assets names, will generate the link on the frontend
   additionalLinks: string[]; // these are links to additional resources
   ports: number[];
-  dynamic?: boolean;
-  flag?: string; // * for the admin side
+}
+
+export interface ChallengeDetails extends Challenge {
+  dynamicFlag: boolean;
+  flag: string;
+  solves: UserSolveResp[];
 }
 
 export interface ChallengeSolveResp {

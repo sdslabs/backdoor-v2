@@ -45,7 +45,7 @@ const SubmissionsTable = () => {
   });
 
   return (
-    <div className="w-full p-6">
+    <div className="w-full p-5">
       <h2 className="text-2xl font-semibold mb-4">Submissions Log</h2>
       <DataTable table={table} />
       <TablePagination table={table} />
