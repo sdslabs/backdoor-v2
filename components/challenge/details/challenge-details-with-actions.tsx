@@ -36,7 +36,7 @@ const ChallengeDetailsWithActions = ({ id }: { id: string }) => {
         </div>
         <div className="flex items-center gap-1 text-muted-foreground">
           <Button size="iconSm" variant={'ghost'}>
-            {isDeployed ? <PowerIcon size={16} /> : <PowerOffIcon size={16} />}
+            {isDeployed ? <PowerOffIcon size={16} /> : <PowerIcon size={16} />}
           </Button>
           <Button size="iconSm" variant={'ghost'}>
             <PenIcon size={16} />

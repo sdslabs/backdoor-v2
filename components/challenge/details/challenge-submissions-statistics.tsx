@@ -37,17 +37,15 @@ const ChallengeSubmissionsStatistics = ({ id }: { id: string }) => {
   ];
 
   let counter = 0;
-  const submissionsChartData = challenge.solves
-    .map((solve) => {
-      if (solve.correct) {
-        counter++;
-      }
-      return {
-        date: solve.solvedAt,
-        submissions: counter,
-      };
-    })
-    .filter(Boolean);
+  const submissionsChartData = challenge.solves.map((solve) => {
+    if (solve.correct) {
+      counter++;
+    }
+    return {
+      date: solve.solvedAt,
+      submissions: counter,
+    };
+  });
 
   return (
     <div className="bg-accent rounded-xl p-4 space-y-4">

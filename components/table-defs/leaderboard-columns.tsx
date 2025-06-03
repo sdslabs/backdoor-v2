@@ -1,5 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { LeaderboardEntry } from '@/lib/data/leaderboard';
+import { LeaderboardEntry } from '@/lib/types';
 
 export const leaderboardColumns: ColumnDef<LeaderboardEntry>[] = [
   {

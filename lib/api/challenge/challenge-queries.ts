@@ -29,7 +29,7 @@ const fetchChallengeDetails = (id: string): Promise<ChallengeDetails> => {
       resolve(
         MOCK_CHALLENGES_DETAILS.find((challenge) => challenge.id === id)!
       );
-    }, 10000);
+    }, 1000);
   });
 };
 

@@ -2,10 +2,10 @@ import {
   ChallengeDetailsWithActions,
   ChallengeSubmissionsStatistics,
   ChallengeSubmissionsTable,
+  ChallengeDetailsWithActionsSkeleton,
+  ChallengeSubmissionTableSkeleton,
+  ChallengeSubmissionsStatisticsSkeleton,
 } from '@/components/challenge';
-import { ChallengeDetailsWithActionsSkeleton } from '@/components/challenge/skeletons/challenge-details-with-actions-skeleton';
-import { ChallengeSubmissionTableSkeleton } from '@/components/challenge/skeletons/challenge-submission-table-skeleton';
-import { ChallengeSubmissionsStatisticsSkeleton } from '@/components/challenge/skeletons/challenge-submissions-statistics-skeleton';
 import { challengeDetailsQuery } from '@/lib/api/challenge';
 import { getQueryClient } from '@/lib/get-query-client';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
