@@ -27,13 +27,17 @@ const fetchChallenge = (name: string): Promise<Challenge> => {
   });
 };
 
-const fetchChallengeDetails = (id: string): Promise<ChallengeDetails> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(
-        MOCK_CHALLENGES_DETAILS.find((challenge) => challenge.id === id)!
-      );
-    }, 1000);
+const fetchChallengeDetails = (name: string): Promise<ChallengeDetails> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const axios = createAuthenticatedClientAxios();
+      const res = await axios.get(`/api/info/challenge/${name}`);
+      console.log('challenge response:', res.data);
+      resolve(res.data);
+    } catch (err) {
+      console.error('Error fetching challenge:', err);
+      reject(err);
+    }
   });
 };
 
@@ -80,7 +84,7 @@ export const challengeQuery = (name: string) => ({
   refetchOnWindowFocus: false,
 });
 
-export const challengeDetailsQuery = (id: string) => ({
-  queryKey: ['challenge-details', id],
-  queryFn: () => fetchChallengeDetails(id),
+export const challengeDetailsQuery = (name: string) => ({
+  queryKey: ['challenge-details', name],
+  queryFn: () => fetchChallengeDetails(name),
 });

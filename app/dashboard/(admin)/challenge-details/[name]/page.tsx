@@ -11,31 +11,35 @@ import { getQueryClient } from '@/lib/get-query-client';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { Suspense } from 'react';
 
-const ChallengeDetailsPage = async ({ params }: { params: { id: string } }) => {
-  const { id } = await params;
+const ChallengeDetailsPage = async ({
+  params,
+}: {
+  params: { name: string };
+}) => {
+  const { name } = await params;
 
   const queryClient = getQueryClient();
-  queryClient.prefetchQuery(challengeDetailsQuery(id));
+  queryClient.prefetchQuery(challengeDetailsQuery(name));
 
   return (
     <div className="w-full flex flex-col gap-4 p-5">
       <Suspense fallback={<ChallengeDetailsWithActionsSkeleton />}>
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <ChallengeDetailsWithActions id={id} />
+          <ChallengeDetailsWithActions name={name} />
         </HydrationBoundary>
       </Suspense>
       <div className="flex flex-row gap-4">
         <div className="basis-1/2">
           <Suspense fallback={<ChallengeSubmissionTableSkeleton />}>
             <HydrationBoundary state={dehydrate(queryClient)}>
-              <ChallengeSubmissionsTable id={id} />
+              <ChallengeSubmissionsTable name={name} />
             </HydrationBoundary>
           </Suspense>
         </div>
         <div className="basis-1/2">
           <Suspense fallback={<ChallengeSubmissionsStatisticsSkeleton />}>
             <HydrationBoundary state={dehydrate(queryClient)}>
-              <ChallengeSubmissionsStatistics id={id} />
+              <ChallengeSubmissionsStatistics name={name} />
             </HydrationBoundary>
           </Suspense>
         </div>

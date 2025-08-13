@@ -10,8 +10,8 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
-const ChallengeSubmissionsTable = ({ id }: { id: string }) => {
-  const { data: challenge } = useSuspenseQuery(challengeDetailsQuery(id));
+const ChallengeSubmissionsTable = ({ name }: { name: string }) => {
+  const { data: challenge } = useSuspenseQuery(challengeDetailsQuery(name));
 
   const table = useReactTable({
     data: challenge.solves,
