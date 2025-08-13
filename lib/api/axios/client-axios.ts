@@ -14,7 +14,9 @@ export function createAuthenticatedClientAxios() {
   });
 
   clientAxios.interceptors.request.use((config) => {
-    const { auth } = Cookies.get();
+    const cookies = Cookies.get();
+    console.log(cookies);
+    const auth = cookies.auth;
     config.headers.Authorization = `Bearer ${auth}`;
     return config;
   });
