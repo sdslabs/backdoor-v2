@@ -10,14 +10,15 @@ export function createAuthenticatedClientAxios() {
   const clientAxios = axios.create({
     baseURL: API_BASE_URL,
     timeout: 5000,
-    withCredentials: true,
   });
 
   clientAxios.interceptors.request.use((config) => {
     const cookies = Cookies.get();
     console.log(cookies);
-    const auth = cookies.auth;
-    config.headers.Authorization = `Bearer ${auth}`;
+    const auth = cookies?.auth;
+    if (auth) {
+      config.headers.Authorization = `Bearer ${auth}`;
+    }
     return config;
   });
 

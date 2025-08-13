@@ -7,7 +7,7 @@ import {
 } from '@/components/challenge';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@/lib/get-query-client';
-import { allChallengesMetadataQuery } from '@/lib/api/challenge/challenge-queries';
+import { allChallengesMetadataServerQuery } from '@/lib/api/challenge/server-queries';
 import { Suspense } from 'react';
 
 /* 
@@ -25,10 +25,11 @@ import { Suspense } from 'react';
   * @param difficulty - challenge difficulty (easy, medium, hard)
 */
 
-const ChallengePage = () => {
+const ChallengePage = async () => {
   const queryClient = getQueryClient();
 
-  queryClient.prefetchQuery(allChallengesMetadataQuery());
+  // Prefetch queries on the server using server-side fetchers
+  await queryClient.prefetchQuery(allChallengesMetadataServerQuery());
 
   return (
     <div className="flex flex-row gap-8 w-full">

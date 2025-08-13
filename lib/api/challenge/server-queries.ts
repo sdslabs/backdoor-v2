@@ -1,3 +1,6 @@
+// Server-side query functions for prefetching
+// These run on the server during SSR/prefetching
+
 import { Challenge, ChallengeDetails, ChallengeMetadata } from '@/lib/types';
 import {
   MOCK_CHALLENGES_DETAILS,
@@ -5,17 +8,10 @@ import {
 } from './challenge-mock-data';
 import { createAuthenticatedServerAxios } from '../axios';
 
-// Fetchers (mock-data) //
+// Mock fetcher functions for server-side prefetching
 // * Comment these when using real API *//
-// const fetchAllChallengesMetadata = (): Promise<ChallengeMetadata[]> => {
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       resolve(MOCK_CHALLENGES_METADATA);
-//     }, 1000);
-//   });
-// };
 
-const fetchChallenge = (id: string): Promise<Challenge> => {
+const fetchChallengeServer = (id: string): Promise<Challenge> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(MOCK_CHALLENGES.find((challenge) => challenge.id === id)!);
@@ -23,7 +19,7 @@ const fetchChallenge = (id: string): Promise<Challenge> => {
   });
 };
 
-const fetchChallengeDetails = (id: string): Promise<ChallengeDetails> => {
+const fetchChallengeDetailsServer = (id: string): Promise<ChallengeDetails> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(
@@ -33,13 +29,15 @@ const fetchChallengeDetails = (id: string): Promise<ChallengeDetails> => {
   });
 };
 
-// Real fetcher functions
-const fetchAllChallengesMetadata = async (): Promise<ChallengeMetadata[]> => {
+// Real server fetcher functions
+const fetchAllChallengesMetadataServer = async (): Promise<
+  ChallengeMetadata[]
+> => {
   try {
     const axios = await createAuthenticatedServerAxios();
     const res = await axios.get('/api/info/challenges');
+    console.log('Challenge metadata server response:', res.data);
 
-    // TODO: Migrate this to backend
     // Transform API response to match frontend interface
     const transformedData: ChallengeMetadata[] = res.data.map(
       (challenge: any) => ({
@@ -57,24 +55,24 @@ const fetchAllChallengesMetadata = async (): Promise<ChallengeMetadata[]> => {
 
     return transformedData;
   } catch (err) {
-    console.error('Error fetching challenges metadata:', err);
+    console.error('Error fetching challenges metadata server:', err);
     throw err;
   }
 };
 
-// Query functions
-export const allChallengesMetadataQuery = () => ({
+// Server Query functions (for prefetching)
+export const allChallengesMetadataServerQuery = () => ({
   queryKey: ['challenges'],
-  queryFn: fetchAllChallengesMetadata,
+  queryFn: fetchAllChallengesMetadataServer,
 });
 
-export const challengeQuery = (id: string) => ({
+export const challengeServerQuery = (id: string) => ({
   queryKey: ['challenge', id],
-  queryFn: () => fetchChallenge(id),
+  queryFn: () => fetchChallengeServer(id),
   refetchOnWindowFocus: false,
 });
 
-export const challengeDetailsQuery = (id: string) => ({
+export const challengeDetailsServerQuery = (id: string) => ({
   queryKey: ['challenge-details', id],
-  queryFn: () => fetchChallengeDetails(id),
+  queryFn: () => fetchChallengeDetailsServer(id),
 });

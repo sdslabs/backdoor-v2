@@ -1,7 +1,7 @@
 import {
-  leaderboardGraphQuery,
-  leaderboardTableQuery,
-} from '@/lib/api/leaderboard/queries';
+  leaderboardGraphServerQuery,
+  leaderboardTableServerQuery,
+} from '@/lib/api/leaderboard/server-queries';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@/lib/get-query-client';
 import React, { Suspense } from 'react';
@@ -12,11 +12,12 @@ import {
   LeaderboardTableSkeleton,
 } from '@/components/leaderboard';
 
-const Leaderboard = () => {
+const Leaderboard = async () => {
   const queryClient = getQueryClient();
 
-  queryClient.prefetchQuery(leaderboardGraphQuery());
-  queryClient.prefetchQuery(leaderboardTableQuery());
+  // Prefetch queries on the server using server-side fetchers
+  await queryClient.prefetchQuery(leaderboardGraphServerQuery());
+  await queryClient.prefetchQuery(leaderboardTableServerQuery());
 
   return (
     <section className="flex flex-col gap-8">
