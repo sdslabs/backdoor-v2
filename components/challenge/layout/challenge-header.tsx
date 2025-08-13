@@ -12,15 +12,19 @@ import {
 import { useChallengeParams } from '@/lib/hooks/use-challenge-params';
 import { DifficultyRating } from '@/components/ui/difficulty-rating';
 import { SolveStatusIcon } from '@/components/ui/solve-status-icon';
+import { useAuthStore } from '@/lib/stores/auth-store';
+import ChallengeCreate from '../create/challenge-create';
 
 export const ChallengeHeader = () => {
   const { tag } = useChallengeParams();
+  const { role } = useAuthStore();
   return (
     <div className="flex flex-row py-5 items-center justify-between sticky top-0 z-50 bg-background shadow-2xl">
       <div className="inline-flex items-end gap-4">
         <h1 className="text-2xl font-bold uppercase">{tag}</h1>
       </div>
       <div className="flex flex-row gap-3">
+        {role === 'admin' && <ChallengeCreate />}
         <StatusSelect />
         <DifficultySelect />
       </div>

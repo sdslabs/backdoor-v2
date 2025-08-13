@@ -17,8 +17,27 @@ export type ChallengeTag =
   | 'rev'
   | 'crypto'
   | 'osint';
+export const ChallengeTagValues: ChallengeTag[] = [
+  'general',
+  'web',
+  'forensics',
+  'pwn',
+  'rev',
+  'crypto',
+  'osint',
+];
 
 export type ChallengeCategory = 'static' | 'bare' | 'web' | 'service';
+
+export const ChallengeCategoryValuesWithDescription: Record<
+  ChallengeCategory,
+  string
+> = {
+  static: 'Static challenges with no infrastructure requirements',
+  bare: 'Bare metal challenges requiring infrastructure',
+  web: 'Web-based challenges with HTTP endpoints',
+  service: 'Network service based challenges',
+};
 
 export type ChallengeDeployedStatus = 'deployed' | 'undeployed';
 
