@@ -110,7 +110,7 @@ const Navbar: React.FC = () => {
       </h1>
       <div className="flex flex-row items-center gap-2">
         {pages.map((page) => (
-          <Link href={page.href} key={page.label}>
+          <Link href={page.href} key={page.label} prefetch>
             <Button
               size={'sm'}
               variant={'ghost'}

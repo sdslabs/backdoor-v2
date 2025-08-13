@@ -16,10 +16,10 @@ import { cn } from '@/lib/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { challengeQuery, submitFlag } from '@/lib/api/challenge';
 
-const ChallengeModalContent: React.FC<{ challengeId: string }> = ({
-  challengeId,
+const ChallengeModalContent: React.FC<{ challengeName: string }> = ({
+  challengeName,
 }) => {
-  const { data: challenge } = useSuspenseQuery(challengeQuery(challengeId));
+  const { data: challenge } = useSuspenseQuery(challengeQuery(challengeName));
   const [flagSubmitState, handleFlagSubmission, flagSubmissionPending] =
     useActionState(submitFlag, null);
 
@@ -100,7 +100,7 @@ const ChallengeModalContent: React.FC<{ challengeId: string }> = ({
           </TooltipProvider>
         )}
 
-        <form action={handleFlagSubmission} className="flex mt-4">
+        <form action={handleFlagSubmission} className="flex mt-4 w-full">
           <Input
             type="text"
             name="flag"
@@ -112,9 +112,10 @@ const ChallengeModalContent: React.FC<{ challengeId: string }> = ({
           />
           <input
             hidden
+            className="hidden"
             name="challengeId"
             id="challengeId"
-            defaultValue={challengeId}
+            defaultValue={challenge.id}
           />
           <Button
             type="submit"

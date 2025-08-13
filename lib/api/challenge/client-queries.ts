@@ -1,9 +1,6 @@
 import { Challenge, ChallengeDetails, ChallengeMetadata } from '@/lib/types';
-import {
-  MOCK_CHALLENGES_DETAILS,
-  MOCK_CHALLENGES,
-} from './challenge-mock-data';
-import { createAuthenticatedServerAxios } from '../axios';
+import { MOCK_CHALLENGES_DETAILS } from './challenge-mock-data';
+import { createAuthenticatedClientAxios } from '../axios';
 
 // Fetchers (mock-data) //
 // * Comment these when using real API *//
@@ -16,11 +13,17 @@ import { createAuthenticatedServerAxios } from '../axios';
 //   });
 // };
 
-const fetchChallenge = (id: string): Promise<Challenge> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(MOCK_CHALLENGES.find((challenge) => challenge.id === id)!);
-    }, 1000);
+const fetchChallenge = (name: string): Promise<Challenge> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const axios = createAuthenticatedClientAxios();
+      const res = await axios.get(`/api/info/challenge/${name}`);
+      console.log('challenge response:', res.data);
+      resolve(res.data);
+    } catch (err) {
+      console.error('Error fetching challenge:', err);
+      reject(err);
+    }
   });
 };
 
@@ -38,10 +41,10 @@ const fetchChallengeDetails = (id: string): Promise<ChallengeDetails> => {
 const fetchAllChallengesMetadata = (): Promise<ChallengeMetadata[]> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const axios = await createAuthenticatedServerAxios();
+      const axios = createAuthenticatedClientAxios();
       const res = await axios.get('/api/info/challenges');
 
-      // TODO: Migrate this to backend
+      // TODO: Migrate this to backend itself
       // Transform API response to match frontend interface
       const transformedData: ChallengeMetadata[] = res.data.map(
         (challenge: any) => ({
@@ -71,9 +74,9 @@ export const allChallengesMetadataQuery = () => ({
   queryFn: fetchAllChallengesMetadata,
 });
 
-export const challengeQuery = (id: string) => ({
-  queryKey: ['challenge', id],
-  queryFn: () => fetchChallenge(id),
+export const challengeQuery = (name: string) => ({
+  queryKey: ['challenge', name],
+  queryFn: () => fetchChallenge(name),
   refetchOnWindowFocus: false,
 });
 

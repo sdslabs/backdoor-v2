@@ -18,7 +18,7 @@ const ChallengeCard: React.FC<ChallengeMetadata> = ({
   solveStatus,
   deployedStatus,
 }) => {
-  const { updateId } = useChallengeParams();
+  const { updateName } = useChallengeParams();
   const { role } = useAuthStore();
   const router = useRouter();
 
@@ -26,7 +26,7 @@ const ChallengeCard: React.FC<ChallengeMetadata> = ({
     if (role === 'admin') {
       router.push(`/dashboard/challenge-details/${id}`);
     } else {
-      updateId(id);
+      updateName(name);
     }
   };
 

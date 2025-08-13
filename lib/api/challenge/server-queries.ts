@@ -11,12 +11,16 @@ import { createAuthenticatedServerAxios } from '../axios';
 // Mock fetcher functions for server-side prefetching
 // * Comment these when using real API *//
 
-const fetchChallengeServer = (id: string): Promise<Challenge> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(MOCK_CHALLENGES.find((challenge) => challenge.id === id)!);
-    }, 1000);
-  });
+const fetchChallengeServer = async (name: string): Promise<Challenge> => {
+  try {
+    const axios = await createAuthenticatedServerAxios();
+    const res = await axios.get(`/api/info/challenges/${name}`);
+    console.log('challenge server response:', res.data);
+    return res.data;
+  } catch (err) {
+    console.error('Error fetching challenge server:', err);
+    throw err;
+  }
 };
 
 const fetchChallengeDetailsServer = (id: string): Promise<ChallengeDetails> => {
@@ -38,6 +42,7 @@ const fetchAllChallengesMetadataServer = async (): Promise<
     const res = await axios.get('/api/info/challenges');
     console.log('Challenge metadata server response:', res.data);
 
+    // TODO: Migrate this to backend itself
     // Transform API response to match frontend interface
     const transformedData: ChallengeMetadata[] = res.data.map(
       (challenge: any) => ({
@@ -66,9 +71,9 @@ export const allChallengesMetadataServerQuery = () => ({
   queryFn: fetchAllChallengesMetadataServer,
 });
 
-export const challengeServerQuery = (id: string) => ({
-  queryKey: ['challenge', id],
-  queryFn: () => fetchChallengeServer(id),
+export const challengeServerQuery = (name: string) => ({
+  queryKey: ['challenge', name],
+  queryFn: () => fetchChallengeServer(name),
   refetchOnWindowFocus: false,
 });
 
