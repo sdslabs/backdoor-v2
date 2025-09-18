@@ -1,4 +1,3 @@
-// lib/query-client.ts
 import {
   defaultShouldDehydrateQuery,
   isServer,
@@ -60,11 +59,4 @@ export function getQueryClient() {
     if (!browserQueryClient) browserQueryClient = makeQueryClient();
     return browserQueryClient;
   }
-}
-
-/**
- * Create a fresh QueryClient (useful for testing or isolated contexts)
- */
-export function createQueryClient() {
-  return makeQueryClient();
 }

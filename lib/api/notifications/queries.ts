@@ -1,6 +1,6 @@
 import { Notification } from '@/lib/types';
 
-// Fetchers
+// Fetcher - using fetch since this doesn't need authentication
 const fetchRecentNotifications = async () => {
   const res = await fetch('/api/notifications/recent');
   if (!res.ok) {
@@ -10,8 +10,11 @@ const fetchRecentNotifications = async () => {
   return data;
 };
 
-// Queries
+// Query
 export const recentNotificationsQuery = () => ({
   queryKey: ['recentNotifications'],
   queryFn: fetchRecentNotifications,
 });
+
+// For backward compatibility
+export const recentNotificationsServerQuery = recentNotificationsQuery;

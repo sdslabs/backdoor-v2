@@ -1,7 +1,7 @@
 import {
-  leaderboardGraphServerQuery,
-  leaderboardTableServerQuery,
-} from '@/lib/api/leaderboard/server-queries';
+  leaderboardGraphQuery,
+  leaderboardTableQuery,
+} from '@/lib/api/leaderboard';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@/lib/query-client';
 import React, { Suspense } from 'react';
@@ -15,10 +15,10 @@ import {
 const Leaderboard = async () => {
   const queryClient = getQueryClient();
 
-  // Prefetch queries on the server using server-side fetchers
+  // Prefetch queries on the server using unified fetchers
   await Promise.all([
-    queryClient.prefetchQuery(leaderboardGraphServerQuery()),
-    queryClient.prefetchQuery(leaderboardTableServerQuery()),
+    queryClient.prefetchQuery(leaderboardGraphQuery()),
+    queryClient.prefetchQuery(leaderboardTableQuery()),
   ]);
 
   const dehydratedState = dehydrate(queryClient);

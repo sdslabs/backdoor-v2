@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { recentNotificationsQuery } from './client-queries';
+import { recentNotificationsQuery } from './queries';
 
 export const useRecentNotifications = () => {
   return useQuery(recentNotificationsQuery());

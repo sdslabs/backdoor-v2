@@ -32,3 +32,6 @@ export const submissionsTableQuery = ({
     refetchInterval: 1000 * 60 * 2, // refetch every 2 minutes
   };
 };
+
+// For backward compatibility
+export const submissionsTableServerQuery = submissionsTableQuery;

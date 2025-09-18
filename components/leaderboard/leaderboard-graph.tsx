@@ -12,7 +12,7 @@ import {
 } from 'recharts';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { leaderboardGraphQuery } from '@/lib/api/leaderboard/client-queries';
+import { leaderboardGraphQuery } from '@/lib/api/leaderboard';
 import { LeaderBoardGraphEntry } from '@/lib/types/leaderboard';
 
 interface FlattenedGraphEntry {

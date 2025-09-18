@@ -5,11 +5,11 @@ import {
   SubmissionsTable,
   SubmissionTableSkeleton,
 } from '@/components/submissions';
-import { submissionsTableServerQuery } from '@/lib/api/submissions/server-queries';
+import { submissionsTableQuery } from '@/lib/api/submissions';
 
 const SubmissionsPage = () => {
   const queryClient = getQueryClient();
-  queryClient.prefetchQuery(submissionsTableServerQuery());
+  queryClient.prefetchQuery(submissionsTableQuery());
 
   return (
     <Suspense fallback={<SubmissionTableSkeleton />}>

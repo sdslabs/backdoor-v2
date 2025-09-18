@@ -2,7 +2,7 @@ import {
   LeaderboardEntry,
   LeaderBoardGraphEntry,
 } from '@/lib/types/leaderboard';
-import { createAuthenticatedClientAxios } from '../axios';
+import { getAuthenticatedAxios } from '../axios';
 
 // Mock fetcher functions
 // * Comment these when using real API *//
@@ -34,31 +34,34 @@ import { createAuthenticatedClientAxios } from '../axios';
 //   });
 // };
 
-// Real fetcher functions
+// Real fetcher functions using unified axios
 const fetchLeaderboardTable = async ({
   page,
 }: {
   page: number;
 }): Promise<{ data: LeaderboardEntry[]; total: number }> => {
   try {
-    const axios = createAuthenticatedClientAxios();
+    const axios = await getAuthenticatedAxios();
     const res = await axios.get('/api/info/leaderboard', {
       params: {
         page,
       },
     });
-    console.log('leaderboard response:', res.data);
+    console.log('Leaderboard response:', res.data);
 
     // Transform API response to match expected LeaderboardEntry structure
     const transformedEntries: LeaderboardEntry[] = (res.data || []).map(
-      (entry: any) => ({
-        rank: entry.rank,
-        playerId: entry.username,
-        totalPoints: entry.score,
-        solvedChallenges: [], // API doesn't provide this, set as empty array
-        dateJoined: new Date().toISOString(), // API doesn't provide this, use current date
-        email: entry.email,
-      })
+      (entry: unknown) => {
+        const entryData = entry as Record<string, unknown>;
+        return {
+          rank: entryData.rank as number,
+          playerId: (entryData.username as string) || '', // Using username for consistency (user mentioned this was fixed)
+          totalPoints: (entryData.score as number) || 0,
+          solvedChallenges: [], // API doesn't provide this, set as empty array
+          dateJoined: new Date().toISOString(), // API doesn't provide this, use current date
+          email: (entryData.email as string) || '',
+        };
+      }
     );
 
     const transformedData = {
@@ -75,7 +78,7 @@ const fetchLeaderboardTable = async ({
 
 const fetchLeaderboardGraph = async () => {
   try {
-    const axios = createAuthenticatedClientAxios();
+    const axios = await getAuthenticatedAxios();
     const res = await axios.get('/api/info/leaderboard-graph');
     return res.data as LeaderBoardGraphEntry[];
   } catch (err) {
@@ -84,7 +87,7 @@ const fetchLeaderboardGraph = async () => {
   }
 };
 
-// Query functions (for prefetching)
+// Query functions
 export const leaderboardGraphQuery = () => {
   return {
     queryKey: ['leaderboardGraph'],

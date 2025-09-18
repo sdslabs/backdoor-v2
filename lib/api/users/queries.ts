@@ -17,3 +17,6 @@ export const userTableQuery = () => {
     queryFn: () => fetchUsers(),
   };
 };
+
+// For backward compatibility
+export const userTableServerQuery = userTableQuery;
