@@ -2,7 +2,7 @@
 
 import { userColumns } from '@/components/table-defs/user-columns';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { userTableQuery } from '@/lib/api/users/client-queries';
+import { userTableQuery } from '@/lib/api/users';
 import {
   useReactTable,
   ColumnFiltersState,
