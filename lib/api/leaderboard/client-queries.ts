@@ -1,22 +1,21 @@
-import { MOCK_LEADERBOARD_GRAPH_DATA } from './mock-data';
-import { LeaderboardEntry } from '@/lib/types/leaderboard';
 import {
-  createAuthenticatedClientAxios,
-  createAuthenticatedServerAxios,
-} from '../axios';
+  LeaderboardEntry,
+  LeaderBoardGraphEntry,
+} from '@/lib/types/leaderboard';
+import { createAuthenticatedClientAxios } from '../axios';
 
 // Mock fetcher functions
 // * Comment these when using real API *//
 
-const fetchLeaderboardGraph = (): Promise<
-  typeof MOCK_LEADERBOARD_GRAPH_DATA
-> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(MOCK_LEADERBOARD_GRAPH_DATA);
-    }, 5000);
-  });
-};
+// const fetchLeaderboardGraph = (): Promise<
+//   typeof MOCK_LEADERBOARD_GRAPH_DATA
+// > => {
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       resolve(MOCK_LEADERBOARD_GRAPH_DATA);
+//     }, 5000);
+//   });
+// };
 
 // const fetchLeaderboardTable = ({
 //   limit,
@@ -70,6 +69,17 @@ const fetchLeaderboardTable = async ({
     return transformedData;
   } catch (err) {
     console.error('Error fetching leaderboard:', err);
+    throw err;
+  }
+};
+
+const fetchLeaderboardGraph = async () => {
+  try {
+    const axios = createAuthenticatedClientAxios();
+    const res = await axios.get('/api/info/leaderboard-graph');
+    return res.data as LeaderBoardGraphEntry[];
+  } catch (err) {
+    console.error('Error fetching leaderboard graph:', err);
     throw err;
   }
 };

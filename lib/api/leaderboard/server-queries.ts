@@ -1,24 +1,38 @@
 // Server-side query functions for prefetching
 // These run on the server during SSR/prefetching
 
-import { MOCK_LEADERBOARD_GRAPH_DATA } from './mock-data';
-import { LeaderboardEntry } from '@/lib/types/leaderboard';
+import {
+  LeaderboardEntry,
+  LeaderBoardGraphEntry,
+} from '@/lib/types/leaderboard';
 import { createAuthenticatedServerAxios } from '../axios';
 
 // Mock fetcher functions for server-side prefetching
 // * Comment these when using real API *//
 
-const fetchLeaderboardGraphServer = (): Promise<
-  typeof MOCK_LEADERBOARD_GRAPH_DATA
-> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(MOCK_LEADERBOARD_GRAPH_DATA);
-    }, 5000);
-  });
-};
+// const fetchLeaderboardGraphServer = (): Promise<
+//   typeof MOCK_LEADERBOARD_GRAPH_DATA
+// > => {
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       resolve(MOCK_LEADERBOARD_GRAPH_DATA);
+//     }, 5000);
+//   });
+// };
 
 // Real server fetcher functions
+
+const fetchLeaderboardGraphServer = async () => {
+  try {
+    const axios = await createAuthenticatedServerAxios();
+    const res = await axios.get('/api/info/leaderboard-graph');
+    return res.data as LeaderBoardGraphEntry[];
+  } catch (err) {
+    console.error('Error fetching leaderboard graph:', err);
+    throw err;
+  }
+};
+
 const fetchLeaderboardTableServer = async ({
   page,
 }: {

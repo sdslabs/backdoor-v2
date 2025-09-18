@@ -9,7 +9,7 @@ import {
 import { Bell } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { useRecentNotifications } from '@/lib/api/notifications/queries';
+import { useRecentNotifications } from '@/lib/api/notifications/hooks';
 import { Notification } from '@/lib/types';
 
 export default function NotificationPopover() {

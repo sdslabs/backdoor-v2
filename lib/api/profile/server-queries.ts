@@ -1,10 +1,12 @@
+// Server-side query functions for prefetching
+// These run on the server during SSR/prefetching
+
 import {
   CTFParticipation,
   PointsOverTime,
   SolveHistory,
   UserStats,
 } from '@/lib/types/profile';
-import { useQuery } from '@tanstack/react-query';
 import {
   MOCK_CTF_PARTICIPATION,
   MOCK_POINTS_OVER_TIME,
@@ -21,8 +23,8 @@ import {
   MOCK_USER_STATS_4,
 } from './mock-data';
 
-// Mock API functions
-const fetchUserStats = (username?: string): Promise<UserStats> => {
+// Mock API functions for server-side prefetching
+const fetchUserStatsServer = (username?: string): Promise<UserStats> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       if (username) {
@@ -40,7 +42,9 @@ const fetchUserStats = (username?: string): Promise<UserStats> => {
   });
 };
 
-const fetchSolveHistory = (username?: string): Promise<SolveHistory[]> => {
+const fetchSolveHistoryServer = (
+  username?: string
+): Promise<SolveHistory[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       if (username) {
@@ -58,7 +62,9 @@ const fetchSolveHistory = (username?: string): Promise<SolveHistory[]> => {
   });
 };
 
-const fetchPointsOverTime = (username?: string): Promise<PointsOverTime[]> => {
+const fetchPointsOverTimeServer = (
+  username?: string
+): Promise<PointsOverTime[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       if (username) {
@@ -76,7 +82,7 @@ const fetchPointsOverTime = (username?: string): Promise<PointsOverTime[]> => {
   });
 };
 
-const fetchCTFParticipation = (): Promise<CTFParticipation[]> => {
+const fetchCTFParticipationServer = (): Promise<CTFParticipation[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(MOCK_CTF_PARTICIPATION);
@@ -84,31 +90,23 @@ const fetchCTFParticipation = (): Promise<CTFParticipation[]> => {
   });
 };
 
-// Query functions
-export const useUserStats = (username?: string) => {
-  return useQuery({
-    queryKey: ['profile', 'stats', username],
-    queryFn: () => fetchUserStats(username),
-  });
-};
+// Server Query functions (for prefetching)
+export const userStatsServerQuery = (username?: string) => ({
+  queryKey: ['profile', 'stats', username],
+  queryFn: () => fetchUserStatsServer(username),
+});
 
-export const solveHistoryQuery = (username?: string) => {
-  return {
-    queryKey: ['profile', 'solveHistory', username],
-    queryFn: () => fetchSolveHistory(username),
-  };
-};
+export const solveHistoryServerQuery = (username?: string) => ({
+  queryKey: ['profile', 'solveHistory', username],
+  queryFn: () => fetchSolveHistoryServer(username),
+});
 
-export const pointsOverTimeQuery = (username?: string) => {
-  return {
-    queryKey: ['profile', 'pointsOverTime', username],
-    queryFn: () => fetchPointsOverTime(username),
-  };
-};
+export const pointsOverTimeServerQuery = (username?: string) => ({
+  queryKey: ['profile', 'pointsOverTime', username],
+  queryFn: () => fetchPointsOverTimeServer(username),
+});
 
-export const ctfParticipationQuery = () => {
-  return {
-    queryKey: ['profile', 'ctfParticipation'],
-    queryFn: fetchCTFParticipation,
-  };
-};
+export const ctfParticipationServerQuery = () => ({
+  queryKey: ['profile', 'ctfParticipation'],
+  queryFn: fetchCTFParticipationServer,
+});

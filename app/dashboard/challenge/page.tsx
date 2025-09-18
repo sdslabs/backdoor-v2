@@ -6,7 +6,7 @@ import {
   ChallengeListSkeleton,
 } from '@/components/challenge';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import { getQueryClient } from '@/lib/get-query-client';
+import { getQueryClient } from '@/lib/query-client';
 import { allChallengesMetadataServerQuery } from '@/lib/api/challenge/server-queries';
 import { Suspense } from 'react';
 

@@ -1,5 +1,4 @@
 import { Notification } from '@/lib/types';
-import { useQuery } from '@tanstack/react-query';
 
 // Fetchers
 const fetchRecentNotifications = async () => {
@@ -12,9 +11,7 @@ const fetchRecentNotifications = async () => {
 };
 
 // Queries
-export const useRecentNotifications = () => {
-  return useQuery({
-    queryKey: ['recentNotifications'],
-    queryFn: fetchRecentNotifications,
-  });
-};
+export const recentNotificationsQuery = () => ({
+  queryKey: ['recentNotifications'],
+  queryFn: fetchRecentNotifications,
+});

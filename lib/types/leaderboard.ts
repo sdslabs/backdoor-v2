@@ -12,3 +12,14 @@ export type LeaderboardEntry = {
   dateJoined: string;
   email: string;
 };
+
+export type LeaderBoardGraphEntry = {
+  id: string;
+  username: string;
+  score: number;
+  rank: number;
+  timeSeriesData: {
+    timestamp: string; // ISO string
+    score: number;
+  }[];
+};

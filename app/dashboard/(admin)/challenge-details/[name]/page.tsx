@@ -7,7 +7,7 @@ import {
   ChallengeSubmissionsStatisticsSkeleton,
 } from '@/components/challenge';
 import { challengeDetailsQuery } from '@/lib/api/challenge';
-import { getQueryClient } from '@/lib/get-query-client';
+import { getQueryClient } from '@/lib/query-client';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { Suspense } from 'react';
 

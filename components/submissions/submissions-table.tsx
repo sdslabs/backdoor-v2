@@ -1,6 +1,6 @@
 'use client';
 
-import { submissionsTableQuery } from '@/lib/api/submissions/queries';
+import { submissionsTableQuery } from '@/lib/api/submissions/client-queries';
 import { SUBMISSIONS_TABLE_PAGE_LIMIT } from '@/lib/constants';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import {
