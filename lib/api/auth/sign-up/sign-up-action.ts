@@ -38,9 +38,9 @@ export async function handleEmailStep(
   try {
     EmailSchema.parse(convertFormDataToRecord(formData));
     console.log('Sending OTP to:', formData.get('email'));
-    await axiosInstance.post('/auth/send-otp', {
-      email: formData.get('email'),
-    });
+    // await axiosInstance.post('/auth/send-otp', {
+    //   email: formData.get('email'),
+    // });
     return createSuccessResponse('OTP sent successfully');
   } catch (err) {
     if (err instanceof z.ZodError) {
@@ -67,9 +67,9 @@ export async function handleOtpVerification(
   try {
     OtpSchema.parse(convertFormDataToRecord(formData));
     const otp = formData.get('otp');
-    await axiosInstance.post('/auth/verify-otp', {
-      otp,
-    });
+    // await axiosInstance.post('/auth/verify-otp', {
+    //   otp,
+    // });
     return createSuccessResponse('OTP verified successfully');
   } catch (err) {
     if (err instanceof z.ZodError) {

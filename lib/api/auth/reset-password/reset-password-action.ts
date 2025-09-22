@@ -1,61 +1,169 @@
+'use server';
+
+import {
+  EmailSchema,
+  NewPasswordSchema,
+  OtpSchema,
+  RegisterUserSchema,
+} from '@/lib/schemas/auth';
 import { z } from 'zod';
-import { EmailSchema, OtpSchema, NewPasswordSchema } from '@/lib/schemas/auth';
-export const steps = ['email', 'otp', 'newPassword'] as const;
-export type StepKey = (typeof steps)[number];
+import { createUnauthenticatedAxios } from '@/lib/api/axios';
+import { AxiosError } from 'axios';
 
-export type FormState = {
-  step: number;
-  errors?: Record<string, string[]>;
-};
+interface ActionResponse {
+  success: boolean;
+  errors?: {
+    email?: string;
+    otp?: string;
+    fullName?: string;
+    username?: string;
+    password?: string;
+    confirmPassword?: string;
+    general?: string;
+  };
+  inputs?: {
+    email?: string;
+    otp?: string;
+    fullName?: string;
+    username?: string;
+    password?: string;
+    confirmPassword?: string;
+  };
+  message: string;
+}
 
-export const initialState: FormState = { step: 0 };
+const axiosInstance = createUnauthenticatedAxios();
+axiosInstance.defaults.headers['Content-Type'] = 'multipart/form-data';
 
-const EXPECTED_OTP = '123456';
-
-// TODO: Implement the logic just like sign-up step
-export async function handleResetPasswordStep(
-  prevState: FormState,
+// Server Actions for each step //
+export async function handleEmailStep(
+  prevState: unknown,
   formData: FormData
-): Promise<FormState> {
-  const step = prevState.step;
-  const formObj = Object.fromEntries(formData.entries());
-
+): Promise<ActionResponse> {
   try {
-    if (step === 0) {
-      EmailSchema.parse(formObj);
-      console.log('Sending OTP to:', formObj.email);
-      return { step: step + 1 };
-    }
-
-    if (step === 1) {
-      OtpSchema.parse(formObj);
-      const otp = formObj.otp;
-      if (otp !== EXPECTED_OTP) {
-        return {
-          step,
-          errors: { otp: ['Incorrect OTP entered'] },
-        };
-      }
-      return { step: step + 1 };
-    }
-
-    if (step === 2) {
-      NewPasswordSchema.parse(formObj);
-      console.log('Resetting password');
-      return { step: step + 1 };
-    }
-  } catch (err: any) {
+    EmailSchema.parse(convertFormDataToRecord(formData));
+    console.log('Sending OTP to:', formData.get('email'));
+    // await axiosInstance.post('/auth/send-otp', {
+    //   email: formData.get('email'),
+    // });
+    return createSuccessResponse('OTP sent successfully');
+  } catch (err) {
     if (err instanceof z.ZodError) {
-      const errors: Record<string, string[]> = {};
-      for (const issue of err.errors) {
-        const key = issue.path[0] as string;
-        if (!errors[key]) errors[key] = [];
-        errors[key].push(issue.message);
-      }
-      return { step, errors };
+      return handleZodError(err, formData);
+    } else if (err instanceof AxiosError && err.response) {
+      const { data } = err.response;
+      console.log(data);
+      return {
+        success: false,
+        message: 'Failed to send OTP',
+        errors: {
+          general: data.message || 'An error occurred while sending OTP',
+        },
+      };
     }
-    return { step, errors: { general: ['Unexpected error'] } };
+    return createErrorResponse('An unexpected error occurred');
   }
+}
 
-  return { step };
+export async function handleOtpVerification(
+  prevState: unknown,
+  formData: FormData
+): Promise<ActionResponse> {
+  try {
+    OtpSchema.parse(convertFormDataToRecord(formData));
+    const otp = formData.get('otp');
+    // await axiosInstance.post('/auth/verify-otp', {
+    //   otp,
+    // });
+    return createSuccessResponse('OTP verified successfully');
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return handleZodError(err, formData);
+    } else if (err instanceof AxiosError && err.response) {
+      const { data } = err.response;
+      return {
+        success: false,
+        message: 'Failed to verify OTP',
+        errors: {
+          general:
+            data.message || 'Failed to verify OTP, please try again later.',
+        },
+      };
+    }
+    return createErrorResponse('An unexpected error occurred');
+  }
+}
+
+export async function handlePasswordConfirmation(
+  prevState: unknown,
+  formData: FormData
+): Promise<ActionResponse> {
+  try {
+    NewPasswordSchema.parse(convertFormDataToRecord(formData));
+    await axiosInstance.post('/auth/register', {
+      password: formData.get('newPassword'),
+      'ssh-key': '',
+    });
+    return createSuccessResponse('User registered successfully');
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return handleZodError(err, formData);
+    } else if (err instanceof AxiosError && err.response) {
+      const { data } = err.response;
+      console.log(data);
+      return {
+        success: false,
+        message: 'Failed to create user',
+        errors: {
+          general: data.message,
+        },
+      };
+    }
+    return createErrorResponse('An unexpected error occurred');
+  }
+}
+
+// Utils //
+// TODO: Make a common utils for this
+function convertFormDataToRecord(formData: FormData): Record<string, string> {
+  const record: Record<string, string> = {};
+  for (const [key, value] of formData.entries()) {
+    if (typeof value === 'string') {
+      record[key] = value;
+    }
+  }
+  return record;
+}
+
+function handleZodError(err: z.ZodError, formData: FormData): ActionResponse {
+  const errors: Record<string, string> = {};
+  for (const issue of err.errors) {
+    const key = issue.path[0] as string;
+    errors[key] = issue.message;
+  }
+  console.log(errors);
+  return {
+    success: false,
+    errors,
+    inputs: convertFormDataToRecord(formData),
+    message: 'Validation failed',
+  };
+}
+
+function createErrorResponse(
+  message: string,
+  errors?: Record<string, string>
+): ActionResponse {
+  return {
+    success: false,
+    errors: errors || { general: 'Unexpected error' },
+    message,
+  };
+}
+
+function createSuccessResponse(message: string): ActionResponse {
+  return {
+    success: true,
+    message,
+  };
 }
