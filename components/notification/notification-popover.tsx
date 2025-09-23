@@ -9,8 +9,9 @@ import {
 import { Bell } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { useRecentNotifications } from '@/lib/api/notifications/hooks';
 import { Notification } from '@/lib/types';
+import { useQuery } from '@tanstack/react-query';
+import { recentNotificationsQuery } from '@/lib/api/notifications';
 
 export default function NotificationPopover() {
   const [hasNew, setHasNew] = useState(false);
@@ -36,7 +37,7 @@ export default function NotificationPopover() {
     data: notificationsData,
     isLoading,
     refetch,
-  } = useRecentNotifications();
+  } = useQuery(recentNotificationsQuery());
 
   const fetchRecentNotificationsHandler = (isOpen: boolean) => {
     if (isOpen) {
