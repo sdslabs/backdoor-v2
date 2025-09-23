@@ -15,6 +15,3 @@ export const recentNotificationsQuery = () => ({
   queryKey: ['recentNotifications'],
   queryFn: fetchRecentNotifications,
 });
-
-// For backward compatibility
-export const recentNotificationsServerQuery = recentNotificationsQuery;

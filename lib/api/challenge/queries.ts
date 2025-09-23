@@ -19,7 +19,7 @@ const fetchAllChallengesMetadata = async (): Promise<ChallengeMetadata[]> => {
     const res = await axios.get('/api/info/challenges');
     console.log('newww Challenge metadata response:', res.data);
 
-    // TODO: Migrate this to backend itself
+    // TODO: Migrate this to swagger
     // Transform API response to match frontend interface
     const transformedData: ChallengeMetadata[] = res.data.map(
       (challenge: unknown) => {
@@ -29,9 +29,9 @@ const fetchAllChallengesMetadata = async (): Promise<ChallengeMetadata[]> => {
           name: (challengeData.name as string) || '',
           tags: (challengeData.tags as string[]) || [],
           points: (challengeData.points as number) || 0,
-          difficulty: 'medium', // Default difficulty since API doesn't provide it
+          difficulty: challengeData.difficulty || 'medium',
           solvesNumber: (challengeData.solvesNumber as number) || 0,
-          solveStatus: 'unsolved', // Default to unsolved since API doesn't provide user-specific solve status
+          solveStatus: challengeData.solveStatus ? 'solved' : 'unsolved',
           deployedStatus:
             (challengeData.status as string) === 'Deployed'
               ? 'deployed'
@@ -89,8 +89,3 @@ export const challengeDetailsQuery = (name: string) => ({
   queryKey: ['challenge-details', name],
   queryFn: () => fetchChallengeDetails(name),
 });
-
-// For backward compatibility - server query functions are now identical to client queries
-export const allChallengesMetadataServerQuery = allChallengesMetadataQuery;
-export const challengeServerQuery = challengeQuery;
-export const challengeDetailsServerQuery = challengeDetailsQuery;

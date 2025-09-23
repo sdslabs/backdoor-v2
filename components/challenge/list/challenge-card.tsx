@@ -24,7 +24,7 @@ const ChallengeCard: React.FC<ChallengeMetadata> = ({
 
   const handleClick = () => {
     if (role === 'admin') {
-      router.push(`/dashboard/challenge-details/${id}`);
+      router.push(`/dashboard/challenge-details/${name}`);
     } else {
       updateName(name);
     }
