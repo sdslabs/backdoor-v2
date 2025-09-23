@@ -1,9 +1,9 @@
 import {
   leaderboardGraphQuery,
   leaderboardTableQuery,
-} from '@/lib/api/leaderboard/queries';
+} from '@/lib/api/leaderboard';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import { getQueryClient } from '@/lib/get-query-client';
+import { getQueryClient } from '@/lib/query-client';
 import React, { Suspense } from 'react';
 import {
   LeaderboardGraph,
@@ -12,24 +12,27 @@ import {
   LeaderboardTableSkeleton,
 } from '@/components/leaderboard';
 
-const Leaderboard = () => {
+const Leaderboard = async () => {
   const queryClient = getQueryClient();
 
-  queryClient.prefetchQuery(leaderboardGraphQuery());
-  queryClient.prefetchQuery(leaderboardTableQuery());
+  // Prefetch queries on the server using unified fetchers
+  await Promise.all([
+    queryClient.prefetchQuery(leaderboardGraphQuery()),
+    queryClient.prefetchQuery(leaderboardTableQuery()),
+  ]);
+
+  const dehydratedState = dehydrate(queryClient);
 
   return (
     <section className="flex flex-col gap-8">
-      <Suspense fallback={<LeaderboardGraphSkeleton />}>
-        <HydrationBoundary state={dehydrate(queryClient)}>
+      <HydrationBoundary state={dehydratedState}>
+        <Suspense fallback={<LeaderboardGraphSkeleton />}>
           <LeaderboardGraph />
-        </HydrationBoundary>
-      </Suspense>
-      <Suspense fallback={<LeaderboardTableSkeleton />}>
-        <HydrationBoundary state={dehydrate(queryClient)}>
+        </Suspense>
+        <Suspense fallback={<LeaderboardTableSkeleton />}>
           <LeaderboardTable />
-        </HydrationBoundary>
-      </Suspense>
+        </Suspense>
+      </HydrationBoundary>
     </section>
   );
 };

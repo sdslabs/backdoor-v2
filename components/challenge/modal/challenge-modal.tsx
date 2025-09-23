@@ -9,9 +9,9 @@ import { Suspense } from 'react';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 
 const ChallengeModal: React.FC = () => {
-  const { id } = useChallengeParams();
+  const { name } = useChallengeParams();
   const router = useRouter();
-  const open = !!id;
+  const open = !!name;
 
   if (open) {
     return (
@@ -31,7 +31,7 @@ const ChallengeModal: React.FC = () => {
             <DialogTitle>Challenge Details</DialogTitle>
           </VisuallyHidden>
           <Suspense fallback={<ChallengeModalContentSkeleton />}>
-            <ChallengeModalContent challengeId={id} />
+            <ChallengeModalContent challengeName={name} />
           </Suspense>
         </DialogContent>
       </Dialog>

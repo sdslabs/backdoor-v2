@@ -9,7 +9,7 @@ export function useChallengeParams() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const id = searchParams.get('id');
+  const name = searchParams.get('name');
   const tag = (searchParams.get('tag') || 'all') as ChallengeTag;
   const status = (searchParams.get('status') ||
     'unsolved') as ChallengeSolveStatus;
@@ -29,12 +29,12 @@ export function useChallengeParams() {
   };
 
   return {
-    id,
+    name,
     tag,
     status,
     difficulty,
     page,
-    updateId: (value: string) => updateParams('id', value),
+    updateName: (value: string) => updateParams('name', value),
     updateTag: (value: ChallengeTag) => updateParams('tag', value),
     updateStatus: (value: ChallengeSolveStatus) =>
       updateParams('status', value),

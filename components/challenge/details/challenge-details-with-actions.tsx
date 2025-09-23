@@ -20,8 +20,8 @@ import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
-const ChallengeDetailsWithActions = ({ id }: { id: string }) => {
-  const { data: challenge } = useSuspenseQuery(challengeDetailsQuery(id));
+const ChallengeDetailsWithActions = ({ name }: { name: string }) => {
+  const { data: challenge } = useSuspenseQuery(challengeDetailsQuery(name));
   const isDeployed = challenge.deployedStatus === 'deployed';
 
   return (

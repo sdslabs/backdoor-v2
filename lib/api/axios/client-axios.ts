@@ -4,18 +4,20 @@
 
 import Cookies from 'js-cookie';
 import { API_BASE_URL } from '@/lib/constants';
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
-export function createAuthenticatedClientAxios() {
+export async function createAuthenticatedClientAxios(): Promise<AxiosInstance> {
   const clientAxios = axios.create({
     baseURL: API_BASE_URL,
     timeout: 5000,
-    withCredentials: true,
   });
 
   clientAxios.interceptors.request.use((config) => {
-    const { auth } = Cookies.get();
-    config.headers.Authorization = `Bearer ${auth}`;
+    const cookies = Cookies.get();
+    const auth = cookies?.auth;
+    if (auth) {
+      config.headers.Authorization = `Bearer ${auth}`;
+    }
     return config;
   });
 
@@ -30,14 +32,7 @@ export function createAuthenticatedClientAxios() {
     }
   );
 
-  return clientAxios;
-}
-
-export function createUnauthenticatedAxios() {
-  const axiosInstance = axios.create({
-    baseURL: API_BASE_URL,
-    timeout: 5000,
+  return new Promise((resolve) => {
+    resolve(clientAxios);
   });
-
-  return axiosInstance;
 }

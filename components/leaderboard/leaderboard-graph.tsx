@@ -12,45 +12,45 @@ import {
 } from 'recharts';
 
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { leaderboardGraphQuery } from '@/lib/api/leaderboard/queries';
-import { MOCK_LEADERBOARD_GRAPH_DATA } from '@/lib/api/leaderboard/mock-data';
+import { leaderboardGraphQuery } from '@/lib/api/leaderboard';
+import { LeaderBoardGraphEntry } from '@/lib/types/leaderboard';
 
 interface FlattenedGraphEntry {
-  hour: string;
+  timestamp: string;
   [playerId: string]: string | number;
 }
 
-const flattenHourlyData = (
-  graphData: typeof MOCK_LEADERBOARD_GRAPH_DATA
+const flattenTimeSeriesData = (
+  graphData: LeaderBoardGraphEntry[]
 ): FlattenedGraphEntry[] => {
-  const allHoursSet = new Set<string>();
+  const allTimestampsSet = new Set<string>();
 
   const playerMap = new Map<string, Map<string, number>>();
 
   graphData.forEach((entry) => {
     const progressMap = new Map<string, number>();
 
-    entry.hourlyProgress.forEach((progress) => {
-      allHoursSet.add(progress.hour);
-      progressMap.set(progress.hour, progress.points);
+    entry.timeSeriesData.forEach((dataPoint) => {
+      allTimestampsSet.add(dataPoint.timestamp);
+      progressMap.set(dataPoint.timestamp, dataPoint.score);
     });
 
-    playerMap.set(entry.playerId, progressMap);
+    playerMap.set(entry.id, progressMap);
   });
 
-  const allHours = Array.from(allHoursSet).sort(
+  const allTimestamps = Array.from(allTimestampsSet).sort(
     (a, b) => new Date(a).getTime() - new Date(b).getTime()
   );
 
   const result: FlattenedGraphEntry[] = [];
-  const playerIds = graphData.map((entry) => entry.playerId);
+  const playerIds = graphData.map((entry) => entry.id);
   const lastSeenPoints = new Map<string, number>();
 
-  allHours.forEach((hour) => {
-    const entry: FlattenedGraphEntry = { hour };
+  allTimestamps.forEach((timestamp) => {
+    const entry: FlattenedGraphEntry = { timestamp };
     playerIds.forEach((id) => {
       const playerProgress = playerMap.get(id);
-      const currentPoints = playerProgress?.get(hour);
+      const currentPoints = playerProgress?.get(timestamp);
       if (currentPoints !== undefined) {
         entry[id] = currentPoints;
         lastSeenPoints.set(id, currentPoints);
@@ -64,7 +64,7 @@ const flattenHourlyData = (
   return result;
 };
 
-const formatHour = (iso: string) => {
+const formatTimestamp = (iso: string) => {
   const date = new Date(iso);
   return `${date.getHours().toString().padStart(2, '0')}:${date
     .getMinutes()
@@ -73,7 +73,7 @@ const formatHour = (iso: string) => {
 };
 
 // Pre-generate colors for each player
-const playerColors = (graphData: typeof MOCK_LEADERBOARD_GRAPH_DATA) =>
+const playerColors = (graphData: LeaderBoardGraphEntry[]) =>
   graphData.map((_, index) => {
     const hue = (index * 360) / graphData.length;
     const saturation = 85;
@@ -82,8 +82,8 @@ const playerColors = (graphData: typeof MOCK_LEADERBOARD_GRAPH_DATA) =>
   });
 
 export const LeaderboardGraph = () => {
-  const { data: graphData } = useSuspenseQuery(leaderboardGraphQuery());
-  const data = flattenHourlyData(graphData);
+  const { data: graphData = [] } = useSuspenseQuery(leaderboardGraphQuery());
+  const data = flattenTimeSeriesData(graphData);
 
   return (
     <div className="bg-accent rounded-lg mt-12 p-5 sm:p-8">
@@ -94,10 +94,10 @@ export const LeaderboardGraph = () => {
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
-            dataKey="hour"
-            tickFormatter={formatHour}
+            dataKey="timestamp"
+            tickFormatter={formatTimestamp}
             label={{
-              value: 'Hour',
+              value: 'Time',
               position: 'insideBottomRight',
               offset: -5,
             }}
@@ -128,9 +128,10 @@ export const LeaderboardGraph = () => {
           <Legend />
           {graphData.map((entry, index) => (
             <Line
-              key={entry.playerId}
+              key={entry.id}
               type="monotone"
-              dataKey={entry.playerId}
+              dataKey={entry.id}
+              name={entry.username}
               stroke={playerColors(graphData)[index]}
               dot={false}
             />

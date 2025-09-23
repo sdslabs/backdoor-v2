@@ -1,7 +1,6 @@
 import { Notification } from '@/lib/types';
-import { useQuery } from '@tanstack/react-query';
 
-// Fetchers
+// Fetcher - using fetch since this doesn't need authentication
 const fetchRecentNotifications = async () => {
   const res = await fetch('/api/notifications/recent');
   if (!res.ok) {
@@ -11,10 +10,8 @@ const fetchRecentNotifications = async () => {
   return data;
 };
 
-// Queries
-export const useRecentNotifications = () => {
-  return useQuery({
-    queryKey: ['recentNotifications'],
-    queryFn: fetchRecentNotifications,
-  });
-};
+// Query
+export const recentNotificationsQuery = () => ({
+  queryKey: ['recentNotifications'],
+  queryFn: fetchRecentNotifications,
+});

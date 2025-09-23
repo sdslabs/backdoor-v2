@@ -5,7 +5,7 @@ import { ChallengeTag } from '@/lib/types';
 import { useChallengeParams } from '@/lib/hooks/use-challenge-params';
 import { ChallengePagination } from './challenge-pagination';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { allChallengesMetadataQuery } from '@/lib/api/challenge/challenge-queries';
+import { allChallengesMetadataQuery } from '@/lib/api/challenge';
 
 const PAGE_SIZE = 12;
 

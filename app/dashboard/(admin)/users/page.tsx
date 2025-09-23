@@ -1,5 +1,5 @@
-import { userTableQuery } from '@/lib/api/users/queries';
-import { getQueryClient } from '@/lib/get-query-client';
+import { userTableQuery } from '@/lib/api/users';
+import { getQueryClient } from '@/lib/query-client';
 import { Suspense } from 'react';
 import { UserTableSkeleton } from '@/components/users';
 import { UsersTable } from '@/components/users';

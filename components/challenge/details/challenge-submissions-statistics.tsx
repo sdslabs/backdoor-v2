@@ -17,8 +17,8 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const ChallengeSubmissionsStatistics = ({ id }: { id: string }) => {
-  const { data: challenge } = useSuspenseQuery(challengeDetailsQuery(id));
+const ChallengeSubmissionsStatistics = ({ name }: { name: string }) => {
+  const { data: challenge } = useSuspenseQuery(challengeDetailsQuery(name));
   const totalSolves = challenge.solves.length;
   const correctSolves = challenge.solvesNumber;
   const metadata = [

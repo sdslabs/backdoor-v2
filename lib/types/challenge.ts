@@ -51,7 +51,7 @@ export interface ChallengeMetadata {
   difficulty: ChallengeDifficulty; // easy, medium, hard
   solvesNumber: number;
   solveStatus: ChallengeSolveStatus;
-  deployedStatus: ChallengeDeployedStatus;
+  createdAt: Date;
 }
 
 export interface Challenge extends ChallengeMetadata {
@@ -61,17 +61,20 @@ export interface Challenge extends ChallengeMetadata {
   // when the user asks to buy the hint for some points.
   // * Will make an issue of this later
   hints: string[];
-  createdAt: Date;
   category: ChallengeCategory;
   assets: string[]; // assets names, will generate the link on the frontend
   additionalLinks: string[]; // these are links to additional resources
-  ports: number[];
+  previousTries: number;
+  maxAttemptLimit: number;
+  deployedLink: string;
 }
 
 export interface ChallengeDetails extends Challenge {
+  // for admin
+  deployedStatus: ChallengeDeployedStatus;
   dynamicFlag: boolean;
   flag: string;
-  solves: UserSolveResp[];
+  // solves: UserSolveResp[]; ** Make an api for this separately, this governs the graph and the user solve status table
 }
 
 export interface ChallengeSolveResp {
@@ -82,3 +85,8 @@ export interface ChallengeSolveResp {
   solvedAt: Date;
   points: number;
 }
+
+/* 
+* service - nc <deployed-link>:<port>
+
+*/

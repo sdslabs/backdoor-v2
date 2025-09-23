@@ -1,9 +1,9 @@
 import {
-  ctfParticipationQuery,
-  pointsOverTimeQuery,
-  solveHistoryQuery,
-} from '@/lib/api/profile/queries';
-import { getQueryClient } from '@/lib/get-query-client';
+  ctfParticipationServerQuery,
+  pointsOverTimeServerQuery,
+  solveHistoryServerQuery,
+} from '@/lib/api/profile/server-queries';
+import { getQueryClient } from '@/lib/query-client';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { Suspense } from 'react';
 import PointsTimeGraph from './points-time-graph';
@@ -19,9 +19,9 @@ interface YearlyActivityProps {
 async function YearlyActivity({ username }: YearlyActivityProps) {
   const queryClient = getQueryClient();
 
-  queryClient.prefetchQuery(pointsOverTimeQuery(username));
-  queryClient.prefetchQuery(solveHistoryQuery(username));
-  queryClient.prefetchQuery(ctfParticipationQuery());
+  queryClient.prefetchQuery(pointsOverTimeServerQuery(username));
+  queryClient.prefetchQuery(solveHistoryServerQuery(username));
+  queryClient.prefetchQuery(ctfParticipationServerQuery());
 
   return (
     <div>

@@ -1,39 +1,93 @@
-import { LEADERBOARD_TABLE_PAGE_LIMIT } from '@/lib/constants';
 import {
-  MOCK_LEADERBOARD_ENTRIES,
-  MOCK_LEADERBOARD_GRAPH_DATA,
-} from './mock-data';
-import { LeaderboardEntry } from '@/lib/types/leaderboard';
+  LeaderboardEntry,
+  LeaderBoardGraphEntry,
+} from '@/lib/types/leaderboard';
+import { getAuthenticatedAxios } from '../axios';
 
 // Mock fetcher functions
-const fetchLeaderboardGraph = (): Promise<
-  typeof MOCK_LEADERBOARD_GRAPH_DATA
-> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(MOCK_LEADERBOARD_GRAPH_DATA);
-    }, 5000);
-  });
-};
+// * Comment these when using real API *//
 
-const fetchLeaderboardTable = ({
-  limit,
+// const fetchLeaderboardGraph = (): Promise<
+//   typeof MOCK_LEADERBOARD_GRAPH_DATA
+// > => {
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       resolve(MOCK_LEADERBOARD_GRAPH_DATA);
+//     }, 5000);
+//   });
+// };
+
+// const fetchLeaderboardTable = ({
+//   limit,
+//   page,
+// }: {
+//   limit: number;
+//   page: number;
+// }): Promise<{ data: LeaderboardEntry[]; total: number }> => {
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       const skip = (page - 1) * limit;
+//       const data = MOCK_LEADERBOARD_ENTRIES.slice(skip, skip + limit);
+//       const total = MOCK_LEADERBOARD_ENTRIES.length;
+//       resolve({ data, total });
+//     }, 1000);
+//   });
+// };
+
+// Real fetcher functions using unified axios
+const fetchLeaderboardTable = async ({
   page,
 }: {
-  limit: number;
   page: number;
 }): Promise<{ data: LeaderboardEntry[]; total: number }> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const skip = (page - 1) * limit;
-      const data = MOCK_LEADERBOARD_ENTRIES.slice(skip, skip + limit);
-      const total = MOCK_LEADERBOARD_ENTRIES.length;
-      resolve({ data, total });
-    }, 1000);
-  });
+  try {
+    const axios = await getAuthenticatedAxios();
+    const res = await axios.get('/api/info/leaderboard', {
+      params: {
+        page,
+      },
+    });
+    console.log('Leaderboard response:', res.data);
+
+    // Transform API response to match expected LeaderboardEntry structure
+    const transformedEntries: LeaderboardEntry[] = (res.data || []).map(
+      (entry: unknown) => {
+        const entryData = entry as Record<string, unknown>;
+        return {
+          rank: entryData.rank as number,
+          playerId: (entryData.username as string) || '', // Using username for consistency (user mentioned this was fixed)
+          totalPoints: (entryData.score as number) || 0,
+          solvedChallenges: [], // API doesn't provide this, set as empty array
+          dateJoined: new Date().toISOString(), // API doesn't provide this, use current date
+          email: (entryData.email as string) || '',
+        };
+      }
+    );
+
+    const transformedData = {
+      data: transformedEntries,
+      total: transformedEntries.length,
+    };
+
+    return transformedData;
+  } catch (err) {
+    console.error('Error fetching leaderboard:', err);
+    throw err;
+  }
 };
 
-// Query functions (for prefetching)
+const fetchLeaderboardGraph = async () => {
+  try {
+    const axios = await getAuthenticatedAxios();
+    const res = await axios.get('/api/info/leaderboard-graph');
+    return res.data as LeaderBoardGraphEntry[];
+  } catch (err) {
+    console.error('Error fetching leaderboard graph:', err);
+    throw err;
+  }
+};
+
+// Query functions
 export const leaderboardGraphQuery = () => {
   return {
     queryKey: ['leaderboardGraph'],
@@ -42,14 +96,14 @@ export const leaderboardGraphQuery = () => {
 };
 
 export const leaderboardTableQuery = ({
-  limit = LEADERBOARD_TABLE_PAGE_LIMIT,
   page = 1,
+  limit,
 }: {
-  limit?: number;
   page?: number;
+  limit?: number;
 } = {}) => {
   return {
-    queryKey: ['leaderboardTable', { limit, page }],
-    queryFn: () => fetchLeaderboardTable({ limit, page }),
+    queryKey: ['leaderboardTable', { page, limit }],
+    queryFn: () => fetchLeaderboardTable({ page }),
   };
 };

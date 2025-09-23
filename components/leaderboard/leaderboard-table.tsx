@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { leaderboardTableQuery } from '@/lib/api/leaderboard/queries';
+import { leaderboardTableQuery } from '@/lib/api/leaderboard';
 import { DataTable } from '@/components/ui/data-table';
 import { TablePagination } from '@/components/ui/table-pagination';
 import {

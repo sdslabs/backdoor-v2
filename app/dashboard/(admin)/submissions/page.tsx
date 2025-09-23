@@ -1,11 +1,11 @@
 import { Suspense } from 'react';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import { getQueryClient } from '@/lib/get-query-client';
+import { getQueryClient } from '@/lib/query-client';
 import {
   SubmissionsTable,
   SubmissionTableSkeleton,
 } from '@/components/submissions';
-import { submissionsTableQuery } from '@/lib/api/submissions/queries';
+import { submissionsTableQuery } from '@/lib/api/submissions';
 
 const SubmissionsPage = () => {
   const queryClient = getQueryClient();

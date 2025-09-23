@@ -7,7 +7,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
-import { pointsOverTimeQuery } from '@/lib/api/profile/queries';
+import { pointsOverTimeQuery } from '@/lib/api/profile/client-queries';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 

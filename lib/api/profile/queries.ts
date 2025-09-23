@@ -4,7 +4,6 @@ import {
   SolveHistory,
   UserStats,
 } from '@/lib/types/profile';
-import { useQuery } from '@tanstack/react-query';
 import {
   MOCK_CTF_PARTICIPATION,
   MOCK_POINTS_OVER_TIME,
@@ -85,30 +84,28 @@ const fetchCTFParticipation = (): Promise<CTFParticipation[]> => {
 };
 
 // Query functions
-export const useUserStats = (username?: string) => {
-  return useQuery({
-    queryKey: ['profile', 'stats', username],
-    queryFn: () => fetchUserStats(username),
-  });
-};
+export const userStatsQuery = (username?: string) => ({
+  queryKey: ['profile', 'stats', username],
+  queryFn: () => fetchUserStats(username),
+});
 
-export const solveHistoryQuery = (username?: string) => {
-  return {
-    queryKey: ['profile', 'solveHistory', username],
-    queryFn: () => fetchSolveHistory(username),
-  };
-};
+export const solveHistoryQuery = (username?: string) => ({
+  queryKey: ['profile', 'solveHistory', username],
+  queryFn: () => fetchSolveHistory(username),
+});
 
-export const pointsOverTimeQuery = (username?: string) => {
-  return {
-    queryKey: ['profile', 'pointsOverTime', username],
-    queryFn: () => fetchPointsOverTime(username),
-  };
-};
+export const pointsOverTimeQuery = (username?: string) => ({
+  queryKey: ['profile', 'pointsOverTime', username],
+  queryFn: () => fetchPointsOverTime(username),
+});
 
-export const ctfParticipationQuery = () => {
-  return {
-    queryKey: ['profile', 'ctfParticipation'],
-    queryFn: fetchCTFParticipation,
-  };
-};
+export const ctfParticipationQuery = () => ({
+  queryKey: ['profile', 'ctfParticipation'],
+  queryFn: fetchCTFParticipation,
+});
+
+// For backward compatibility
+export const userStatsServerQuery = userStatsQuery;
+export const solveHistoryServerQuery = solveHistoryQuery;
+export const pointsOverTimeServerQuery = pointsOverTimeQuery;
+export const ctfParticipationServerQuery = ctfParticipationQuery;
