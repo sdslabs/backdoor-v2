@@ -55,7 +55,7 @@ export async function loginAction(
     const cookieStore = await cookies();
     cookieStore.set('auth', token);
 
-    return { success: true, message, role };
+    return { success: true, message, role: role as UserRole };
   } catch (error) {
     console.error('Login error:', error);
 
