@@ -1,6 +1,6 @@
 'use client';
 
-import { ChallengeMetadata } from '@/lib/types/challenge';
+import type { ChallengeDetails } from '@/lib/types/challenge';
 import { Badge } from '@/components/ui/badge';
 import { DifficultyRating } from '@/components/ui/difficulty-rating';
 import { SolveStatusIcon } from '@/components/ui/solve-status-icon';
@@ -8,7 +8,7 @@ import { useChallengeParams } from '@/lib/hooks/use-challenge-params';
 import { useAuthStore } from '@/lib/stores/auth-store';
 import { useRouter } from 'next/navigation';
 
-const ChallengeCard: React.FC<ChallengeMetadata> = ({
+const ChallengeCard: React.FC<ChallengeDetails> = ({
   id,
   name,
   tags,
