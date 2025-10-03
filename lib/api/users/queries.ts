@@ -21,6 +21,15 @@ const fetchUsers = async (): Promise<UserInfo[]> => {
   }
 };
 
+export const banUser = async (userId: number): Promise<void> => {
+  try {
+    const axios = await getAuthenticatedAxios();
+    const res = await axios.post(`/api/admin/users/ban/${userId.toString()}`);
+  } catch (err) {
+    throw err;
+  }
+};
+
 // Queries
 export const userTableQuery = () => {
   return {
