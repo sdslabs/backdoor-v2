@@ -12,9 +12,13 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { DifficultyRating } from '@/components/ui/difficulty-rating';
-import { cn, downloadAssets } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { challengeQuery, submitFlag } from '@/lib/api/challenge';
+import {
+  challengeDownloadAssets,
+  challengeQuery,
+  submitFlag,
+} from '@/lib/api/challenge';
 
 const ChallengeModalContent: React.FC<{ challengeName: string }> = ({
   challengeName,
@@ -60,7 +64,7 @@ const ChallengeModalContent: React.FC<{ challengeName: string }> = ({
               <div
                 key={asset}
                 className="flex items-center mb-2 cursor-pointer"
-                onClick={() => downloadAssets(challenge.name, asset)}
+                onClick={() => challengeDownloadAssets(challenge.name, asset)}
               >
                 <a
                   target="_blank"

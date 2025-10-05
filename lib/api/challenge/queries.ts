@@ -1,5 +1,5 @@
 import { Challenge, ChallengeDetails, ChallengeMetadata } from '@/lib/types';
-import { getAuthenticatedAxios } from '../axios';
+import { getAuthenticatedAxios, getUnauthenticatedAxios } from '../axios';
 
 // Mock fetcher functions
 // * Comment these when using real API *//
@@ -89,3 +89,23 @@ export const challengeDetailsQuery = (name: string) => ({
   queryKey: ['challenge-details', name],
   queryFn: () => fetchChallengeDetails(name),
 });
+
+export async function challengeDownloadAssets(
+  challengeName: string,
+  asset: string
+) {
+  const axios = getUnauthenticatedAxios();
+  const url = `${process.env.NEXT_PUBLIC_BACKEND_URI_DEV}/api/info/download?challenge=${challengeName}&asset=${asset}`;
+  const response = await axios({
+    url: url,
+    method: 'GET',
+    responseType: 'blob',
+  }).then((response) => {
+    const url = window.URL.createObjectURL(response.data);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', asset);
+    document.body.appendChild(link);
+    link.click();
+  });
+}
