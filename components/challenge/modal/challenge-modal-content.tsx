@@ -57,11 +57,14 @@ const ChallengeModalContent: React.FC<{ challengeName: string }> = ({
         {challenge.assets.length > 0 && (
           <div className="mb-6">
             {challenge.assets.map((asset) => (
-              <div key={asset} className="flex items-center mb-2">
+              <div
+                key={asset}
+                className="flex items-center mb-2 cursor-pointer"
+                onClick={() => downloadAssets(challenge.name, asset)}
+              >
                 <a
-                  href={downloadAssets(challenge.name, asset)}
                   target="_blank"
-                  className="text-primary hover:underline flex items-center"
+                  className="text-primary hover:underline flex items-center "
                 >
                   {asset}
                   <DownloadIcon size={16} className="ml-2" />
