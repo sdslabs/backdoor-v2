@@ -6,6 +6,8 @@ import { Input } from '../ui/input';
 import { getAuthenticatedAxios } from '@/lib/api/axios';
 import { toast } from 'sonner';
 import { banUser } from '@/lib/api/users';
+import { getCsvBlob } from 'tanstack-table-export-to-csv';
+import { download } from '@/lib/utils';
 
 const UserActions = ({ table }: { table: Table<UserInfo> }) => {
   const banSelectedUsers = async () => {
@@ -27,6 +29,18 @@ const UserActions = ({ table }: { table: Table<UserInfo> }) => {
     table.resetRowSelection();
   };
 
+  const handleExportToCsv = (): void => {
+    const headers = table
+      .getHeaderGroups()
+      .map((x) => x.headers)
+      .flat();
+
+    const rows = table.getCoreRowModel().rows;
+
+    const csvBlob = getCsvBlob(headers, rows);
+    download(csvBlob, 'userData.csv');
+  };
+
   return (
     <div className="bg-muted rounded-t-lg flex flex-row items-center justify-between py-3 px-4">
       <h2 className="text-xl">Player Data</h2>
@@ -41,7 +55,9 @@ const UserActions = ({ table }: { table: Table<UserInfo> }) => {
         <Button variant={'secondary'} onClick={() => banSelectedUsers()}>
           Ban Selected
         </Button>
-        <Button>Export Data (PDF/CSV)</Button>
+        <Button onClick={() => handleExportToCsv()}>
+          Export Data (PDF/CSV)
+        </Button>
       </div>
     </div>
   );

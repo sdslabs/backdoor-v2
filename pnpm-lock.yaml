@@ -119,6 +119,9 @@ importers:
       tailwind-merge:
         specifier: ^3.0.2
         version: 3.3.1
+      tanstack-table-export-to-csv:
+        specifier: ^1.0.5
+        version: 1.0.5(@types/react@19.1.13)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       tw-animate-css:
         specifier: ^1.2.4
         version: 1.3.8
@@ -2450,6 +2453,12 @@ packages:
     peerDependencies:
       react: '>= 16.8 || 18.0.0'
 
+  react-innertext@1.1.5:
+    resolution: {integrity: sha512-PWAqdqhxhHIv80dT9znP2KvS+hfkbRovFp4zFYHFFlOoQLRiawIic81gKb3U1wEyJZgMwgs3JoLtwryASRWP3Q==}
+    peerDependencies:
+      '@types/react': '>=0.0.0 <=99'
+      react: '>=0.0.0 <=99'
+
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
@@ -2723,6 +2732,9 @@ packages:
 
   tailwindcss@4.1.13:
     resolution: {integrity: sha512-i+zidfmTqtwquj4hMEwdjshYYgMbOrPzb9a0M3ZgNa0JMoZeFC6bxZvO8yr8ozS6ix2SDz0+mvryPeBs2TFE+w==}
+
+  tanstack-table-export-to-csv@1.0.5:
+    resolution: {integrity: sha512-BKCpi5I3RUINY2ZHnaZWQrbBK9BfqJ90BJQaWuFwkCkkDLlIz7XQoR+xYKWmaikbce2m64pO3JhkJIZggvs8Xw==}
 
   tapable@2.2.3:
     resolution: {integrity: sha512-ZL6DDuAlRlLGghwcfmSn9sK3Hr6ArtyudlSAiCqQ6IfE+b+HHbydbYDIG15IfS5do+7XQQBdBiubF/cV2dnDzg==}
@@ -5236,6 +5248,11 @@ snapshots:
       prop-types: 15.8.1
       react: 19.1.1
 
+  react-innertext@1.1.5(@types/react@19.1.13)(react@19.1.1):
+    dependencies:
+      '@types/react': 19.1.13
+      react: 19.1.1
+
   react-is@16.13.1: {}
 
   react-is@18.3.1: {}
@@ -5575,6 +5592,16 @@ snapshots:
   tailwind-merge@3.3.1: {}
 
   tailwindcss@4.1.13: {}
+
+  tanstack-table-export-to-csv@1.0.5(@types/react@19.1.13)(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+    dependencies:
+      '@tanstack/react-table': 8.21.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      react-innertext: 1.1.5(@types/react@19.1.13)(react@19.1.1)
+      typescript: 5.9.2
+    transitivePeerDependencies:
+      - '@types/react'
+      - react
+      - react-dom
 
   tapable@2.2.3: {}
 
