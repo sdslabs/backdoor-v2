@@ -1,6 +1,7 @@
 import { SubmissionResp } from '@/lib/types';
 import { SUBMISSIONS } from './mock-data';
 import { SUBMISSIONS_TABLE_PAGE_LIMIT } from '@/lib/constants';
+import { getUnauthenticatedAxios } from '../axios';
 
 const fetchSubmissions = async ({
   page,
@@ -9,14 +10,20 @@ const fetchSubmissions = async ({
   page: number;
   limit: number;
 }): Promise<{ data: SubmissionResp[]; total: number }> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const skip = (page - 1) * limit;
-      const data = SUBMISSIONS.slice(skip, skip + limit);
-      const total = SUBMISSIONS.length;
-      resolve({ data, total });
-    }, 1000);
-  });
+  const axios = getUnauthenticatedAxios();
+  const response = await axios.get<SubmissionResp[]>('/api/info/submissions');
+  const submissions = response.data;
+
+  const skip = (page - 1) * limit;
+  let data = submissions.slice(skip, skip + limit);
+
+  // Convert date into readable format
+  data = data.map((submission) => ({
+    ...submission,
+    solvedAt: new Date(submission.solvedAt),
+  }));
+  const total = submissions.length;
+  return { data, total };
 };
 
 export const submissionsTableQuery = ({
