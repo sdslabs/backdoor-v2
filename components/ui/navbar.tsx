@@ -7,6 +7,7 @@ import {
   Swords,
   User2Icon,
   UserCircle2Icon,
+  BellRingIcon,
 } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
@@ -83,6 +84,11 @@ const ADMIN_ACTIONS: NavbarActions = {
       label: 'Submissions',
       icon: FilePenLineIcon,
       href: '/dashboard/submissions',
+    },
+    {
+      label: 'Notify',
+      icon: BellRingIcon,
+      href: '/dashboard/notification',
     },
   ],
   sideActions: [

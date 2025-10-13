@@ -35,6 +35,12 @@ export default function NotificationPopover() {
     return () => evtSource.close();
   }, []);
 
+  useEffect(() => {
+    // Updates event when it's open
+    // NOTE: since this fetches all the notification, usage to be discussed
+    refetch();
+  }, [hasNew]);
+
   const {
     data: notificationsData,
     isLoading,
