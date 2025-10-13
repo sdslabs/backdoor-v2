@@ -5,27 +5,26 @@ import { UserInfo } from '@/lib/types';
 import { Input } from '../ui/input';
 import { getAuthenticatedAxios } from '@/lib/api/axios';
 import { toast } from 'sonner';
-import { banUser } from '@/lib/api/users';
+import { banUsers } from '@/lib/api/users';
 import { getCsvBlob } from 'tanstack-table-export-to-csv';
 import { download } from '@/lib/utils';
+import { useMutation } from '@tanstack/react-query';
 
 const UserActions = ({ table }: { table: Table<UserInfo> }) => {
   const banSelectedUsers = async () => {
     const selectedRows = table.getFilteredSelectedRowModel().rows;
     const selectedUsers = selectedRows.map((row) => row.original);
-    if (selectedUsers.length === 0) {
+    const selectedUserIds = selectedRows.map((rows) => rows.original.id);
+    if (selectedUserIds.length === 0) {
       toast.error('No users selected');
       return;
     }
-
-    selectedUsers.forEach(async (user) => {
-      try {
-        await banUser(user.id);
-        toast.success(`Banned user ${user.username}`);
-      } catch (err) {
-        toast.error(`Error banning user ${user.username}`);
-      }
-    });
+    try {
+      await mutateUser(selectedUserIds);
+      toast.success(`Banned users successfully`);
+    } catch (err) {
+      toast.error(`Error banning users`);
+    }
     table.resetRowSelection();
   };
 
@@ -40,6 +39,10 @@ const UserActions = ({ table }: { table: Table<UserInfo> }) => {
     const csvBlob = getCsvBlob(headers, rows);
     download(csvBlob, 'userData.csv');
   };
+
+  const { mutate: mutateUser } = useMutation({
+    mutationFn: banUsers,
+  });
 
   return (
     <div className="bg-muted rounded-t-lg flex flex-row items-center justify-between py-3 px-4">
