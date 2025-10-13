@@ -1,13 +1,15 @@
 import { Notification } from '@/lib/types';
+import { getUnauthenticatedAxios } from '../axios';
 
-// Fetcher - using fetch since this doesn't need authentication
 const fetchRecentNotifications = async () => {
-  const res = await fetch('/api/notifications/recent');
-  if (!res.ok) {
+  const axios = getUnauthenticatedAxios();
+  const res = await axios.get('/api/notification/available');
+  console.log(res);
+  if (!res) {
     throw new Error('Failed to fetch notifications');
   }
-  const data = (await res.json()) as Notification[];
-  return data;
+
+  return res.data as Notification[];
 };
 
 // Query
