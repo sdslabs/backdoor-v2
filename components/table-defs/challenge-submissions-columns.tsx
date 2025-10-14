@@ -1,9 +1,9 @@
-import { UserSolveResp } from '@/lib/types';
+import { Submission, UserSolveResp } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { ChevronDown } from 'lucide-react';
 
-export const challengeSubmissionsColumns: ColumnDef<UserSolveResp>[] = [
+export const challengeSubmissionsColumns: ColumnDef<Submission>[] = [
   {
     accessorKey: 'username',
     header: () => (

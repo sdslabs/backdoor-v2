@@ -3,6 +3,7 @@
 import { challengeSubmissionsColumns } from '@/components/table-defs/challenge-submissions-columns';
 import { DataTable } from '@/components/ui/data-table';
 import { challengeDetailsQuery } from '@/lib/api/challenge';
+import { submissionsByChallengeTableQuery } from '@/lib/api/submissions';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import {
   getCoreRowModel,
@@ -11,10 +12,12 @@ import {
 } from '@tanstack/react-table';
 
 const ChallengeSubmissionsTable = ({ name }: { name: string }) => {
-  const { data: challenge } = useSuspenseQuery(challengeDetailsQuery(name));
+  const { data: submissions } = useSuspenseQuery(
+    submissionsByChallengeTableQuery({ challengeName: name })
+  );
 
   const table = useReactTable({
-    data: challenge.solves,
+    data: submissions.data,
     columns: challengeSubmissionsColumns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
