@@ -36,13 +36,13 @@ const ChallengeDetailsPage = async ({
             </HydrationBoundary>
           </Suspense>
         </div>
-        {/* <div className="basis-1/2">
+        <div className="basis-1/2">
           <Suspense fallback={<ChallengeSubmissionsStatisticsSkeleton />}>
             <HydrationBoundary state={dehydrate(queryClient)}>
               <ChallengeSubmissionsStatistics name={name} />
             </HydrationBoundary>
           </Suspense>
-        </div> */}
+        </div>
       </div>
     </div>
   );
