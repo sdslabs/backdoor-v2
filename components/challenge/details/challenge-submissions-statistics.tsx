@@ -36,7 +36,7 @@ const ChallengeSubmissionsStatistics = ({ name }: { name: string }) => {
     },
     {
       label: 'Solve Rate (%)',
-      value: `${Math.round((correctSolves / totalSolves) * 100)}`,
+      value: `${Math.round((correctSolves / totalSolves) * 100) || 0}`,
     },
   ];
 
