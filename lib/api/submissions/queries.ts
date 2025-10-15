@@ -104,7 +104,7 @@ export const submissionsByChallengeTableQuery = ({
   limit?: number;
 } = {}) => {
   return {
-    queryKey: ['submissions', { page, limit }],
+    queryKey: ['submissions', challengeName, { page, limit }],
     queryFn: () => fetchSubmissionsByChallenge({ challengeName, page, limit }),
     refetchInterval: 1000 * 60 * 2, // refetch every 2 minutes
   };
