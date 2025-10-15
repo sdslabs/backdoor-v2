@@ -54,13 +54,18 @@ export interface ChallengeMetadata {
   createdAt: Date;
 }
 
+export interface hint {
+  id: number;
+  points: number;
+}
+
 export interface Challenge extends ChallengeMetadata {
   description: string;
   // TODO
   // hints -> hintsNumber and query the hint from the backend
   // when the user asks to buy the hint for some points.
   // * Will make an issue of this later
-  hints: string[];
+  hints: hint[];
   category: ChallengeCategory;
   assets: string[]; // assets names, will generate the link on the frontend
   additionalLinks: string[]; // these are links to additional resources
