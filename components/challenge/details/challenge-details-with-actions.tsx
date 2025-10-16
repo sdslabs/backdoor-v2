@@ -1,7 +1,10 @@
 'use client';
 
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { challengeDetailsQuery } from '@/lib/api/challenge';
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
+import {
+  challengeDetailsQuery,
+  manageChallengeByName,
+} from '@/lib/api/challenge';
 import {
   Tooltip,
   TooltipContent,
@@ -19,10 +22,32 @@ import { DifficultyRating } from '@/components/ui/difficulty-rating';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 const ChallengeDetailsWithActions = ({ name }: { name: string }) => {
   const { data: challenge } = useSuspenseQuery(challengeDetailsQuery(name));
-  const isDeployed = challenge.deployedStatus === 'deployed';
+  const isDeployed = challenge.deployedStatus.toLowerCase() === 'deployed';
+
+  const handleManageChallengeState = async ({
+    name,
+    action,
+  }: {
+    name: string;
+    action: string;
+  }) => {
+    try {
+      // TODO: Remove this when Backend server ChallengeMetaData even when the challen is undeployed
+      if (action.toLowerCase() === 'undeploy') {
+        throw Error('undeploy feature under construction...');
+      } else if (action.toLowerCase() === 'purge') {
+        throw Error('not a good idea to delete a chalenge!!');
+      }
+      const res = await manageChallengeByName({ name: name, action: action });
+      toast(res.message);
+    } catch (err) {
+      toast.error(`Some error occured: ${err}`);
+    }
+  };
 
   return (
     <div className="bg-accent p-6 rounded-xl w-full space-y-2">
@@ -35,13 +60,36 @@ const ChallengeDetailsWithActions = ({ name }: { name: string }) => {
           </Badge>
         </div>
         <div className="flex items-center gap-1 text-muted-foreground">
-          <Button size="iconSm" variant={'ghost'}>
+          <Button
+            size="iconSm"
+            variant={'ghost'}
+            onClick={() => {
+              isDeployed
+                ? handleManageChallengeState({
+                    name: challenge.name,
+                    action: 'undeploy',
+                  })
+                : handleManageChallengeState({
+                    name: challenge.name,
+                    action: 'deploy',
+                  });
+            }}
+          >
             {isDeployed ? <PowerOffIcon size={16} /> : <PowerIcon size={16} />}
           </Button>
           <Button size="iconSm" variant={'ghost'}>
             <PenIcon size={16} />
           </Button>
-          <Button size="iconSm" variant={'ghost'}>
+          <Button
+            size="iconSm"
+            variant={'ghost'}
+            onClick={() => {
+              handleManageChallengeState({
+                name: challenge.name,
+                action: 'purge',
+              });
+            }}
+          >
             <TrashIcon size={16} />
           </Button>
         </div>

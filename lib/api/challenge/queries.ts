@@ -73,6 +73,30 @@ const fetchChallengeDetails = async (
   }
 };
 
+export const manageChallengeByName = async (vars: {
+  name: string;
+  action: string;
+}): Promise<{ message: string }> => {
+  try {
+    const axios = await getAuthenticatedAxios();
+    axios.defaults.headers['Content-Type'] = 'multipart/form-data';
+    console.log(`Taking action ${vars.action} on ${vars.name}`);
+
+    const res = await axios.post(`api/manage/challenge/`, {
+      name: vars.name,
+      action: vars.action,
+    });
+    console.log('Challenge Action response:', res.data);
+    return res.data;
+  } catch (err) {
+    console.error(
+      `Error performing action(${vars.action}) on ${vars.name}:`,
+      err
+    );
+    throw err;
+  }
+};
+
 // Query functions
 export const allChallengesMetadataQuery = () => ({
   queryKey: ['challenges'],
