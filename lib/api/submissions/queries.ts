@@ -6,7 +6,7 @@ import {
 } from '@/lib/types';
 import { SUBMISSIONS } from './mock-data';
 import { SUBMISSIONS_TABLE_PAGE_LIMIT } from '@/lib/constants';
-import { getUnauthenticatedAxios } from '../axios';
+import { getAuthenticatedAxios, getUnauthenticatedAxios } from '../axios';
 
 const fetchSubmissions = async ({
   page,
@@ -15,7 +15,7 @@ const fetchSubmissions = async ({
   page: number;
   limit: number;
 }): Promise<{ data: Submission[]; total: number }> => {
-  const axios = getUnauthenticatedAxios();
+  const axios = await getAuthenticatedAxios();
   const response = await axios.get<SubmissionResp[]>('/api/info/submissions');
   const submissions = response.data;
 
