@@ -139,9 +139,13 @@ const ChallengeModalContent: React.FC<{ challengeName: string }> = ({
             {flagSubmitState.error}
           </div>
         )}
-        {flagSubmitState?.success && (
+        {flagSubmitState?.success ? (
           <div className="mt-2 text-green-500 text-sm">
-            Flag submitted successfully!
+            {flagSubmitState.message}
+          </div>
+        ) : (
+          <div className="mt-2 text-red-500 text-sm">
+            {flagSubmitState?.message || ''}
           </div>
         )}
       </div>

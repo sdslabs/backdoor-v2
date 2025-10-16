@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { getAuthenticatedAxios } from '../axios';
 
 export async function submitFlag(_: unknown, formData: FormData) {
@@ -16,9 +17,16 @@ export async function submitFlag(_: unknown, formData: FormData) {
       chall_id: challengeId,
       flag,
     });
+    const {
+      message,
+      success,
+    }: {
+      message: string;
+      success: boolean;
+    } = res.data;
     console.log('submit response: ', res);
-    // revalidatePath(`/dashboard/challenges`);
-    return { success: true };
+    revalidatePath(`/dashboard/challenges`);
+    return { message, success };
   } catch (error) {
     console.error('Error submitting flag:', error);
     return { error: 'Something went wrong. Please try again.', success: false };
