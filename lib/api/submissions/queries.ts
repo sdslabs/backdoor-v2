@@ -5,7 +5,10 @@ import {
   SubmissionResp,
 } from '@/lib/types';
 import { SUBMISSIONS } from './mock-data';
-import { SUBMISSIONS_TABLE_PAGE_LIMIT } from '@/lib/constants';
+import {
+  CHALLENGE_SUBMISSIONS_TABLE_PAGE_LIMIT,
+  SUBMISSIONS_TABLE_PAGE_LIMIT,
+} from '@/lib/constants';
 import { getAuthenticatedAxios, getUnauthenticatedAxios } from '../axios';
 
 const fetchSubmissions = async ({
@@ -97,7 +100,7 @@ export const submissionsTableQuery = ({
 export const submissionsByChallengeTableQuery = ({
   challengeName = '',
   page = 1,
-  limit = SUBMISSIONS_TABLE_PAGE_LIMIT,
+  limit = CHALLENGE_SUBMISSIONS_TABLE_PAGE_LIMIT,
 }: {
   challengeName?: string;
   page?: number;
