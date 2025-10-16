@@ -99,7 +99,7 @@ const ChallengeModalContent: React.FC<{ challengeName: string }> = ({
                       className="bg-muted-foreground [&_svg]:bg-muted-foreground [&_svg]:fill-muted-foreground"
                       side="top"
                     >
-                      <p>{hint}</p>
+                      <p>{hint.points}</p>
                     </TooltipContent>
                   </Tooltip>
                 ))}
