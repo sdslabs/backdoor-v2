@@ -5,7 +5,7 @@ import { UserInfo } from '@/lib/types';
 import { Input } from '../ui/input';
 import { getAuthenticatedAxios } from '@/lib/api/axios';
 import { toast } from 'sonner';
-import { banUsers } from '@/lib/api/users';
+import { banUserQuery, banUsers } from '@/lib/api/users';
 import { getCsvBlob } from 'tanstack-table-export-to-csv';
 import { download } from '@/lib/utils';
 import { useMutation } from '@tanstack/react-query';
@@ -40,9 +40,7 @@ const UserActions = ({ table }: { table: Table<UserInfo> }) => {
     download(csvBlob, 'userData.csv');
   };
 
-  const { mutate: mutateUser } = useMutation({
-    mutationFn: banUsers,
-  });
+  const { mutate: mutateUser } = useMutation(banUserQuery());
 
   return (
     <div className="bg-muted rounded-t-lg flex flex-row items-center justify-between py-3 px-4">
