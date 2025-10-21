@@ -1,5 +1,6 @@
 import { Challenge, ChallengeDetails, ChallengeMetadata } from '@/lib/types';
 import { getAuthenticatedAxios, getUnauthenticatedAxios } from '../axios';
+import { API_BASE_URL } from '@/lib/constants';
 
 // Mock fetcher functions
 // * Comment these when using real API *//
@@ -16,7 +17,7 @@ import { getAuthenticatedAxios, getUnauthenticatedAxios } from '../axios';
 const fetchAllChallengesMetadata = async (): Promise<ChallengeMetadata[]> => {
   try {
     const axios = await getAuthenticatedAxios();
-    const res = await axios.get('/api/info/challenges');
+    const res = await axios.get('/info/challenges');
     console.log('newww Challenge metadata response:', res.data);
 
     // TODO: Migrate this to swagger
@@ -50,7 +51,7 @@ const fetchAllChallengesMetadata = async (): Promise<ChallengeMetadata[]> => {
 const fetchChallenge = async (name: string): Promise<Challenge> => {
   try {
     const axios = await getAuthenticatedAxios();
-    const res = await axios.get(`/api/info/challenge/${name}`);
+    const res = await axios.get(`/info/challenge/${name}`);
     console.log('Challenge response:', res.data);
     return res.data;
   } catch (err) {
@@ -64,7 +65,7 @@ const fetchChallengeDetails = async (
 ): Promise<ChallengeDetails> => {
   try {
     const axios = await getAuthenticatedAxios();
-    const res = await axios.get(`/api/info/challenge/${name}`);
+    const res = await axios.get(`/info/challenge/${name}`);
     console.log('Challenge details response:', res.data);
     return res.data;
   } catch (err) {
@@ -82,7 +83,7 @@ export const manageChallengeByName = async (vars: {
     axios.defaults.headers['Content-Type'] = 'multipart/form-data';
     console.log(`Taking action ${vars.action} on ${vars.name}`);
 
-    const res = await axios.post(`api/manage/challenge/`, {
+    const res = await axios.post(`/manage/challenge/`, {
       name: vars.name,
       action: vars.action,
     });
@@ -119,7 +120,7 @@ export async function challengeDownloadAssets(
   asset: string
 ) {
   const axios = getUnauthenticatedAxios();
-  const url = `${process.env.NEXT_PUBLIC_BACKEND_URI_DEV}/api/info/download?challenge=${challengeName}&asset=${asset}`;
+  const url = `${API_BASE_URL}/info/download?challenge=${challengeName}&asset=${asset}`;
   const response = await axios({
     url: url,
     method: 'GET',

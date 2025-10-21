@@ -4,7 +4,7 @@ export const banUsers = async (userId: number[]): Promise<void> => {
   userId.forEach(async (userId) => {
     try {
       const axios = await getAuthenticatedAxios();
-      const res = await axios.post(`/api/admin/users/ban/${userId.toString()}`);
+      const res = await axios.post(`/admin/users/ban/${userId.toString()}`);
     } catch (err) {
       throw err;
     }

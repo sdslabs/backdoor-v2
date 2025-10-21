@@ -13,7 +13,7 @@ import { getAuthenticatedAxios } from '../axios';
 const fetchUsers = async (): Promise<UserInfo[]> => {
   try {
     const axios = await getAuthenticatedAxios();
-    const res = await axios.get('/api/info/users');
+    const res = await axios.get('/info/users');
     return res.data;
   } catch (err) {
     console.error('Error fetching users:', err);

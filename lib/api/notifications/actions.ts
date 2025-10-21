@@ -41,7 +41,7 @@ export async function sendBackgroundNotificationsAction(
 
   try {
     const response = await axiosInstance.post<HTTPPlainResp>(
-      '/api/notification/add',
+      '/notification/add',
       {
         title,
         desc,

@@ -19,7 +19,7 @@ const fetchSubmissions = async ({
   limit: number;
 }): Promise<{ data: Submission[]; total: number }> => {
   const axios = await getAuthenticatedAxios();
-  const response = await axios.get<SubmissionResp[]>('/api/info/submissions');
+  const response = await axios.get<SubmissionResp[]>('/info/submissions');
   const submissions = response.data;
 
   const skip = (page - 1) * limit;
@@ -56,7 +56,7 @@ const fetchSubmissionsByChallenge = async ({
 }): Promise<{ data: Submission[]; total: number }> => {
   const axios = getUnauthenticatedAxios();
   const response = await axios.get<SubmissionResp[]>(
-    `/api/info/submissions/challenge/${challengeName}`
+    `/info/submissions/challenge/${challengeName}`
   );
   const submissions = response.data;
 

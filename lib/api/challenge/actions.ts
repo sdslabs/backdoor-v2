@@ -13,7 +13,7 @@ export async function submitFlag(_: unknown, formData: FormData) {
     const axios = await getAuthenticatedAxios();
     axios.defaults.headers['Content-Type'] = 'multipart/form-data';
 
-    const res = await axios.post('api/submit/challenge', {
+    const res = await axios.post('/submit/challenge', {
       chall_id: challengeId,
       flag,
     });
