@@ -12,14 +12,13 @@ import { Button } from '@/components/ui/button';
 import { NotificationStream } from '@/lib/types';
 import { useQuery } from '@tanstack/react-query';
 import { recentNotificationsQuery } from '@/lib/api/notifications';
+import { API_BASE_URL } from '@/lib/constants';
 
 export default function NotificationPopover() {
   const [hasNew, setHasNew] = useState(false);
 
   useEffect(() => {
-    const evtSource = new EventSource(
-      `${process.env.NEXT_PUBLIC_BACKEND_URI_PROD}/api/notification/stream`
-    );
+    const evtSource = new EventSource(`${API_BASE_URL}/notification/stream`);
 
     evtSource.onmessage = (e) => {
       const data: NotificationStream = JSON.parse(e.data);
