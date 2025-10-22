@@ -28,13 +28,7 @@ const ChallengeDetailsWithActions = ({ name }: { name: string }) => {
   const { data: challenge } = useSuspenseQuery(challengeDetailsQuery(name));
   const isDeployed = challenge.deployedStatus.toLowerCase() === 'deployed';
 
-  const handleManageChallengeState = async ({
-    name,
-    action,
-  }: {
-    name: string;
-    action: string;
-  }) => {
+  const handleManageChallengeState = async ({ action }: { action: string }) => {
     try {
       // TODO: Remove this when Backend server ChallengeMetaData even when the challen is undeployed
       if (action.toLowerCase() === 'undeploy') {
@@ -42,7 +36,10 @@ const ChallengeDetailsWithActions = ({ name }: { name: string }) => {
       } else if (action.toLowerCase() === 'purge') {
         throw Error('not a good idea to delete a chalenge!!');
       }
-      const res = await manageChallengeByName({ name: name, action: action });
+      const res = await manageChallengeByName({
+        name: challenge.name,
+        action: action,
+      });
       toast(res.message);
     } catch (err) {
       toast.error(`Some error occured: ${err}`);
@@ -66,11 +63,9 @@ const ChallengeDetailsWithActions = ({ name }: { name: string }) => {
             onClick={() => {
               isDeployed
                 ? handleManageChallengeState({
-                    name: challenge.name,
                     action: 'undeploy',
                   })
                 : handleManageChallengeState({
-                    name: challenge.name,
                     action: 'deploy',
                   });
             }}
@@ -85,7 +80,6 @@ const ChallengeDetailsWithActions = ({ name }: { name: string }) => {
             variant={'ghost'}
             onClick={() => {
               handleManageChallengeState({
-                name: challenge.name,
                 action: 'purge',
               });
             }}
