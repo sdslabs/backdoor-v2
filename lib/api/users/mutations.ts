@@ -10,7 +10,7 @@ export const banUsers = async (userId: number[]): Promise<void> => {
     }
   });
 };
-export const banUserQuery = () => {
+export const banUserMutation = () => {
   return {
     mutationFn: banUsers,
   };

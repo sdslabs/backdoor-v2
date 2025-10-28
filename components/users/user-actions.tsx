@@ -3,18 +3,21 @@ import { Button } from '../ui/button';
 import { Table } from '@tanstack/react-table';
 import { UserInfo } from '@/lib/types';
 import { Input } from '../ui/input';
-import { getAuthenticatedAxios } from '@/lib/api/axios';
 import { toast } from 'sonner';
-import { banUserQuery, banUsers } from '@/lib/api/users';
+import { banUserMutation } from '@/lib/api/users';
 import { getCsvBlob } from 'tanstack-table-export-to-csv';
 import { download } from '@/lib/utils';
-import { useMutation } from '@tanstack/react-query';
+import { QueryClient, useMutation } from '@tanstack/react-query';
+import { getQueryClient } from '@/lib/query-client';
 
 const UserActions = ({ table }: { table: Table<UserInfo> }) => {
+  const queryClient: QueryClient = getQueryClient();
+
   const banSelectedUsers = async () => {
     const selectedRows = table.getFilteredSelectedRowModel().rows;
     const selectedUsers = selectedRows.map((row) => row.original);
     const selectedUserIds = selectedRows.map((rows) => rows.original.id);
+
     if (selectedUserIds.length === 0) {
       toast.error('No users selected');
       return;
@@ -40,7 +43,10 @@ const UserActions = ({ table }: { table: Table<UserInfo> }) => {
     download(csvBlob, 'userData.csv');
   };
 
-  const { mutate: mutateUser } = useMutation(banUserQuery());
+  const { mutate: mutateUser } = useMutation({
+    ...banUserMutation(),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['users'] }),
+  });
 
   return (
     <div className="bg-muted rounded-t-lg flex flex-row items-center justify-between py-3 px-4">
@@ -56,9 +62,7 @@ const UserActions = ({ table }: { table: Table<UserInfo> }) => {
         <Button variant={'secondary'} onClick={() => banSelectedUsers()}>
           Ban Selected
         </Button>
-        <Button onClick={() => handleExportToCsv()}>
-          Export Data (PDF/CSV)
-        </Button>
+        <Button onClick={() => handleExportToCsv()}>Export Data CSV</Button>
       </div>
     </div>
   );
