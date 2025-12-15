@@ -14,7 +14,11 @@ import {
 import { DifficultyRating } from '@/components/ui/difficulty-rating';
 import { cn } from '@/lib/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { challengeQuery, submitFlag } from '@/lib/api/challenge';
+import {
+  challengeDownloadAssets,
+  challengeQuery,
+  submitFlag,
+} from '@/lib/api/challenge';
 
 const ChallengeModalContent: React.FC<{ challengeName: string }> = ({
   challengeName,
@@ -57,10 +61,14 @@ const ChallengeModalContent: React.FC<{ challengeName: string }> = ({
         {challenge.assets.length > 0 && (
           <div className="mb-6">
             {challenge.assets.map((asset) => (
-              <div key={asset} className="flex items-center mb-2">
+              <div
+                key={asset}
+                className="flex items-center mb-2 cursor-pointer"
+                onClick={() => challengeDownloadAssets(challenge.name, asset)}
+              >
                 <a
-                  href="#"
-                  className="text-primary hover:underline flex items-center"
+                  target="_blank"
+                  className="text-primary hover:underline flex items-center "
                 >
                   {asset}
                   <DownloadIcon size={16} className="ml-2" />
@@ -91,7 +99,7 @@ const ChallengeModalContent: React.FC<{ challengeName: string }> = ({
                       className="bg-muted-foreground [&_svg]:bg-muted-foreground [&_svg]:fill-muted-foreground"
                       side="top"
                     >
-                      <p>{hint}</p>
+                      <p>{hint.points}</p>
                     </TooltipContent>
                   </Tooltip>
                 ))}
@@ -131,9 +139,13 @@ const ChallengeModalContent: React.FC<{ challengeName: string }> = ({
             {flagSubmitState.error}
           </div>
         )}
-        {flagSubmitState?.success && (
+        {flagSubmitState?.success ? (
           <div className="mt-2 text-green-500 text-sm">
-            Flag submitted successfully!
+            {flagSubmitState.message}
+          </div>
+        ) : (
+          <div className="mt-2 text-red-500 text-sm">
+            {flagSubmitState?.message || ''}
           </div>
         )}
       </div>

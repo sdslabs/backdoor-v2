@@ -1,7 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { SubmissionResp } from '@/lib/types';
+import { Submission, SubmissionResp } from '@/lib/types';
 
-export const submissionColumns: ColumnDef<SubmissionResp>[] = [
+export const submissionColumns: ColumnDef<Submission>[] = [
   {
     accessorKey: 'solvedAt',
     header: 'Time',

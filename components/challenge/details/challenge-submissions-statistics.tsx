@@ -9,6 +9,7 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { submissionsByChallengeTableQuery } from '@/lib/api/submissions';
 
 const chartConfig = {
   submissions: {
@@ -19,7 +20,10 @@ const chartConfig = {
 
 const ChallengeSubmissionsStatistics = ({ name }: { name: string }) => {
   const { data: challenge } = useSuspenseQuery(challengeDetailsQuery(name));
-  const totalSolves = challenge.solves.length;
+  const { data: submissions } = useSuspenseQuery(
+    submissionsByChallengeTableQuery({ challengeName: name })
+  );
+  const totalSolves = submissions.total;
   const correctSolves = challenge.solvesNumber;
   const metadata = [
     {
@@ -32,12 +36,12 @@ const ChallengeSubmissionsStatistics = ({ name }: { name: string }) => {
     },
     {
       label: 'Solve Rate (%)',
-      value: `${Math.round((correctSolves / totalSolves) * 100)}`,
+      value: `${Math.round((correctSolves / totalSolves) * 100) || 0}`,
     },
   ];
 
   let counter = 0;
-  const submissionsChartData = challenge.solves.map((solve) => {
+  const submissionsChartData = submissions.data.map((solve) => {
     if (solve.correct) {
       counter++;
     }

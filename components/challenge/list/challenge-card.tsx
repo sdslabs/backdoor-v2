@@ -1,6 +1,9 @@
 'use client';
 
-import { ChallengeMetadata } from '@/lib/types/challenge';
+import type {
+  ChallengeDetails,
+  ChallengeMetadata,
+} from '@/lib/types/challenge';
 import { Badge } from '@/components/ui/badge';
 import { DifficultyRating } from '@/components/ui/difficulty-rating';
 import { SolveStatusIcon } from '@/components/ui/solve-status-icon';
@@ -16,7 +19,6 @@ const ChallengeCard: React.FC<ChallengeMetadata> = ({
   difficulty,
   solvesNumber,
   solveStatus,
-  deployedStatus,
 }) => {
   const { updateName } = useChallengeParams();
   const { role } = useAuthStore();

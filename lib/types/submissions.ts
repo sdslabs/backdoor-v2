@@ -1,6 +1,6 @@
 import { ChallengeCategory, ChallengeTag } from './challenge';
 
-export interface SubmissionResp {
+export interface Submission {
   userId: number;
   username: string;
   challId: number;
@@ -9,4 +9,19 @@ export interface SubmissionResp {
   tags: ChallengeTag[];
   points: number;
   solvedAt: Date;
+  flag: string;
+  correct: boolean;
+}
+
+export interface SubmissionResp {
+  user_id: number;
+  username: string;
+  chall_id: number;
+  name: string;
+  category: ChallengeCategory;
+  tags: ChallengeTag[];
+  points: number;
+  submitted_at: Date;
+  flag: string;
+  success: boolean;
 }

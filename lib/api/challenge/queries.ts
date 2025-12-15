@@ -1,5 +1,6 @@
 import { Challenge, ChallengeDetails, ChallengeMetadata } from '@/lib/types';
-import { getAuthenticatedAxios } from '../axios';
+import { getAuthenticatedAxios, getUnauthenticatedAxios } from '../axios';
+import { API_BASE_URL } from '@/lib/constants';
 
 // Mock fetcher functions
 // * Comment these when using real API *//
@@ -16,7 +17,7 @@ import { getAuthenticatedAxios } from '../axios';
 const fetchAllChallengesMetadata = async (): Promise<ChallengeMetadata[]> => {
   try {
     const axios = await getAuthenticatedAxios();
-    const res = await axios.get('/api/info/challenges');
+    const res = await axios.get('/info/challenges');
     console.log('newww Challenge metadata response:', res.data);
 
     // TODO: Migrate this to swagger
@@ -50,7 +51,7 @@ const fetchAllChallengesMetadata = async (): Promise<ChallengeMetadata[]> => {
 const fetchChallenge = async (name: string): Promise<Challenge> => {
   try {
     const axios = await getAuthenticatedAxios();
-    const res = await axios.get(`/api/info/challenge/${name}`);
+    const res = await axios.get(`/info/challenge/${name}`);
     console.log('Challenge response:', res.data);
     return res.data;
   } catch (err) {
@@ -64,11 +65,35 @@ const fetchChallengeDetails = async (
 ): Promise<ChallengeDetails> => {
   try {
     const axios = await getAuthenticatedAxios();
-    const res = await axios.get(`/api/info/challenge/${name}`);
+    const res = await axios.get(`/info/challenge/${name}`);
     console.log('Challenge details response:', res.data);
     return res.data;
   } catch (err) {
     console.error('Error fetching challenge details:', err);
+    throw err;
+  }
+};
+
+export const manageChallengeByName = async (vars: {
+  name: string;
+  action: string;
+}): Promise<{ message: string }> => {
+  try {
+    const axios = await getAuthenticatedAxios();
+    axios.defaults.headers['Content-Type'] = 'multipart/form-data';
+    console.log(`Taking action ${vars.action} on ${vars.name}`);
+
+    const res = await axios.post(`/manage/challenge/`, {
+      name: vars.name,
+      action: vars.action,
+    });
+    console.log('Challenge Action response:', res.data);
+    return res.data;
+  } catch (err) {
+    console.error(
+      `Error performing action(${vars.action}) on ${vars.name}:`,
+      err
+    );
     throw err;
   }
 };
@@ -89,3 +114,23 @@ export const challengeDetailsQuery = (name: string) => ({
   queryKey: ['challenge-details', name],
   queryFn: () => fetchChallengeDetails(name),
 });
+
+export async function challengeDownloadAssets(
+  challengeName: string,
+  asset: string
+) {
+  const axios = getUnauthenticatedAxios();
+  const url = `${API_BASE_URL}/info/download?challenge=${challengeName}&asset=${asset}`;
+  const response = await axios({
+    url: url,
+    method: 'GET',
+    responseType: 'blob',
+  }).then((response) => {
+    const url = window.URL.createObjectURL(response.data);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', asset);
+    document.body.appendChild(link);
+    link.click();
+  });
+}

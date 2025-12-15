@@ -9,20 +9,21 @@ import {
 import { Bell } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { Notification } from '@/lib/types';
+import { NotificationStream } from '@/lib/types';
 import { useQuery } from '@tanstack/react-query';
 import { recentNotificationsQuery } from '@/lib/api/notifications';
+import { API_BASE_URL } from '@/lib/constants';
 
 export default function NotificationPopover() {
   const [hasNew, setHasNew] = useState(false);
 
   useEffect(() => {
-    const evtSource = new EventSource('/api/notifications');
+    const evtSource = new EventSource(`${API_BASE_URL}/notification/stream`);
 
     evtSource.onmessage = (e) => {
-      const data: Notification = JSON.parse(e.data);
+      const data: NotificationStream = JSON.parse(e.data);
       setHasNew(true);
-      toast(data.title, { description: data.description });
+      toast(data.Title, { description: data.Description });
     };
 
     evtSource.onerror = () => {
@@ -32,6 +33,12 @@ export default function NotificationPopover() {
 
     return () => evtSource.close();
   }, []);
+
+  useEffect(() => {
+    // Updates event when it's open
+    // NOTE: since this fetches all the notification, usage to be discussed
+    refetch();
+  }, [hasNew]);
 
   const {
     data: notificationsData,
@@ -75,10 +82,10 @@ export default function NotificationPopover() {
               <li key={idx} className="px-4 py-3 rounded-md shadow-sm bg-muted">
                 <p className="font-medium text-primary">{notif.title}</p>
                 <p className="text-sm text-secondary-foreground">
-                  {notif.description}
+                  {notif.desc}
                 </p>
                 <p className="text-xs text-right text-muted-foreground mt-1">
-                  {new Date(notif.datetime).toLocaleString()}
+                  {new Date(notif.updated_at).toLocaleString()}
                 </p>
               </li>
             ))}

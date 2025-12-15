@@ -42,7 +42,7 @@ const fetchLeaderboardTable = async ({
 }): Promise<{ data: LeaderboardEntry[]; total: number }> => {
   try {
     const axios = await getAuthenticatedAxios();
-    const res = await axios.get('/api/info/leaderboard', {
+    const res = await axios.get('/info/leaderboard', {
       params: {
         page,
       },
@@ -79,7 +79,7 @@ const fetchLeaderboardTable = async ({
 const fetchLeaderboardGraph = async () => {
   try {
     const axios = await getAuthenticatedAxios();
-    const res = await axios.get('/api/info/leaderboard-graph');
+    const res = await axios.get('/info/leaderboard-graph');
     return res.data as LeaderBoardGraphEntry[];
   } catch (err) {
     console.error('Error fetching leaderboard graph:', err);

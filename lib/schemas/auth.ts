@@ -39,3 +39,8 @@ export const RegisterUserSchema = z
     path: ['confirmPassword'],
     message: 'Passwords do not match',
   });
+
+export const BackgroundNotificationSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
+  desc: z.string().min(1, 'Description is required'),
+});
