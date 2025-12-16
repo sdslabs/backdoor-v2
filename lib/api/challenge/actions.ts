@@ -32,3 +32,38 @@ export async function submitFlag(_: unknown, formData: FormData) {
     return { error: 'Something went wrong. Please try again.', success: false };
   }
 }
+
+export async function getHintDetails(hintId: number) {
+  try {
+    const axios = await getAuthenticatedAxios();
+
+    const res = await axios.get(`/info/hint/${hintId}`);
+    const data = res.data;
+
+    return { success: true, data };
+  } catch (error) {
+    console.error('Error fetching hint:', error);
+    return {
+      success: false,
+      error: 'Failed to fetch hint. Please try again.',
+    };
+  }
+}
+
+export async function redeemHint(hintId: number) {
+  try {
+    const axios = await getAuthenticatedAxios();
+
+    const res = await axios.post(`/info/hint/${hintId}`);
+    const data = res.data;
+
+    revalidatePath('/dashboard/challenges');
+    return { success: true, data };
+  } catch (error) {
+    console.error('Error redeeming hint:', error);
+    return {
+      success: false,
+      error: 'Failed to redeem hint. Please try again.',
+    };
+  }
+}

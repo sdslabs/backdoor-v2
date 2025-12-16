@@ -5,12 +5,6 @@ import React, { useActionState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { DifficultyRating } from '@/components/ui/difficulty-rating';
 import { cn } from '@/lib/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -19,6 +13,7 @@ import {
   challengeQuery,
   submitFlag,
 } from '@/lib/api/challenge';
+import { HintButtons } from '@/components/challenge/details/hint-button-with-modal';
 
 const ChallengeModalContent: React.FC<{ challengeName: string }> = ({
   challengeName,
@@ -78,35 +73,7 @@ const ChallengeModalContent: React.FC<{ challengeName: string }> = ({
           </div>
         )}
 
-        {challenge.hints.length > 0 && (
-          <TooltipProvider>
-            <div className="mb-6">
-              <div className="flex items-center gap-2 mb-2">
-                <span>Hints</span>
-                {challenge.hints.map((hint, index) => (
-                  <Tooltip key={index}>
-                    <TooltipTrigger>
-                      <div
-                        className={cn(
-                          'font-mono text-xs size-5',
-                          'text-muted-foreground border border-muted-foreground'
-                        )}
-                      >
-                        {index + 1}
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent
-                      className="bg-muted-foreground [&_svg]:bg-muted-foreground [&_svg]:fill-muted-foreground"
-                      side="top"
-                    >
-                      <p>{hint.points}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                ))}
-              </div>
-            </div>
-          </TooltipProvider>
-        )}
+        {challenge.hints.length > 0 && <HintButtons hints={challenge.hints} />}
 
         <form action={handleFlagSubmission} className="flex mt-4 w-full">
           <Input
