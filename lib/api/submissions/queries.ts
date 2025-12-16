@@ -54,7 +54,7 @@ const fetchSubmissionsByChallenge = async ({
   page: number;
   limit: number;
 }): Promise<{ data: Submission[]; total: number }> => {
-  const axios = getUnauthenticatedAxios();
+  const axios = await getAuthenticatedAxios();
   const response = await axios.get<SubmissionResp[]>(
     `/info/submissions/challenge/${challengeName}`
   );
