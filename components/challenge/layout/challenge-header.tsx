@@ -43,6 +43,7 @@ const StatusSelect: React.FC = () => {
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Status</SelectLabel>
+          <SelectItem value="all">All</SelectItem>
           <SelectItem value="unsolved">
             <SolveStatusIcon status="unsolved" /> Unsolved
           </SelectItem>
@@ -66,6 +67,7 @@ const DifficultySelect: React.FC = () => {
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Difficulty</SelectLabel>
+          <SelectItem value="all">All</SelectItem>
           <SelectItem value="easy">
             <DifficultyRating difficulty="easy" /> Easy
           </SelectItem>
