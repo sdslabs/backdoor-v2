@@ -121,9 +121,7 @@ const ChallengeDetailsWithActions = ({ name }: { name: string }) => {
           ))}
         </div>
       )}
-      {challenge.hints.length > 0 && (
-        <HintButtons hints={challenge.hints} variant="details" />
-      )}
+      {challenge.hints.length > 0 && <HintButtons hints={challenge.hints} />}
     </div>
   );
 };

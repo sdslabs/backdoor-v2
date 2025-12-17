@@ -41,11 +41,18 @@ export async function getHintDetails(hintId: number) {
     const data = res.data;
 
     return { success: true, data };
-  } catch (error) {
-    console.error('Error fetching hint:', error);
+  } catch (error: any) {
+    console.error('Error redeeming hint:', error);
+
+    const errorMessage =
+      error?.response?.data?.error ||
+      error?.response?.data?.message ||
+      error?.message ||
+      'Failed to redeem hint. Please try again.';
+
     return {
       success: false,
-      error: 'Failed to fetch hint. Please try again.',
+      error: errorMessage,
     };
   }
 }
@@ -59,11 +66,18 @@ export async function redeemHint(hintId: number) {
 
     revalidatePath('/dashboard/challenges');
     return { success: true, data };
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error redeeming hint:', error);
+
+    const errorMessage =
+      error?.response?.data?.error ||
+      error?.response?.data?.message ||
+      error?.message ||
+      'Failed to redeem hint. Please try again.';
+
     return {
       success: false,
-      error: 'Failed to redeem hint. Please try again.',
+      error: errorMessage,
     };
   }
 }

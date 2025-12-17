@@ -9,18 +9,13 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { getHintDetails, redeemHint } from '@/lib/api/challenge/actions';
-import { toast } from 'sonner';
-import { Check, Lock } from 'lucide-react';
+import { Lock } from 'lucide-react';
 
 interface HintButtonsProps {
   hints: { id: number; points: number; description?: string }[];
-  variant?: 'modal' | 'details';
 }
 
-export const HintButtons: React.FC<HintButtonsProps> = ({
-  hints,
-  variant = 'modal',
-}) => {
+export const HintButtons: React.FC<HintButtonsProps> = ({ hints }) => {
   const [selectedHint, setSelectedHint] = useState<{
     id: number;
     points: number;
@@ -31,6 +26,7 @@ export const HintButtons: React.FC<HintButtonsProps> = ({
   const [isFetching, setIsFetching] = useState(false);
   const [hintContent, setHintContent] = useState<string | null>(null);
   const [isRedeemed, setIsRedeemed] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [hintStatuses, setHintStatuses] = useState<
     Record<number, { isRedeemed: boolean; isLoading: boolean }>
   >({});
@@ -75,16 +71,13 @@ export const HintButtons: React.FC<HintButtonsProps> = ({
     description?: string;
   }) => {
     setIsFetching(true);
+    setErrorMessage(null);
 
     const result = await getHintDetails(hint.id);
     setIsFetching(false);
 
     if (!result.success) {
-      if (variant === 'modal') {
-        alert(result.error || 'Failed to fetch hint');
-      } else {
-        toast.error(result.error || 'Failed to fetch hint');
-      }
+      alert(result.error || 'Failed to fetch hint');
       return;
     }
 
@@ -110,36 +103,28 @@ export const HintButtons: React.FC<HintButtonsProps> = ({
     if (!selectedHint) return;
 
     setIsRedeeming(true);
+    setErrorMessage(null);
     const result = await redeemHint(selectedHint.id);
     setIsRedeeming(false);
 
     if (result.success) {
       setHintContent(result.data.message);
       setIsRedeemed(true);
+      setErrorMessage(null);
       setHintStatuses((prev) => ({
         ...prev,
         [selectedHint.id]: { isRedeemed: true, isLoading: false },
       }));
     } else {
-      if (variant === 'modal') {
-        alert(result.error || 'Failed to redeem hint');
-      } else {
-        toast.error(result.error || 'Failed to redeem hint');
-      }
+      setErrorMessage(result.error || 'Failed to redeem hint');
     }
   };
 
   return (
     <>
       <TooltipProvider>
-        <div className={variant === 'modal' ? 'mb-6' : ''}>
-          <div
-            className={
-              variant === 'modal'
-                ? 'flex items-center gap-2 mb-2'
-                : 'flex items-center gap-2'
-            }
-          >
+        <div className="mb-6">
+          <div className="flex items-center gap-2 mb-2">
             <span>Hints</span>
             {hints.map((hint, index) => {
               const status = hintStatuses[hint.id];
@@ -205,11 +190,14 @@ export const HintButtons: React.FC<HintButtonsProps> = ({
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="text-lg font-semibold mb-2">Hint</h2>
-            <p className="text-muted-foreground text-sm mb-6">
+            <p className="text-sm mb-4">
               {isRedeemed
                 ? hintContent
                 : `Do you want to redeem this hint for ${selectedHint?.points} points?`}
             </p>
+            {errorMessage && (
+              <p className="text-red-500 text-sm mb-4">{errorMessage}</p>
+            )}
             <div className="flex justify-end gap-2">
               {isRedeemed ? (
                 <Button onClick={() => setIsModalOpen(false)}>Close</Button>
