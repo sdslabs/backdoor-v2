@@ -4,7 +4,7 @@ import { Table } from '@tanstack/react-table';
 import { UserInfo } from '@/lib/types';
 import { Input } from '../ui/input';
 import { toast } from 'sonner';
-import { banUserMutation } from '@/lib/api/users';
+import { banUserMutation, unbanUserMutation } from '@/lib/api/users';
 import { getCsvBlob } from 'tanstack-table-export-to-csv';
 import { download } from '@/lib/utils';
 import { QueryClient, useMutation } from '@tanstack/react-query';
@@ -23,8 +23,26 @@ const UserActions = ({ table }: { table: Table<UserInfo> }) => {
       return;
     }
     try {
-      await mutateUser(selectedUserIds);
+      await mutateUserBan(selectedUserIds);
       toast.success(`Banned users successfully`);
+    } catch (err) {
+      toast.error(`Error banning users`);
+    }
+    table.resetRowSelection();
+  };
+
+  const unbanSelectedUsers = async () => {
+    const selectedRows = table.getFilteredSelectedRowModel().rows;
+    const selectedUsers = selectedRows.map((row) => row.original);
+    const selectedUserIds = selectedRows.map((rows) => rows.original.id);
+
+    if (selectedUserIds.length === 0) {
+      toast.error('No users selected');
+      return;
+    }
+    try {
+      await mutateUserUnban(selectedUserIds);
+      toast.success(`Unbanned users successfully`);
     } catch (err) {
       toast.error(`Error banning users`);
     }
@@ -43,8 +61,13 @@ const UserActions = ({ table }: { table: Table<UserInfo> }) => {
     download(csvBlob, 'userData.csv');
   };
 
-  const { mutate: mutateUser } = useMutation({
+  const { mutate: mutateUserBan } = useMutation({
     ...banUserMutation(),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['users'] }),
+  });
+
+  const { mutate: mutateUserUnban } = useMutation({
+    ...unbanUserMutation(),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['users'] }),
   });
 
@@ -61,6 +84,9 @@ const UserActions = ({ table }: { table: Table<UserInfo> }) => {
         />
         <Button variant={'secondary'} onClick={() => banSelectedUsers()}>
           Ban Selected
+        </Button>
+        <Button variant={'secondary'} onClick={() => unbanSelectedUsers()}>
+          Unban Selected
         </Button>
         <Button onClick={() => handleExportToCsv()}>Export Data CSV</Button>
       </div>
