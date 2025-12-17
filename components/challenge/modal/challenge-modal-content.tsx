@@ -82,44 +82,54 @@ const ChallengeModalContent: React.FC<{ challengeName: string }> = ({
 
         {challenge.hints.length > 0 && <HintButtons hints={challenge.hints} />}
 
-        <form action={handleFlagSubmission} className="flex mt-4 w-full">
-          <Input
-            type="text"
-            name="flag"
-            id="flag"
-            placeholder="Enter flag"
-            autoFocus
-            className="rounded-r-none !border-r-none text-center"
-            disabled={flagSubmissionPending}
-          />
-          <input
-            hidden
-            className="hidden"
-            name="challengeId"
-            id="challengeId"
-            defaultValue={challenge.id}
-          />
-          <Button
-            type="submit"
-            className="rounded-l-none"
-            disabled={flagSubmissionPending}
-          >
-            {flagSubmissionPending ? 'Submitting...' : 'Submit'}
-          </Button>
-        </form>
+        {!challenge.solveStatus ? (
+          <>
+            <form action={handleFlagSubmission} className="flex mt-4 w-full">
+              <Input
+                type="text"
+                name="flag"
+                id="flag"
+                placeholder="Enter flag"
+                autoFocus
+                className="rounded-r-none !border-r-none text-center"
+                disabled={flagSubmissionPending}
+              />
+              <input
+                hidden
+                className="hidden"
+                name="challengeId"
+                id="challengeId"
+                defaultValue={challenge.id}
+              />
+              <Button
+                type="submit"
+                className="rounded-l-none"
+                disabled={flagSubmissionPending}
+              >
+                {flagSubmissionPending ? 'Submitting...' : 'Submit'}
+              </Button>
+            </form>
 
-        {flagSubmitState?.error && (
-          <div className="mt-2 text-red-500 text-sm">
-            {flagSubmitState.error}
-          </div>
-        )}
-        {flagSubmitState?.success ? (
-          <div className="mt-2 text-green-500 text-sm">
-            {flagSubmitState.message}
-          </div>
+            {flagSubmitState?.error && (
+              <div className="mt-2 text-red-500 text-sm">
+                {flagSubmitState.error}
+              </div>
+            )}
+            {flagSubmitState?.success ? (
+              <div className="mt-2 text-green-500 text-sm">
+                {flagSubmitState.message}
+              </div>
+            ) : (
+              <div className="mt-2 text-red-500 text-sm">
+                {flagSubmitState?.message || ''}
+              </div>
+            )}
+          </>
         ) : (
-          <div className="mt-2 text-red-500 text-sm">
-            {flagSubmitState?.message || ''}
+          <div className="mt-4 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+            <p className="text-green-500 text-center font-semibold">
+              Challenge Solved!
+            </p>
           </div>
         )}
       </div>
