@@ -45,10 +45,13 @@ export const challengeSubmissionsColumns: ColumnDef<Submission>[] = [
     ),
     cell: ({ row }) => {
       const date = row.getValue('solvedAt') as Date;
-      return date.toLocaleDateString('en-US', {
+      if (!date) return '-';
+      return date.toLocaleString('en-US', {
         day: 'numeric',
         month: 'short',
         year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
       });
     },
   },

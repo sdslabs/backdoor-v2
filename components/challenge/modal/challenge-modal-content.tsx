@@ -35,7 +35,14 @@ const ChallengeModalContent: React.FC<{ challengeName: string }> = ({
               className="text-muted-foreground cursor-pointer hover:text-primary transition"
             />
           </div>
-          <DifficultyRating difficulty={challenge.difficulty} />
+          <div className="flex items-center">
+            <span className="pr-2 border-r border-muted-foreground text-sm">
+              {challenge.points} points
+            </span>
+            <span className="pl-2">
+              <DifficultyRating difficulty={challenge.difficulty} />
+            </span>
+          </div>
         </div>
 
         <div className="flex justify-between align-center">
