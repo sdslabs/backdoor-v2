@@ -1,7 +1,7 @@
 import { getAuthenticatedAxios } from '../axios';
 
-export const banUsers = async (userId: number[]): Promise<void> => {
-  userId.forEach(async (userId) => {
+export const banUsers = async (userIds: number[]): Promise<void> => {
+  userIds.forEach(async (userId) => {
     try {
       const axios = await getAuthenticatedAxios();
       const res = await axios.post(`/admin/users/ban/${userId.toString()}`);
@@ -10,8 +10,8 @@ export const banUsers = async (userId: number[]): Promise<void> => {
     }
   });
 };
-export const unbanUsers = async (userId: number[]): Promise<void> => {
-  userId.forEach(async (userId) => {
+export const unbanUsers = async (userIds: number[]): Promise<void> => {
+  userIds.forEach(async (userId) => {
     try {
       const axios = await getAuthenticatedAxios();
       const res = await axios.post(`/admin/users/unban/${userId.toString()}`);

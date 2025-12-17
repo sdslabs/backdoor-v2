@@ -20,6 +20,7 @@ import UserActions from './user-actions';
 
 const UsersTable = () => {
   const { data: usersData } = useSuspenseQuery(userTableQuery());
+  console.log('Userdata for table: ', usersData);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,

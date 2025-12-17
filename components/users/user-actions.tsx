@@ -28,6 +28,7 @@ const UserActions = ({ table }: { table: Table<UserInfo> }) => {
     } catch (err) {
       toast.error(`Error banning users`);
     }
+    queryClient.refetchQueries({ queryKey: ['users'] });
     table.resetRowSelection();
   };
 
@@ -46,6 +47,9 @@ const UserActions = ({ table }: { table: Table<UserInfo> }) => {
     } catch (err) {
       toast.error(`Error banning users`);
     }
+
+    // TODO: fix autoupdate table status
+    queryClient.refetchQueries({ queryKey: ['users'] });
     table.resetRowSelection();
   };
 
@@ -63,12 +67,10 @@ const UserActions = ({ table }: { table: Table<UserInfo> }) => {
 
   const { mutate: mutateUserBan } = useMutation({
     ...banUserMutation(),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['users'] }),
   });
 
   const { mutate: mutateUserUnban } = useMutation({
     ...unbanUserMutation(),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['users'] }),
   });
 
   return (
@@ -82,7 +84,12 @@ const UserActions = ({ table }: { table: Table<UserInfo> }) => {
             table.getColumn('username')?.setFilterValue(e.target.value);
           }}
         />
-        <Button variant={'secondary'} onClick={() => banSelectedUsers()}>
+        <Button
+          variant={'secondary'}
+          onClick={() => {
+            banSelectedUsers();
+          }}
+        >
           Ban Selected
         </Button>
         <Button variant={'secondary'} onClick={() => unbanSelectedUsers()}>
