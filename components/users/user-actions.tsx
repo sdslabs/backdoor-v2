@@ -84,17 +84,19 @@ const UserActions = ({ table }: { table: Table<UserInfo> }) => {
             table.getColumn('username')?.setFilterValue(e.target.value);
           }}
         />
-        <Button
-          variant={'secondary'}
-          onClick={() => {
-            banSelectedUsers();
-          }}
-        >
-          Ban Selected
-        </Button>
-        <Button variant={'secondary'} onClick={() => unbanSelectedUsers()}>
-          Unban Selected
-        </Button>
+        <div className="flex flex-row gap-1">
+          <Button
+            variant={'destructive'}
+            onClick={() => {
+              banSelectedUsers();
+            }}
+          >
+            Ban
+          </Button>
+          <Button variant={'default'} onClick={() => unbanSelectedUsers()}>
+            Unban
+          </Button>
+        </div>
         <Button onClick={() => handleExportToCsv()}>Export Data CSV</Button>
       </div>
     </div>
