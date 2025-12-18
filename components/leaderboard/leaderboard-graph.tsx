@@ -23,6 +23,10 @@ interface FlattenedGraphEntry {
 const flattenTimeSeriesData = (
   graphData: LeaderBoardGraphEntry[]
 ): FlattenedGraphEntry[] => {
+  if (!graphData || graphData.length === 0) {
+    return [];
+  }
+
   const allTimestampsSet = new Set<string>();
 
   const playerMap = new Map<string, Map<string, number>>();
@@ -90,54 +94,67 @@ export const LeaderboardGraph = () => {
       <h2 className="text-2xl font-bold text-center mb-6">
         Top 10 Players Over Time
       </h2>
-      <ResponsiveContainer width="100%" height={400}>
-        <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            dataKey="timestamp"
-            tickFormatter={formatTimestamp}
-            label={{
-              value: 'Time',
-              position: 'insideBottomRight',
-              offset: -5,
-            }}
-          />
-          <YAxis />
-          <Tooltip
-            content={({ active, payload }) => {
-              if (!active || !payload || !payload.length) return null;
-
-              return (
-                <div className="bg-popover backdrop-blur-md rounded-lg px-4 py-3 border border-border shadow-md">
-                  {payload.map((entry, index) => (
-                    <div key={index} className="text-muted-foreground text-sm">
-                      <span
-                        className="inline-block w-2 h-2 rounded-full mr-2"
-                        style={{ backgroundColor: entry.color }}
-                      ></span>
-                      {entry.name}:{' '}
-                      <span className="text-primary font-semibold">
-                        {entry.value}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              );
-            }}
-          />
-          <Legend />
-          {graphData.map((entry, index) => (
-            <Line
-              key={entry.id}
-              type="monotone"
-              dataKey={entry.id}
-              name={entry.username}
-              stroke={playerColors(graphData)[index]}
-              dot={false}
+      {!graphData || graphData.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-[400px] text-muted-foreground">
+          <p className="text-lg">No data available yet</p>
+          <p className="text-sm mt-2">
+            The graph will appear once players start solving challenges
+          </p>
+        </div>
+      ) : (
+        <ResponsiveContainer width="100%" height={400}>
+          <LineChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="timestamp"
+              tickFormatter={formatTimestamp}
+              label={{
+                value: 'Time',
+                position: 'insideBottomRight',
+                offset: -5,
+              }}
             />
-          ))}
-        </LineChart>
-      </ResponsiveContainer>
+            <YAxis />
+            <Tooltip
+              content={({ active, payload }) => {
+                if (!active || !payload || !payload.length) return null;
+
+                return (
+                  <div className="bg-popover backdrop-blur-md rounded-lg px-4 py-3 border border-border shadow-md">
+                    {payload.map((entry, index) => (
+                      <div
+                        key={index}
+                        className="text-muted-foreground text-sm"
+                      >
+                        <span
+                          className="inline-block w-2 h-2 rounded-full mr-2"
+                          style={{ backgroundColor: entry.color }}
+                        ></span>
+                        {entry.name}:{' '}
+                        <span className="text-primary font-semibold">
+                          {entry.value}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                );
+              }}
+            />
+            <Legend />
+            {graphData &&
+              graphData.map((entry, index) => (
+                <Line
+                  key={entry.id}
+                  type="monotone"
+                  dataKey={entry.id}
+                  name={entry.username}
+                  stroke={playerColors(graphData)[index]}
+                  dot={false}
+                />
+              ))}
+          </LineChart>
+        </ResponsiveContainer>
+      )}
     </div>
   );
 };
