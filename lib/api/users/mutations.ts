@@ -1,32 +1,32 @@
 import { getAuthenticatedAxios } from '../axios';
 
-export const banUsers = async (userIds: number[]): Promise<void> => {
-  userIds.forEach(async (userId) => {
-    try {
-      const axios = await getAuthenticatedAxios();
-      const res = await axios.post(`/admin/users/ban/${userId.toString()}`);
-    } catch (err) {
-      throw err;
-    }
-  });
+export type UserActionType = 'ban' | 'unban';
+
+export interface UserActionPayload {
+  userIds: number[];
+  action: UserActionType;
+}
+
+export const modifyUserStatus = async (
+  payload: UserActionPayload
+): Promise<void> => {
+  const { userIds, action } = payload;
+
+  await Promise.all(
+    userIds.map(async (userId) => {
+      try {
+        const axios = await getAuthenticatedAxios();
+        await axios.post(`/admin/users/${action}/${userId.toString()}`);
+      } catch (err) {
+        console.error(`Error ${action}ing user ${userId}:`, err);
+        throw err;
+      }
+    })
+  );
 };
-export const unbanUsers = async (userIds: number[]): Promise<void> => {
-  userIds.forEach(async (userId) => {
-    try {
-      const axios = await getAuthenticatedAxios();
-      const res = await axios.post(`/admin/users/unban/${userId.toString()}`);
-    } catch (err) {
-      throw err;
-    }
-  });
-};
-export const banUserMutation = () => {
+
+export const userStatusMutation = () => {
   return {
-    mutationFn: banUsers,
-  };
-};
-export const unbanUserMutation = () => {
-  return {
-    mutationFn: unbanUsers,
+    mutationFn: modifyUserStatus,
   };
 };
