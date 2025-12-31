@@ -22,7 +22,7 @@ const ChallengeModalContent: React.FC<{ challengeName: string }> = ({
 }) => {
   const { data: challenge } = useSuspenseQuery(challengeQuery(challengeName));
   const { data: submissions } = useSuspenseQuery(
-    submissionsByChallengeTableQuery({ challengeName, limit: 1000 })
+    submissionsByChallengeTableQuery({ challengeId: challenge.id, limit: 1000 })
   );
   const [flagSubmitState, handleFlagSubmission, flagSubmissionPending] =
     useActionState(submitFlag, null);

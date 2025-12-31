@@ -16,13 +16,14 @@ import {
 import { useState } from 'react';
 
 const ChallengeSubmissionsTable = ({ name }: { name: string }) => {
+  const { data: challenge } = useSuspenseQuery(challengeDetailsQuery(name));
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: CHALLENGE_SUBMISSIONS_TABLE_PAGE_LIMIT,
   });
   const { data: submissions } = useSuspenseQuery(
     submissionsByChallengeTableQuery({
-      challengeName: name,
+      challengeId: challenge.id,
       page: pagination.pageIndex + 1,
       limit: pagination.pageSize,
     })
