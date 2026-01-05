@@ -45,7 +45,14 @@ const ChallengeCard: React.FC<ChallengeMetadata> = ({
             </h3>
             <SolveStatusIcon status={solveStatus} />
           </div>
-          <DifficultyRating difficulty={difficulty} />
+          <div className="flex items-center">
+            <span className="pr-2 border-r border-muted-foreground text-sm">
+              {points} points
+            </span>
+            <span className="pl-2">
+              <DifficultyRating difficulty={difficulty} />
+            </span>
+          </div>
         </div>
         <div className="flex justify-between items-center">
           <div className="flex gap-2">

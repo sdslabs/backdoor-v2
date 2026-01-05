@@ -32,3 +32,52 @@ export async function submitFlag(_: unknown, formData: FormData) {
     return { error: 'Something went wrong. Please try again.', success: false };
   }
 }
+
+export async function getHintDetails(hintId: number) {
+  try {
+    const axios = await getAuthenticatedAxios();
+
+    const res = await axios.get(`/info/hint/${hintId}`);
+    const data = res.data;
+
+    return { success: true, data };
+  } catch (error: any) {
+    console.error('Error redeeming hint:', error);
+
+    const errorMessage =
+      error?.response?.data?.error ||
+      error?.response?.data?.message ||
+      error?.message ||
+      'Failed to redeem hint. Please try again.';
+
+    return {
+      success: false,
+      error: errorMessage,
+    };
+  }
+}
+
+export async function redeemHint(hintId: number) {
+  try {
+    const axios = await getAuthenticatedAxios();
+
+    const res = await axios.post(`/info/hint/${hintId}`);
+    const data = res.data;
+
+    revalidatePath('/dashboard/challenges');
+    return { success: true, data };
+  } catch (error: any) {
+    console.error('Error redeeming hint:', error);
+
+    const errorMessage =
+      error?.response?.data?.error ||
+      error?.response?.data?.message ||
+      error?.message ||
+      'Failed to redeem hint. Please try again.';
+
+    return {
+      success: false,
+      error: errorMessage,
+    };
+  }
+}

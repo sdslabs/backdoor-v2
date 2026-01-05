@@ -21,7 +21,7 @@ const chartConfig = {
 const ChallengeSubmissionsStatistics = ({ name }: { name: string }) => {
   const { data: challenge } = useSuspenseQuery(challengeDetailsQuery(name));
   const { data: submissions } = useSuspenseQuery(
-    submissionsByChallengeTableQuery({ challengeName: name })
+    submissionsByChallengeTableQuery({ challengeId: challenge.id })
   );
   const totalSolves = submissions.total;
   const correctSolves = challenge.solvesNumber;

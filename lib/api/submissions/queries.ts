@@ -46,17 +46,17 @@ const fetchSubmissions = async ({
 };
 
 const fetchSubmissionsByChallenge = async ({
-  challengeName,
+  challengeId,
   page,
   limit,
 }: {
-  challengeName: string;
+  challengeId: string;
   page: number;
   limit: number;
 }): Promise<{ data: Submission[]; total: number }> => {
-  const axios = getUnauthenticatedAxios();
+  const axios = await getAuthenticatedAxios();
   const response = await axios.get<SubmissionResp[]>(
-    `/info/submissions/challenge/${challengeName}`
+    `/info/submissions/challenge/${challengeId}`
   );
   const submissions = response.data;
 
@@ -98,17 +98,17 @@ export const submissionsTableQuery = ({
 };
 
 export const submissionsByChallengeTableQuery = ({
-  challengeName = '',
+  challengeId = '',
   page = 1,
   limit = CHALLENGE_SUBMISSIONS_TABLE_PAGE_LIMIT,
 }: {
-  challengeName?: string;
+  challengeId?: string;
   page?: number;
   limit?: number;
 } = {}) => {
   return {
-    queryKey: ['submissions', challengeName, { page, limit }],
-    queryFn: () => fetchSubmissionsByChallenge({ challengeName, page, limit }),
+    queryKey: ['submissions', challengeId, { page, limit }],
+    queryFn: () => fetchSubmissionsByChallenge({ challengeId, page, limit }),
     refetchInterval: 1000 * 60 * 2, // refetch every 2 minutes
   };
 };

@@ -1,7 +1,7 @@
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
   ChallengeTag,
-  ChallengeDifficulty,
+  ChallengeDifficultyFilter,
   ChallengeSolveStatus,
 } from '@/lib/types';
 
@@ -13,8 +13,8 @@ export function useChallengeParams() {
   const tag = (searchParams.get('tag') || 'all') as ChallengeTag;
   const status = (searchParams.get('status') ||
     'unsolved') as ChallengeSolveStatus;
-  const difficulty =
-    searchParams.get('difficulty') || ('' as ChallengeDifficulty);
+  const difficulty = (searchParams.get('difficulty') ||
+    '') as ChallengeDifficultyFilter;
   const page = parseInt(searchParams.get('page') || '1');
 
   const updateParams = (key: string, value: string) => {
@@ -38,7 +38,8 @@ export function useChallengeParams() {
     updateTag: (value: ChallengeTag) => updateParams('tag', value),
     updateStatus: (value: ChallengeSolveStatus) =>
       updateParams('status', value),
-    updateDifficulty: (value: string) => updateParams('difficulty', value),
+    updateDifficulty: (value: ChallengeDifficultyFilter) =>
+      updateParams('difficulty', value),
     updatePage: (value: number) =>
       updateParams('page', String(Math.floor(value))), // Just in case trying to pass a float lol.
   };

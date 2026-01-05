@@ -1,6 +1,7 @@
 import { UserSolveResp } from './user';
 
 export type ChallengeDifficulty = 'easy' | 'medium' | 'hard';
+export type ChallengeDifficultyFilter = ChallengeDifficulty | 'all' | '';
 
 export const ChallengeDifficultyValue: Record<ChallengeDifficulty, number> = {
   easy: 1,
@@ -41,7 +42,7 @@ export const ChallengeCategoryValuesWithDescription: Record<
 
 export type ChallengeDeployedStatus = 'deployed' | 'undeployed';
 
-export type ChallengeSolveStatus = 'solved' | 'unsolved';
+export type ChallengeSolveStatus = 'solved' | 'unsolved' | 'all';
 
 export interface ChallengeMetadata {
   id: string;
@@ -57,6 +58,7 @@ export interface ChallengeMetadata {
 export interface hint {
   id: number;
   points: number;
+  description: string;
 }
 
 export interface Challenge extends ChallengeMetadata {

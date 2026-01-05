@@ -17,8 +17,10 @@ const ChallengeList = () => {
     ({ tags, solveStatus, difficulty: challengeDifficulty }) => {
       return (
         (tag === 'all' || tags.includes(tag as ChallengeTag)) &&
-        solveStatus === status &&
-        (!difficulty || difficulty === challengeDifficulty)
+        (status === 'all' || solveStatus === status) &&
+        (!difficulty ||
+          difficulty === 'all' ||
+          difficulty === challengeDifficulty)
       );
     }
   );
