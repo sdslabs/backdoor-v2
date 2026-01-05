@@ -1,6 +1,5 @@
+import { UserActionType } from '@/lib/types';
 import { getAuthenticatedAxios } from '../axios';
-
-export type UserActionType = 'ban' | 'unban';
 
 export interface UserActionPayload {
   userIds: number[];
@@ -11,11 +10,11 @@ export const modifyUserStatus = async (
   payload: UserActionPayload
 ): Promise<void> => {
   const { userIds, action } = payload;
+  const axios = await getAuthenticatedAxios();
 
   await Promise.all(
     userIds.map(async (userId) => {
       try {
-        const axios = await getAuthenticatedAxios();
         await axios.post(`/admin/users/${action}/${userId.toString()}`);
       } catch (err) {
         console.error(`Error ${action}ing user ${userId}:`, err);
