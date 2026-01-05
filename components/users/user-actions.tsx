@@ -4,7 +4,7 @@ import { Table } from '@tanstack/react-table';
 import { UserInfo } from '@/lib/types';
 import { Input } from '../ui/input';
 import { toast } from 'sonner';
-import { banUserMutation } from '@/lib/api/users';
+import { userStatusMutation } from '@/lib/api/users';
 import { getCsvBlob } from 'tanstack-table-export-to-csv';
 import { download } from '@/lib/utils';
 import { QueryClient, useMutation } from '@tanstack/react-query';
@@ -13,9 +13,10 @@ import { getQueryClient } from '@/lib/query-client';
 const UserActions = ({ table }: { table: Table<UserInfo> }) => {
   const queryClient: QueryClient = getQueryClient();
 
-  const banSelectedUsers = async () => {
+  type UserActionType = 'ban' | 'unban';
+
+  const modifySelectedUsersStatus = async (action: UserActionType) => {
     const selectedRows = table.getFilteredSelectedRowModel().rows;
-    const selectedUsers = selectedRows.map((row) => row.original);
     const selectedUserIds = selectedRows.map((rows) => rows.original.id);
 
     if (selectedUserIds.length === 0) {
@@ -23,11 +24,16 @@ const UserActions = ({ table }: { table: Table<UserInfo> }) => {
       return;
     }
     try {
-      await mutateUser(selectedUserIds);
-      toast.success(`Banned users successfully`);
+      await mutateUserStatus({ userIds: selectedUserIds, action });
+      toast.success(
+        `${action === 'ban' ? 'Banned' : 'Unbanned'} users successfully`
+      );
     } catch (err) {
-      toast.error(`Error banning users`);
+      toast.error(`Error ${action === 'ban' ? 'banning' : 'unbanning'} users`);
     }
+
+    // TODO: fix autoupdate table status
+    queryClient.refetchQueries({ queryKey: ['users'] });
     table.resetRowSelection();
   };
 
@@ -43,9 +49,8 @@ const UserActions = ({ table }: { table: Table<UserInfo> }) => {
     download(csvBlob, 'userData.csv');
   };
 
-  const { mutate: mutateUser } = useMutation({
-    ...banUserMutation(),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['users'] }),
+  const { mutate: mutateUserStatus } = useMutation({
+    ...userStatusMutation(),
   });
 
   return (
@@ -59,9 +64,22 @@ const UserActions = ({ table }: { table: Table<UserInfo> }) => {
             table.getColumn('username')?.setFilterValue(e.target.value);
           }}
         />
-        <Button variant={'secondary'} onClick={() => banSelectedUsers()}>
-          Ban Selected
-        </Button>
+        <div className="flex flex-row gap-1">
+          <Button
+            variant={'destructive'}
+            onClick={() => {
+              modifySelectedUsersStatus('ban');
+            }}
+          >
+            Ban
+          </Button>
+          <Button
+            variant={'default'}
+            onClick={() => modifySelectedUsersStatus('unban')}
+          >
+            Unban
+          </Button>
+        </div>
         <Button onClick={() => handleExportToCsv()}>Export Data CSV</Button>
       </div>
     </div>

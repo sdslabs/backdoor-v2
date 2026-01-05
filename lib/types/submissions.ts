@@ -1,5 +1,6 @@
 import { ChallengeCategory, ChallengeTag } from './challenge';
 
+export type UserActionType = 'ban' | 'unban';
 export interface Submission {
   userId: number;
   username: string;
