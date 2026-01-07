@@ -1,5 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Submission, SubmissionResp } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
 export const submissionColumns: ColumnDef<Submission>[] = [
   {
@@ -17,6 +18,23 @@ export const submissionColumns: ColumnDef<Submission>[] = [
   {
     accessorKey: 'name',
     header: 'Challenge',
+  },
+  {
+    accessorKey: 'flag',
+    header: 'Flag',
+    cell: ({ row }) => {
+      const { correct, flag } = row.original;
+      return (
+        <span
+          className={cn(
+            correct ? 'text-emerald-500' : 'text-destructive',
+            'font-mono text-sm'
+          )}
+        >
+          {flag}
+        </span>
+      );
+    },
   },
   {
     accessorKey: 'category',
