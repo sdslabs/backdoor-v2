@@ -55,4 +55,10 @@ export const challengeSubmissionsColumns: ColumnDef<Submission>[] = [
       });
     },
   },
+  {
+    accessorKey: 'Cheating',
+    header: '',
+    enableHiding: true,
+    enableColumnFilter: true,
+  },
 ];
