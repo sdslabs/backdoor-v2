@@ -36,7 +36,7 @@ const fetchSubmissions = async ({
         category: submission.category as ChallengeCategory,
         tags: submission.tags as ChallengeTag[],
         points: submission.points,
-        solvedAt: new Date(submission.submitted_at),
+        solvedAt: new Date(submission.solvedAt),
         flag: submission.flag,
         correct: submission.success,
       }) as Submission
@@ -74,7 +74,7 @@ const fetchSubmissionsByChallenge = async ({
         category: submission.category as ChallengeCategory,
         tags: submission.tags as ChallengeTag[],
         points: submission.points,
-        solvedAt: new Date(submission.submitted_at),
+        solvedAt: new Date(submission.solvedAt),
         flag: submission.flag,
         correct: submission.success,
       }) as Submission
