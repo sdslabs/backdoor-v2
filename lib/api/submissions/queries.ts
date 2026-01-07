@@ -39,6 +39,7 @@ const fetchSubmissions = async ({
         solvedAt: new Date(submission.solvedAt),
         flag: submission.flag,
         correct: submission.success,
+        Cheating: submission.Cheating || false,
       }) as Submission
   );
   const total = submissions.length;
@@ -77,6 +78,7 @@ const fetchSubmissionsByChallenge = async ({
         solvedAt: new Date(submission.solvedAt),
         flag: submission.flag,
         correct: submission.success,
+        Cheating: submission.Cheating || false,
       }) as Submission
   );
   const total = submissions.length;

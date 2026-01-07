@@ -40,6 +40,9 @@ const SubmissionsTable = () => {
     state: {
       columnFilters,
       pagination,
+      columnVisibility: {
+        Cheating: false,
+      },
     },
     onColumnFiltersChange: setColumnFilters,
     onPaginationChange: setPagination,

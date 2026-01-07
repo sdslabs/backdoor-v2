@@ -12,6 +12,7 @@ export interface Submission {
   solvedAt: Date;
   flag: string;
   correct: boolean;
+  Cheating?: boolean;
 }
 
 export interface SubmissionResp {
@@ -25,4 +26,5 @@ export interface SubmissionResp {
   solvedAt: Date;
   flag: string;
   success: boolean;
+  Cheating?: boolean;
 }

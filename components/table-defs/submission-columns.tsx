@@ -60,4 +60,10 @@ export const submissionColumns: ColumnDef<Submission>[] = [
       );
     },
   },
+  {
+    accessorKey: 'Cheating',
+    header: '',
+    enableHiding: true,
+    enableColumnFilter: true,
+  },
 ];

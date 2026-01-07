@@ -33,22 +33,27 @@ export function DataTable<T>({ table }: DataTableProps<T>) {
         ))}
       </TableHeader>
       <TableBody>
-        {table.getRowModel().rows.map((row) => (
-          <TableRow
-            key={row.id}
-            className={`border-none bg-muted rounded ${
-              row.getIsSelected()
-                ? 'bg-primary text-primary-foreground'
-                : 'hover:bg-accent'
-            }`}
-          >
-            {row.getVisibleCells().map((cell) => (
-              <TableCell key={cell.id} className="py-4">
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </TableCell>
-            ))}
-          </TableRow>
-        ))}
+        {table.getRowModel().rows.map((row) => {
+          const Cheating = (row.original as any)?.Cheating;
+          return (
+            <TableRow
+              key={row.id}
+              className={`border-none rounded ${
+                Cheating
+                  ? 'bg-yellow-500/20 hover:bg-yellow-500/30'
+                  : row.getIsSelected()
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-muted hover:bg-accent'
+              }`}
+            >
+              {row.getVisibleCells().map((cell) => (
+                <TableCell key={cell.id} className="py-4">
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
+              ))}
+            </TableRow>
+          );
+        })}
       </TableBody>
     </Table>
   );
