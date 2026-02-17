@@ -5,6 +5,6 @@ export * from './submissions';
 export * from './user';
 export * from './notification';
 export * from './leaderboard';
-export * from './';
+export * from './instance';
 
 //* Will restructure types later. For now, exporting them all here to avoid import errors later.

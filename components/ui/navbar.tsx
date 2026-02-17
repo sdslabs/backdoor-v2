@@ -8,6 +8,7 @@ import {
   User2Icon,
   UserCircle2Icon,
   BellRingIcon,
+  Server,
 } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
@@ -45,6 +46,11 @@ const USER_ACTIONS: NavbarActions = {
       href: '/dashboard/challenge',
     },
     {
+      label: 'Instances',
+      icon: Server,
+      href: '/dashboard/instances',
+    },
+    {
       label: 'Leaderboard',
       icon: Medal,
       href: '/dashboard/leaderboard',
@@ -71,6 +77,11 @@ const ADMIN_ACTIONS: NavbarActions = {
       href: '/dashboard/challenge',
     },
     {
+      label: 'Instances',
+      icon: Server,
+      href: '/dashboard/instances',
+    },
+    {
       label: 'Leaderboard',
       icon: Medal,
       href: '/dashboard/leaderboard',
@@ -84,6 +95,11 @@ const ADMIN_ACTIONS: NavbarActions = {
       label: 'Submissions',
       icon: FilePenLineIcon,
       href: '/dashboard/submissions',
+    },
+    {
+      label: 'Instance Admin',
+      icon: Server,
+      href: '/dashboard/instance-admin',
     },
     {
       label: 'Notify',
