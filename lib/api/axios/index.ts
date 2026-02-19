@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/lib/constants';
+import {API_BASE_URL, BASE_URL} from '@/lib/constants';
 import axios, { AxiosInstance } from 'axios';
 import { createAuthenticatedServerAxios } from './server-axios';
 import { createAuthenticatedClientAxios } from './client-axios';
@@ -11,6 +11,13 @@ export function getUnauthenticatedAxios() {
   });
 
   return axiosInstance;
+}
+
+export function getAxios() {
+  return axios.create({
+    baseURL: BASE_URL,
+    timeout: 5000,
+  })
 }
 
 export async function getAuthenticatedAxios(): Promise<AxiosInstance> {
