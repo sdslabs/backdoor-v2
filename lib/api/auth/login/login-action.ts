@@ -1,6 +1,6 @@
 'use server';
 
-import {getAxios, getUnauthenticatedAxios} from '@/lib/api/axios';
+import { getAuthAxios, getUnauthenticatedAxios } from '@/lib/api/axios';
 import { HTTPAuthorizeResp, UserRole } from '@/lib/types';
 import { AxiosError } from 'axios';
 import { cookies } from 'next/headers';
@@ -39,7 +39,7 @@ export async function loginAction(
   }
 
   const { username, password } = parsed.data;
-  const axiosInstance = getAxios();
+  const axiosInstance = getAuthAxios();
   axiosInstance.defaults.headers['Content-Type'] = 'multipart/form-data';
 
   try {
