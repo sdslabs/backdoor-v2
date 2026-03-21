@@ -1,5 +1,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Submission, SubmissionResp } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
 export const submissionColumns: ColumnDef<Submission>[] = [
   {
@@ -19,6 +20,23 @@ export const submissionColumns: ColumnDef<Submission>[] = [
     header: 'Challenge',
   },
   {
+    accessorKey: 'flag',
+    header: 'Flag',
+    cell: ({ row }) => {
+      const { correct, flag } = row.original;
+      return (
+        <span
+          className={cn(
+            correct ? 'text-emerald-500' : 'text-destructive',
+            'font-mono text-sm'
+          )}
+        >
+          {flag}
+        </span>
+      );
+    },
+  },
+  {
     accessorKey: 'category',
     header: 'Category',
   },
@@ -31,6 +49,9 @@ export const submissionColumns: ColumnDef<Submission>[] = [
     header: 'Tags',
     cell: ({ row }) => {
       const tags = row.getValue('tags') as string[];
+      if (!tags || !Array.isArray(tags) || tags.length === 0) {
+        return <span className="text-xs text-muted-foreground">No tags</span>;
+      }
       return (
         <div className="flex gap-1">
           {tags.map((tag) => (
@@ -41,5 +62,11 @@ export const submissionColumns: ColumnDef<Submission>[] = [
         </div>
       );
     },
+  },
+  {
+    accessorKey: 'Cheating',
+    header: '',
+    enableHiding: true,
+    enableColumnFilter: true,
   },
 ];

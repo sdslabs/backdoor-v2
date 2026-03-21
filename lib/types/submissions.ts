@@ -12,6 +12,7 @@ export interface Submission {
   solvedAt: Date;
   flag: string;
   correct: boolean;
+  Cheating?: boolean;
 }
 
 export interface SubmissionResp {
@@ -22,7 +23,8 @@ export interface SubmissionResp {
   category: ChallengeCategory;
   tags: ChallengeTag[];
   points: number;
-  submitted_at: Date;
+  solvedAt: Date;
   flag: string;
   success: boolean;
+  Cheating?: boolean;
 }
