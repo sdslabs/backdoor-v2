@@ -19,7 +19,7 @@ const fetchSubmissions = async ({
   limit: number;
 }): Promise<{ data: Submission[]; total: number }> => {
   const axios = await getAuthenticatedAxios();
-  const response = await axios.get<SubmissionResp[]>('/info/submissions');
+  const response = await axios.get<SubmissionResp[]>('/admin/submissions');
   const submissions = response.data;
 
   const skip = (page - 1) * limit;
@@ -34,7 +34,7 @@ const fetchSubmissions = async ({
         challId: submission.chall_id,
         name: submission.name,
         category: submission.category as ChallengeCategory,
-        tags: submission.tags as ChallengeTag[],
+        tags: (submission.tags as ChallengeTag[]) || [],
         points: submission.points,
         solvedAt: new Date(submission.solvedAt),
         flag: submission.flag,
@@ -73,7 +73,7 @@ const fetchSubmissionsByChallenge = async ({
         challId: submission.chall_id,
         name: submission.name,
         category: submission.category as ChallengeCategory,
-        tags: submission.tags as ChallengeTag[],
+        tags: (submission.tags as ChallengeTag[]) || [],
         points: submission.points,
         solvedAt: new Date(submission.solvedAt),
         flag: submission.flag,

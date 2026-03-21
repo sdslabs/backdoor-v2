@@ -49,6 +49,9 @@ export const submissionColumns: ColumnDef<Submission>[] = [
     header: 'Tags',
     cell: ({ row }) => {
       const tags = row.getValue('tags') as string[];
+      if (!tags || !Array.isArray(tags) || tags.length === 0) {
+        return <span className="text-xs text-muted-foreground">No tags</span>;
+      }
       return (
         <div className="flex gap-1">
           {tags.map((tag) => (
