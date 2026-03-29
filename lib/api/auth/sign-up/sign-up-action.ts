@@ -2,7 +2,7 @@
 
 import { EmailSchema, OtpSchema, RegisterUserSchema } from '@/lib/schemas/auth';
 import { z } from 'zod';
-import { getUnauthenticatedAxios } from '@/lib/api/axios';
+import { getAuthAxios, getUnauthenticatedAxios } from '@/lib/api/axios';
 import { AxiosError } from 'axios';
 
 interface ActionResponse {
@@ -27,7 +27,7 @@ interface ActionResponse {
   message: string;
 }
 
-const axiosInstance = getUnauthenticatedAxios();
+const axiosInstance = getAuthAxios();
 axiosInstance.defaults.headers['Content-Type'] = 'multipart/form-data';
 
 // Server Actions for each step //
