@@ -49,6 +49,14 @@ const RegisterUser = () => {
         required
       />
       <AuthInput
+        name="ssh-key"
+        label="SSH Key"
+        type="text"
+        error={state?.errors?.sshkey}
+        defaultValue={state?.inputs?.sshkey}
+        required
+      />
+      <AuthInput
         name="password"
         label="Password"
         type="password"

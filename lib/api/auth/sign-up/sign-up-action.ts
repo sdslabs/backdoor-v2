@@ -12,6 +12,7 @@ interface ActionResponse {
     otp?: string;
     fullName?: string;
     username?: string;
+    sshkey?: string;
     password?: string;
     confirmPassword?: string;
     general?: string;
@@ -21,6 +22,7 @@ interface ActionResponse {
     otp?: string;
     fullName?: string;
     username?: string;
+    sshkey?: string;
     password?: string;
     confirmPassword?: string;
   };
@@ -100,7 +102,7 @@ export async function handleUserRegistration(
       username: formData.get('username'),
       password: formData.get('password'),
       email: formData.get('email'),
-      'ssh-key': '',
+      'ssh-key': formData.get('ssh-key'),
     });
     return createSuccessResponse('User registered successfully');
   } catch (err) {
