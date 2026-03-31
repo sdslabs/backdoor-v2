@@ -132,6 +132,10 @@
   --chart-5: hsl(22, 68%, 48%);
 }
 
+nextjs-portal, next-route-announcer {
+  display: none !important;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
