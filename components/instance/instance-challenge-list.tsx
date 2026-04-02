@@ -13,7 +13,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 const PAGE_SIZE = 12;
 
 const InstanceChallengeList: React.FC = () => {
-  const { data: allChallenges } = useSuspenseQuery(allChallengesMetadataQuery());
+  const { data: allChallenges } = useSuspenseQuery(
+    allChallengesMetadataQuery()
+  );
   const { data: userInstances } = useQuery({
     ...userInstancesQuery(),
     refetchInterval: 30000,
@@ -29,12 +31,9 @@ const InstanceChallengeList: React.FC = () => {
     instanceMap.set(instance.challenge_name, instance);
   });
 
-  // For now, show all challenges that have instances or could have instances
-  // In a real implementation, you'd filter by a field like `isInstanced: true`
-  // For now, we'll show challenges that have active instances
-  const instancedChallenges = allChallenges;
+  const instancedChallenges = allChallenges?.filter((c) => c.isInstanced) ?? [];
 
-  const filteredChallenges = instancedChallenges?.filter(
+  const filteredChallenges = instancedChallenges.filter(
     ({ tags, solveStatus, difficulty: challengeDifficulty }) => {
       return (
         (tag === 'all' || tags.includes(tag as ChallengeTag)) &&

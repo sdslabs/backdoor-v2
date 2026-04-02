@@ -13,7 +13,10 @@ const ChallengeList = () => {
   const { data: challenges } = useSuspenseQuery(allChallengesMetadataQuery());
   const { tag, status, difficulty, page } = useChallengeParams();
 
-  const filteredChallenges = challenges?.filter(
+  const nonInstancedChallenges =
+    challenges?.filter((c) => !c.isInstanced) ?? [];
+
+  const filteredChallenges = nonInstancedChallenges.filter(
     ({ tags, solveStatus, difficulty: challengeDifficulty }) => {
       return (
         (tag === 'all' || tags.includes(tag as ChallengeTag)) &&

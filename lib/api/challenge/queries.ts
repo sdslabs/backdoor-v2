@@ -25,6 +25,8 @@ const fetchAllChallengesMetadata = async (): Promise<ChallengeMetadata[]> => {
     const transformedData: ChallengeMetadata[] = res.data.map(
       (challenge: unknown) => {
         const challengeData = challenge as Record<string, unknown>;
+        const instancedRaw =
+          challengeData.instanced ?? challengeData.isInstanced;
         return {
           id: challengeData.id?.toString() || '',
           name: (challengeData.name as string) || '',
@@ -33,6 +35,7 @@ const fetchAllChallengesMetadata = async (): Promise<ChallengeMetadata[]> => {
           difficulty: challengeData.difficulty || 'medium',
           solvesNumber: (challengeData.solvesNumber as number) || 0,
           solveStatus: challengeData.solveStatus ? 'solved' : 'unsolved',
+          isInstanced: instancedRaw === true,
           deployedStatus:
             (challengeData.status as string) === 'Deployed'
               ? 'deployed'

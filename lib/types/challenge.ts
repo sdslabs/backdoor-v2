@@ -52,6 +52,8 @@ export interface ChallengeMetadata {
   difficulty: ChallengeDifficulty; // easy, medium, hard
   solvesNumber: number;
   solveStatus: ChallengeSolveStatus;
+  /** Per-user instance spawn (sadserver / on-demand) vs static challenges */
+  isInstanced: boolean;
   createdAt: Date;
 }
 
