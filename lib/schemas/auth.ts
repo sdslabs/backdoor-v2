@@ -13,6 +13,11 @@ export const OtpSchema = z.object({
   otp: z.string().length(6, { message: 'OTP must be 6 digits' }),
 });
 
+export const VerifyOtpSchema = z.object({
+  email: z.string().email({ message: 'Invalid email address' }),
+  otp: z.string().length(6, { message: 'OTP must be 6 digits' }),
+});
+
 export const NewPasswordSchema = z
   .object({
     newPassword: z

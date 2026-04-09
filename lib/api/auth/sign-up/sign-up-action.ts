@@ -1,6 +1,10 @@
 'use server';
 
-import { EmailSchema, OtpSchema, RegisterUserSchema } from '@/lib/schemas/auth';
+import {
+  EmailSchema,
+  RegisterUserSchema,
+  VerifyOtpSchema,
+} from '@/lib/schemas/auth';
 import { z } from 'zod';
 import { getAuthAxios, getUnauthenticatedAxios } from '@/lib/api/axios';
 import { AxiosError } from 'axios';
@@ -67,9 +71,11 @@ export async function handleOtpVerification(
   formData: FormData
 ): Promise<ActionResponse> {
   try {
-    OtpSchema.parse(convertFormDataToRecord(formData));
+    VerifyOtpSchema.parse(convertFormDataToRecord(formData));
+    const email = formData.get('email');
     const otp = formData.get('otp');
     await axiosInstance.post('/auth/verify-otp', {
+      email,
       otp,
     });
     return createSuccessResponse('OTP verified successfully');

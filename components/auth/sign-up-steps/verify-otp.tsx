@@ -6,6 +6,7 @@ import {
   InputOTPSlot,
 } from '@/components/ui/input-otp';
 import { handleOtpVerification } from '@/lib/api/auth/sign-up';
+import { useEmailStore } from '@/lib/stores/email-store';
 import { useStepper } from '@/components/ui/stepper';
 import { Spinner } from '@/components/ui/spinner';
 import { toast } from 'sonner';
@@ -16,6 +17,7 @@ const VerifyOtp = () => {
     null
   );
   const stepper = useStepper();
+  const { email } = useEmailStore();
 
   useEffect(() => {
     if (state?.success) {
@@ -26,6 +28,7 @@ const VerifyOtp = () => {
 
   return (
     <form action={formAction} className="space-y-4 flex flex-col items-center">
+      <input type="hidden" name="email" value={email} />
       <InputOTP defaultValue={state?.inputs?.otp} maxLength={6} name="otp">
         <InputOTPGroup>
           {[...Array(6)].map((_, i) => (
@@ -33,6 +36,9 @@ const VerifyOtp = () => {
           ))}
         </InputOTPGroup>
       </InputOTP>
+      {state?.errors?.email && (
+        <p className="text-sm text-destructive">{state.errors.email}</p>
+      )}
       {state?.errors?.otp && (
         <p className="text-sm text-destructive mt-2">{state.errors.otp}</p>
       )}
