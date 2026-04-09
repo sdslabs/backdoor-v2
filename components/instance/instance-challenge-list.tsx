@@ -12,6 +12,38 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 const PAGE_SIZE = 12;
 
+function orphanMetadata(instance: InstanceResponse): ChallengeMetadata {
+  return {
+    id: instance.instance_id,
+    name: instance.challenge_name,
+    tags: [],
+    points: 0,
+    difficulty: 'medium',
+    solvesNumber: 0,
+    solveStatus: 'unsolved',
+    isInstanced: true,
+    createdAt: new Date(0),
+  };
+}
+
+function matchesFilters(
+  meta: ChallengeMetadata | undefined,
+  tag: string,
+  status: string,
+  difficulty: string
+): boolean {
+  if (!meta) {
+    return (
+      tag === 'all' && status === 'all' && (!difficulty || difficulty === 'all')
+    );
+  }
+  return (
+    (tag === 'all' || meta.tags.includes(tag as ChallengeTag)) &&
+    (status === 'all' || meta.solveStatus === status) &&
+    (!difficulty || difficulty === 'all' || difficulty === meta.difficulty)
+  );
+}
+
 const InstanceChallengeList: React.FC = () => {
   const { data: allChallenges } = useSuspenseQuery(
     allChallengesMetadataQuery()
@@ -25,32 +57,33 @@ const InstanceChallengeList: React.FC = () => {
   const searchParams = useSearchParams();
   const { tag, status, difficulty, page } = useChallengeParams();
 
-  // Create a map of challenge name to instance for quick lookup
-  const instanceMap = new Map<string, InstanceResponse>();
-  userInstances?.forEach((instance) => {
-    instanceMap.set(instance.challenge_name, instance);
-  });
+  const metaByName = new Map<string, ChallengeMetadata>();
+  allChallenges?.forEach((c) => metaByName.set(c.name, c));
 
-  const instancedChallenges = allChallenges?.filter((c) => c.isInstanced) ?? [];
+  const rows =
+    userInstances?.map((instance) => {
+      const meta = metaByName.get(instance.challenge_name);
+      return {
+        instance,
+        meta: meta ?? orphanMetadata(instance),
+      };
+    }) ?? [];
 
-  const filteredChallenges = instancedChallenges.filter(
-    ({ tags, solveStatus, difficulty: challengeDifficulty }) => {
-      return (
-        (tag === 'all' || tags.includes(tag as ChallengeTag)) &&
-        (status === 'all' || solveStatus === status) &&
-        (!difficulty ||
-          difficulty === 'all' ||
-          difficulty === challengeDifficulty)
-      );
-    }
+  const filteredRows = rows.filter(({ instance }) =>
+    matchesFilters(
+      metaByName.get(instance.challenge_name),
+      tag,
+      status,
+      difficulty ?? ''
+    )
   );
 
-  const paginatedChallenges = filteredChallenges?.slice(
+  const paginatedRows = filteredRows.slice(
     (Number(page) - 1) * PAGE_SIZE,
     Number(page) * PAGE_SIZE
   );
 
-  const totalPages = Math.ceil((filteredChallenges?.length || 0) / PAGE_SIZE);
+  const totalPages = Math.ceil(filteredRows.length / PAGE_SIZE);
 
   const handleChallengeClick = (challengeName: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -58,11 +91,11 @@ const InstanceChallengeList: React.FC = () => {
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
-  if (filteredChallenges?.length === 0) {
+  if (filteredRows.length === 0) {
     return (
       <div className="col-span-full">
         <div className="text-center text-muted-foreground py-12">
-          No instance challenges found :(
+          No active instances :(
         </div>
       </div>
     );
@@ -71,16 +104,16 @@ const InstanceChallengeList: React.FC = () => {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {paginatedChallenges?.map((challenge, i) => (
+        {paginatedRows.map(({ instance, meta }) => (
           <InstanceChallengeCard
-            key={i}
-            {...challenge}
-            instance={instanceMap.get(challenge.name)}
-            onClick={() => handleChallengeClick(challenge.name)}
+            key={instance.instance_id}
+            {...meta}
+            instance={instance}
+            onClick={() => handleChallengeClick(instance.challenge_name)}
           />
         ))}
       </div>
-      {filteredChallenges && filteredChallenges.length > PAGE_SIZE && (
+      {filteredRows.length > PAGE_SIZE && (
         <ChallengePagination totalPages={totalPages} />
       )}
     </>

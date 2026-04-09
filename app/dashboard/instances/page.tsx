@@ -11,15 +11,11 @@ import { Suspense } from 'react';
 import { ChallengeListSkeleton } from '@/components/challenge';
 
 /*
-  Instance Challenges Page
-  
-  This page displays all instance-on-demand challenges.
-  Users can:
-  - View available instance challenges
-  - Spawn new instances for challenges
-  - Manage active instances (extend time, stop)
-  - Submit flags once the instance is running
-  
+  User instances page
+
+  Lists instances the user has spawned (GET /instances). Open a row to manage
+  that instance (extend, stop, check solution) via the same modal as Challenges.
+
   URL Params:
   * @param instance - challenge name for modal
   * @param tag - challenge tag filter (all, web, pwn, etc.)

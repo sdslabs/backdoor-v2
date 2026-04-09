@@ -1,10 +1,10 @@
 import {
   ChallengeList,
-  ChallengeModal,
   ChallengeTagsSidebar,
   ChallengeHeader,
   ChallengeListSkeleton,
 } from '@/components/challenge';
+import { InstanceChallengeModal } from '@/components/instance';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { getQueryClient } from '@/lib/query-client';
 import { allChallengesMetadataQuery } from '@/lib/api/challenge';
@@ -15,11 +15,11 @@ import { Suspense } from 'react';
   It contains the challenge list and the challenge tags sidebar.
   The challenge list is filtered by the selected tags, status and difficulty.
   The challenge tags sidebar allows the user to filter the challenges by tags.
-  The challenge modal is used to display the challenge details when a challenge is clicked.
+  The instance challenge modal opens when a challenge is clicked (spawn / manage instance).
 
   All the states are in the URL.
   URL Params - 
-  * @param id - challenge id
+  * @param instance - challenge name for instance modal
   * @param tag - challenge tag (all, web, pwn, etc.)
   * @param status - challenge status (solved, unsolved)
   * @param difficulty - challenge difficulty (easy, medium, hard)
@@ -42,7 +42,7 @@ const ChallengePage = async () => {
           </HydrationBoundary>
         </Suspense>
       </div>
-      <ChallengeModal />
+      <InstanceChallengeModal />
     </div>
   );
 };

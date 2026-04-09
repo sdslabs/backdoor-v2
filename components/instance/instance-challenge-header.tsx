@@ -11,7 +11,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useChallengeParams } from '@/lib/hooks/use-challenge-params';
-import { ChallengeDifficulty, ChallengeSolveStatus } from '@/lib/types/challenge';
+import {
+  ChallengeDifficulty,
+  ChallengeSolveStatus,
+} from '@/lib/types/challenge';
 
 const InstanceChallengeHeader: React.FC = () => {
   const { data: userInstances } = useQuery({
@@ -27,7 +30,7 @@ const InstanceChallengeHeader: React.FC = () => {
   return (
     <div className="flex items-center justify-between mb-6">
       <div className="flex items-center gap-4">
-        <h2 className="text-2xl font-display">Instance Challenges</h2>
+        <h2 className="text-2xl font-bold">Instances</h2>
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20">
           <Server className="size-4 text-primary" />
           <span className="text-sm font-medium text-primary">

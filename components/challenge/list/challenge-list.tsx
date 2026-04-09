@@ -1,22 +1,36 @@
 'use client';
 
-import { ChallengeCard } from './challenge-card';
+import { InstanceChallengeCard } from '@/components/instance/instance-challenge-card';
 import { ChallengeTag } from '@/lib/types';
 import { useChallengeParams } from '@/lib/hooks/use-challenge-params';
 import { ChallengePagination } from './challenge-pagination';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQuery, useQuery } from '@tanstack/react-query';
 import { allChallengesMetadataQuery } from '@/lib/api/challenge';
+import { userInstancesQuery } from '@/lib/api/instances';
+import { InstanceResponse } from '@/lib/types/instance';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const PAGE_SIZE = 12;
 
 const ChallengeList = () => {
   const { data: challenges } = useSuspenseQuery(allChallengesMetadataQuery());
+  const { data: userInstances } = useQuery({
+    ...userInstancesQuery(),
+    refetchInterval: 30000,
+  });
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { tag, status, difficulty, page } = useChallengeParams();
 
-  const nonInstancedChallenges =
-    challenges?.filter((c) => !c.isInstanced) ?? [];
+  const instanceMap = new Map<string, InstanceResponse>();
+  userInstances?.forEach((instance) => {
+    instanceMap.set(instance.challenge_name, instance);
+  });
 
-  const filteredChallenges = nonInstancedChallenges.filter(
+  const instancedChallenges = challenges?.filter((c) => c.isInstanced) ?? [];
+
+  const filteredChallenges = instancedChallenges.filter(
     ({ tags, solveStatus, difficulty: challengeDifficulty }) => {
       return (
         (tag === 'all' || tags.includes(tag as ChallengeTag)) &&
@@ -35,6 +49,12 @@ const ChallengeList = () => {
 
   const totalPages = Math.ceil((filteredChallenges?.length || 0) / PAGE_SIZE);
 
+  const handleChallengeClick = (challengeName: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('instance', challengeName);
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
+
   if (filteredChallenges?.length === 0) {
     return (
       <div className="col-span-full">
@@ -47,9 +67,14 @@ const ChallengeList = () => {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 py-1">
         {paginatedChallenges?.map((challenge, i) => (
-          <ChallengeCard key={i} {...challenge} />
+          <InstanceChallengeCard
+            key={i}
+            {...challenge}
+            instance={instanceMap.get(challenge.name)}
+            onClick={() => handleChallengeClick(challenge.name)}
+          />
         ))}
       </div>
       {filteredChallenges && filteredChallenges.length > PAGE_SIZE && (
