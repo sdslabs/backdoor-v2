@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { SESSION_USERNAME_COOKIE } from '@/lib/constants';
 import { UserRole } from '../types';
 import Cookies from 'js-cookie';
 
@@ -20,6 +21,7 @@ export const useAuthStore = create<AuthState>()(
       setRole: (role) => set({ role }),
       logout: () => {
         Cookies.remove('auth');
+        Cookies.remove(SESSION_USERNAME_COOKIE);
         set({ role: undefined });
         set({ isLoggedIn: false });
         window.location.href = '/';

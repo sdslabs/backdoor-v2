@@ -5,6 +5,7 @@ import { HTTPAuthorizeResp, UserRole } from '@/lib/types';
 import { AxiosError } from 'axios';
 import { cookies } from 'next/headers';
 import { LoginSchema } from '@/lib/schemas/auth';
+import { SESSION_USERNAME_COOKIE } from '@/lib/constants';
 
 interface ActionResponse {
   success: boolean;
@@ -54,6 +55,7 @@ export async function loginAction(
     const { token, message, role } = response.data;
     const cookieStore = await cookies();
     cookieStore.set('auth', token);
+    cookieStore.set(SESSION_USERNAME_COOKIE, username);
 
     return { success: true, message, role: role as UserRole };
   } catch (error) {

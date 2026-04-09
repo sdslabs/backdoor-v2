@@ -3,7 +3,7 @@
 */
 
 import Cookies from 'js-cookie';
-import { API_BASE_URL } from '@/lib/constants';
+import { API_BASE_URL, SESSION_USERNAME_COOKIE } from '@/lib/constants';
 import axios, { AxiosInstance } from 'axios';
 
 export async function createAuthenticatedClientAxios(): Promise<AxiosInstance> {
@@ -26,6 +26,7 @@ export async function createAuthenticatedClientAxios(): Promise<AxiosInstance> {
     (error) => {
       if (error.response && error.response.status === 403) {
         Cookies.remove('auth');
+        Cookies.remove(SESSION_USERNAME_COOKIE);
         window.location.href = '/';
       }
       return Promise.reject(error);

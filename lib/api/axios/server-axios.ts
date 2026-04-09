@@ -4,7 +4,7 @@ This is the axios instance for server side queries.
 
 'use server';
 
-import { API_BASE_URL } from '@/lib/constants';
+import { API_BASE_URL, SESSION_USERNAME_COOKIE } from '@/lib/constants';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import axios from 'axios';
@@ -28,6 +28,7 @@ export async function createAuthenticatedServerAxios() {
     (error) => {
       if (error.response && error.response.status === 403) {
         cookiesList.delete('auth');
+        cookiesList.delete(SESSION_USERNAME_COOKIE);
         redirect('/');
       }
       return Promise.reject(error);
