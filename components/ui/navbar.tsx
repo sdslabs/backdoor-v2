@@ -16,7 +16,6 @@ import { Button } from './button';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import NotificationPopover from '@/components/notification/notification-popover';
-import { useAuthStore } from '@/lib/stores/auth-store';
 
 // Types
 interface NavPages {
@@ -120,10 +119,11 @@ const ADMIN_ACTIONS: NavbarActions = {
   ],
 };
 
-const Navbar: React.FC = () => {
+const Navbar: React.FC<{ sessionAdminNav: boolean }> = ({
+  sessionAdminNav,
+}) => {
   const pathname = usePathname();
-  const { role } = useAuthStore();
-  const { pages, sideActions } = role == 'admin' ? ADMIN_ACTIONS : USER_ACTIONS;
+  const { pages, sideActions } = sessionAdminNav ? ADMIN_ACTIONS : USER_ACTIONS;
 
   return (
     <div className="flex flex-row items-center py-4 gap-4 bg-background/70 backdrop-blur-md shadow-lg">

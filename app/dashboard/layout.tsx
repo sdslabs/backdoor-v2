@@ -1,12 +1,17 @@
 import { Navbar } from '@/components/ui/navbar';
+import { getSessionAdminNav } from '@/lib/server/session-nav';
 
-const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+export default async function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const sessionAdminNav = await getSessionAdminNav();
+
   return (
     <div className="w-full h-screen flex flex-col">
-      <Navbar />
+      <Navbar sessionAdminNav={sessionAdminNav} />
       <div className="flex-1">{children}</div>
     </div>
   );
-};
-
-export default DashboardLayout;
+}
