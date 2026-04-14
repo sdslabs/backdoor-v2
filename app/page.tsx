@@ -13,7 +13,7 @@ export default function HomePage() {
   return (
     <section className="h-screen flex flex-col items-center justify-center gap-8">
       <div className="space-y-4 text-center">
-        <h1 className="text-6xl font-display text-primary">backdoor</h1>
+        <h1 className="text-6xl font-display text-primary">hydra</h1>
         <p className="text-xl italic">For when the windows are shut</p>
       </div>
       <div className="w-full max-w-sm px-4">

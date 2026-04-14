@@ -19,10 +19,10 @@ export interface SubmissionResp {
   username: string;
   chall_id: number;
   name: string;
-  category: ChallengeCategory;
-  tags: ChallengeTag[];
-  points: number;
-  submitted_at: Date;
+  category?: ChallengeCategory;
+  tags?: ChallengeTag[];
+  points?: number;
+  solvedAt: Date;
   flag: string;
   success: boolean;
 }

@@ -6,7 +6,10 @@ import {
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 
-import { getUserProfile } from '@/lib/api/profile/actions';
+import {
+  getUserProfile,
+  resolveSessionUsername,
+} from '@/lib/api/profile/actions';
 
 interface ProfilePageProps {
   params: Promise<{
@@ -24,11 +27,15 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     notFound();
   }
 
+  const sessionUsername = await resolveSessionUsername();
+  const showLogout =
+    sessionUsername !== null && sessionUsername === userProfile.username;
+
   return (
     <div className="bg-background text-foreground p-6 min-h-screen">
       {/* Profile Header */}
       <Suspense fallback={<UserInformationSkeleton />}>
-        <UserInformation userProfile={userProfile} />
+        <UserInformation userProfile={userProfile} showLogout={showLogout} />
       </Suspense>
 
       {/* Yearly activity with solve history and points graph */}

@@ -13,7 +13,7 @@ export default async function DashboardProfilePage() {
   return (
     <div className="bg-background text-foreground p-6 min-h-screen">
       <Suspense fallback={<UserInformationSkeleton />}>
-        <UserInformation userProfile={user} />
+        <UserInformation userProfile={user} showLogout />
       </Suspense>
       <YearlyActivity username={user.username} />
     </div>

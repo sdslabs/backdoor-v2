@@ -30,7 +30,7 @@ export const submissionColumns: ColumnDef<Submission>[] = [
     accessorKey: 'tags',
     header: 'Tags',
     cell: ({ row }) => {
-      const tags = row.getValue('tags') as string[];
+      const tags = (row.getValue('tags') as string[] | undefined) ?? [];
       return (
         <div className="flex gap-1">
           {tags.map((tag) => (

@@ -19,7 +19,7 @@ const fetchSubmissions = async ({
   limit: number;
 }): Promise<{ data: Submission[]; total: number }> => {
   const axios = await getAuthenticatedAxios();
-  const response = await axios.get<SubmissionResp[]>('/info/submissions');
+  const response = await axios.get<SubmissionResp[]>('/admin/submissions');
   const submissions = response.data;
 
   const skip = (page - 1) * limit;
@@ -33,10 +33,10 @@ const fetchSubmissions = async ({
         username: submission.username,
         challId: submission.chall_id,
         name: submission.name,
-        category: submission.category as ChallengeCategory,
-        tags: submission.tags as ChallengeTag[],
-        points: submission.points,
-        solvedAt: new Date(submission.submitted_at),
+        category: (submission.category ?? 'misc') as ChallengeCategory,
+        tags: (submission.tags ?? []) as ChallengeTag[],
+        points: submission.points ?? 0,
+        solvedAt: new Date(submission.solvedAt),
         flag: submission.flag,
         correct: submission.success,
       }) as Submission
@@ -71,10 +71,10 @@ const fetchSubmissionsByChallenge = async ({
         username: submission.username,
         challId: submission.chall_id,
         name: submission.name,
-        category: submission.category as ChallengeCategory,
-        tags: submission.tags as ChallengeTag[],
-        points: submission.points,
-        solvedAt: new Date(submission.submitted_at),
+        category: (submission.category ?? 'misc') as ChallengeCategory,
+        tags: (submission.tags ?? []) as ChallengeTag[],
+        points: submission.points ?? 0,
+        solvedAt: new Date(submission.solvedAt),
         flag: submission.flag,
         correct: submission.success,
       }) as Submission

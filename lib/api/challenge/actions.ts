@@ -69,11 +69,15 @@ export async function redeemHint(hintId: number) {
   } catch (error: any) {
     console.error('Error redeeming hint:', error);
 
-    const errorMessage =
+    const rawMessage =
       error?.response?.data?.error ||
       error?.response?.data?.message ||
       error?.message ||
       'Failed to redeem hint. Please try again.';
+
+    const errorMessage = String(rawMessage).includes('DATABASE ERROR')
+      ? 'You do not have enough points to redeem this hint.'
+      : rawMessage;
 
     return {
       success: false,

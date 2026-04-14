@@ -2,15 +2,21 @@
 
 import { UserProfile } from '@/lib/types/profile';
 import Image from 'next/image';
+import { LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/lib/stores/auth-store';
 
 interface UserInformationProps {
   userProfile: UserProfile;
+  /** When true, show a logout control (own profile / dashboard profile only). */
+  showLogout?: boolean;
 }
 
-function UserInformation({ userProfile }: UserInformationProps) {
-  const { isLoggedIn, role } = useAuthStore();
+function UserInformation({
+  userProfile,
+  showLogout = false,
+}: UserInformationProps) {
+  const { isLoggedIn, role, logout } = useAuthStore();
   const isAdmin = isLoggedIn && role === 'admin';
 
   return (
@@ -52,7 +58,7 @@ function UserInformation({ userProfile }: UserInformationProps) {
             </p>
             <div className="text-base font-semibold text-secondary-foreground">
               {userProfile.bhawan ? (
-                <p className="my-2">Bhawan — {userProfile.bhawan}</p>
+                <p className="my-2">Bhawan - {userProfile.bhawan}</p>
               ) : null}
               <p className="my-2">
                 Date joined -{' '}
@@ -73,6 +79,18 @@ function UserInformation({ userProfile }: UserInformationProps) {
             </div>
           </div>
           <div className="flex items-center gap-6">
+            {showLogout ? (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="cursor-pointer normal-case"
+                onClick={() => logout()}
+              >
+                <LogOut className="size-4" />
+                Log out
+              </Button>
+            ) : null}
             <div className="text-center">
               <div className="text-3xl font-bold text-highlight my-2">
                 {userProfile.stats.rank}

@@ -162,8 +162,8 @@ async function fetchUserProfileFromBackend(
   }
 }
 
-/** Session-backed profile when an auth token is present; otherwise `null`. Never redirects. */
-export async function resolveCurrentUserProfile(): Promise<UserProfile | null> {
+/** Username for the current session from cookies/JWT, or `null` if not signed in. */
+export async function resolveSessionUsername(): Promise<string | null> {
   const cookieStore = await cookies();
   const token = cookieStore.get('auth')?.value?.trim();
   if (!token) {
@@ -176,6 +176,16 @@ export async function resolveCurrentUserProfile(): Promise<UserProfile | null> {
 
   if (!username) {
     username = syntheticUsernameFromToken(token);
+  }
+
+  return username;
+}
+
+/** Session-backed profile when an auth token is present; otherwise `null`. Never redirects. */
+export async function resolveCurrentUserProfile(): Promise<UserProfile | null> {
+  const username = await resolveSessionUsername();
+  if (!username) {
+    return null;
   }
 
   // Try to fetch the real profile from the backend

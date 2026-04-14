@@ -5,7 +5,7 @@ import { Toaster } from '@/components/ui/sonner';
 import Providers from './providers';
 
 export const metadata: Metadata = {
-  title: 'Backdoor',
+  title: 'hydra',
   description: 'A CTF platform for everyone',
 };
 

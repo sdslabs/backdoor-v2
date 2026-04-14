@@ -128,7 +128,7 @@ const Navbar: React.FC = () => {
   return (
     <div className="flex flex-row items-center py-4 gap-4 bg-background/70 backdrop-blur-md shadow-lg">
       <h1 className="text-2xl font-display text-primary w-36 text-right pr-4">
-        backdoor
+        hydra
       </h1>
       <div className="flex flex-row items-center gap-2">
         {pages.map((page) => (
