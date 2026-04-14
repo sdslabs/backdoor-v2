@@ -1,7 +1,7 @@
 import { ColumnDef } from '@tanstack/react-table';
-import { LeaderboardEntry } from '@/lib/types';
+import { BhawanRankingEntry } from '@/lib/types/leaderboard';
 
-export const leaderboardColumns: ColumnDef<LeaderboardEntry>[] = [
+export const bhawanRankingColumns: ColumnDef<BhawanRankingEntry>[] = [
   {
     accessorKey: 'rank',
     header: () => <div className="text-center">Rank</div>,
@@ -10,15 +10,15 @@ export const leaderboardColumns: ColumnDef<LeaderboardEntry>[] = [
     ),
   },
   {
-    accessorKey: 'playerId',
-    header: 'Player',
-  },
-  {
     accessorKey: 'bhawan',
     header: 'Bhawan',
   },
   {
-    accessorKey: 'totalPoints',
-    header: 'Points',
+    accessorKey: 'topPoints',
+    header: 'Top score',
+  },
+  {
+    accessorKey: 'topPlayer',
+    header: 'Top player',
   },
 ];

@@ -87,6 +87,7 @@ export const MOCK_LEADERBOARD_ENTRIES: LeaderboardEntry[] = [
     totalPoints: 4500, // Sum of points of solved LEADERBOARD_CHALLENGES
     dateJoined: '2023-01-15', // Example date
     email: 'captain_hook1818@example.com', // Example email
+    bhawan: 'RJB',
   },
   {
     rank: 2,
@@ -99,6 +100,7 @@ export const MOCK_LEADERBOARD_ENTRIES: LeaderboardEntry[] = [
     totalPoints: 3000, // Sum of points of solved LEADERBOARD_CHALLENGES
     dateJoined: '2023-02-20', // Example date
     email: 'hashkat@example.com', // Example email
+    bhawan: 'RKB',
   },
   {
     rank: 3,
@@ -110,6 +112,7 @@ export const MOCK_LEADERBOARD_ENTRIES: LeaderboardEntry[] = [
     totalPoints: 1800, // Sum of points of solved LEADERBOARD_CHALLENGES
     dateJoined: '2023-03-10', // Example date
     email: 'lorem_1a_2y2s@example.com', // Example email
+    bhawan: 'RJB',
   },
   {
     rank: 4,
@@ -121,6 +124,7 @@ export const MOCK_LEADERBOARD_ENTRIES: LeaderboardEntry[] = [
     totalPoints: 2500, // Sum of points of solved LEADERBOARD_CHALLENGES
     dateJoined: '2023-04-05', // Example date
     email: 'neon_ninja@example.com', // Example email
+    bhawan: 'RKB',
   },
   {
     rank: 5,
@@ -132,6 +136,7 @@ export const MOCK_LEADERBOARD_ENTRIES: LeaderboardEntry[] = [
     totalPoints: 2000, // Sum of points of solved LEADERBOARD_CHALLENGES
     dateJoined: '2023-05-10', // Example date
     email: 'binary_wolf@example.com', // Example email
+    bhawan: 'RJB',
   },
   {
     rank: 6,
@@ -143,6 +148,7 @@ export const MOCK_LEADERBOARD_ENTRIES: LeaderboardEntry[] = [
     totalPoints: 2300, // Sum of points of solved LEADERBOARD_CHALLENGES
     dateJoined: '2023-06-15', // Example date
     email: 'crypto_hawk@example.com', // Example email
+    bhawan: 'RKB',
   },
   {
     rank: 7,
@@ -154,6 +160,7 @@ export const MOCK_LEADERBOARD_ENTRIES: LeaderboardEntry[] = [
     totalPoints: 2700, // Sum of points of solved LEADERBOARD_CHALLENGES
     dateJoined: '2023-07-01', // Example date
     email: 'meta_phantom@example.com', // Example email
+    bhawan: 'RJB',
   },
   {
     rank: 8,
@@ -164,6 +171,7 @@ export const MOCK_LEADERBOARD_ENTRIES: LeaderboardEntry[] = [
     totalPoints: 1000, // Sum of points of solved LEADERBOARD_CHALLENGES
     dateJoined: '2023-08-10', // Example date
     email: 'sorcery_king@example.com', // Example email
+    bhawan: 'RKB',
   },
   {
     rank: 9,
@@ -174,6 +182,7 @@ export const MOCK_LEADERBOARD_ENTRIES: LeaderboardEntry[] = [
     totalPoints: 1200, // Sum of points of solved challenges
     dateJoined: '2023-09-05', // Example date
     email: 'dark_magician@example.com', // Example email
+    bhawan: 'RJB',
   },
   {
     rank: 10,
@@ -184,6 +193,7 @@ export const MOCK_LEADERBOARD_ENTRIES: LeaderboardEntry[] = [
     totalPoints: 800, // Sum of points of solved challenges
     dateJoined: '2023-10-20', // Example date
     email: 'white_hat@example.com', // Example email
+    bhawan: 'RKB',
   },
   // The last 35 users will have 0 points
   ...Array(35)
@@ -195,5 +205,6 @@ export const MOCK_LEADERBOARD_ENTRIES: LeaderboardEntry[] = [
       totalPoints: 0, // These users have not solved any challenges
       dateJoined: `2023-12-${index + 1}`, // Example date
       email: `user_${index + 11}@example.com`, // Example email
+      bhawan: index % 2 === 0 ? 'RJB' : 'RKB',
     })),
 ];

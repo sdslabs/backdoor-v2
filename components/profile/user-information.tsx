@@ -51,6 +51,9 @@ function UserInformation({ userProfile }: UserInformationProps) {
               {userProfile.name}
             </p>
             <div className="text-base font-semibold text-secondary-foreground">
+              {userProfile.bhawan ? (
+                <p className="my-2">Bhawan — {userProfile.bhawan}</p>
+              ) : null}
               <p className="my-2">
                 Date joined -{' '}
                 {userProfile.createdAt.toLocaleDateString('en-GB', {

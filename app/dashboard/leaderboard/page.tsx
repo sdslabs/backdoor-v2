@@ -18,7 +18,9 @@ const Leaderboard = async () => {
   // Prefetch queries on the server using unified fetchers
   await Promise.all([
     queryClient.prefetchQuery(leaderboardGraphQuery()),
-    queryClient.prefetchQuery(leaderboardTableQuery()),
+    queryClient.prefetchQuery(
+      leaderboardTableQuery({ page: 1, mode: 'overall' })
+    ),
   ]);
 
   const dehydratedState = dehydrate(queryClient);

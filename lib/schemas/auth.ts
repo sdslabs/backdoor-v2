@@ -1,3 +1,4 @@
+import { BHAWAN_OPTIONS } from '@/lib/constants';
 import { z } from 'zod';
 
 export const LoginSchema = z.object({
@@ -35,6 +36,7 @@ export const RegisterUserSchema = z
     fullName: z.string().min(3, { message: 'Full name too short' }),
     username: z.string().min(3, { message: 'Username too short' }),
     email: z.string().email({ message: 'Invalid email address' }),
+    bhawan: z.enum(BHAWAN_OPTIONS, { message: 'Select a valid bhawan' }),
     password: z
       .string()
       .min(6, { message: 'Password must be at least 6 characters' }),

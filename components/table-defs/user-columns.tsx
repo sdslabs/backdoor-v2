@@ -51,6 +51,18 @@ export const userColumns: ColumnDef<UserInfo>[] = [
     ),
   },
   {
+    accessorKey: 'bhawan',
+    header: ({ column }) => (
+      <div
+        className="flex items-center cursor-pointer"
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
+        Bhawan
+        <ChevronDown className="ml-2 h-4 w-4" />
+      </div>
+    ),
+  },
+  {
     accessorKey: 'rank',
     header: ({ column }) => (
       <div

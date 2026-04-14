@@ -3,6 +3,8 @@ export interface UserProfile {
   username: string;
   name: string;
   email: string;
+  /** Hostel code from backend when present */
+  bhawan?: string;
   avatar: string;
   role: 'user' | 'admin';
   createdAt: Date;

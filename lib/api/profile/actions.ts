@@ -19,6 +19,7 @@ interface BackendUserResp {
   score: number;
   rank: number;
   email: string;
+  bhawan?: string;
   challenges: BackendChallengeSolve[];
 }
 
@@ -64,6 +65,7 @@ function transformBackendUser(data: BackendUserResp): UserProfile {
     username: data.username,
     name: data.username, // backend doesn't have a display name; use username
     email: data.email,
+    bhawan: data.bhawan ?? '',
     avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(data.username)}`,
     role: data.role === 'admin' || data.role === 'author' ? 'admin' : 'user',
     createdAt: new Date(), // Not provided by backend

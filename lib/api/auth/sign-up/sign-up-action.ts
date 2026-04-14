@@ -17,6 +17,7 @@ interface ActionResponse {
     fullName?: string;
     username?: string;
     sshkey?: string;
+    bhawan?: string;
     password?: string;
     confirmPassword?: string;
     general?: string;
@@ -27,6 +28,7 @@ interface ActionResponse {
     fullName?: string;
     username?: string;
     sshkey?: string;
+    bhawan?: string;
     password?: string;
     confirmPassword?: string;
   };
@@ -97,18 +99,30 @@ export async function handleOtpVerification(
   }
 }
 
+function apiErrorMessage(data: unknown): string {
+  if (data && typeof data === 'object') {
+    const o = data as Record<string, unknown>;
+    if (typeof o.error === 'string') return o.error;
+    if (typeof o.message === 'string') return o.message;
+  }
+  return 'Request failed';
+}
+
 export async function handleUserRegistration(
   prevState: unknown,
   formData: FormData
 ): Promise<ActionResponse> {
   try {
     RegisterUserSchema.parse(convertFormDataToRecord(formData));
-    await axiosInstance.post('/auth/register', {
-      fullname: formData.get('fullname'),
-      username: formData.get('username'),
-      password: formData.get('password'),
-      email: formData.get('email'),
-      'ssh-key': formData.get('ssh-key'),
+    const body = new URLSearchParams();
+    body.set('name', String(formData.get('fullName') ?? ''));
+    body.set('username', String(formData.get('username') ?? ''));
+    body.set('password', String(formData.get('password') ?? ''));
+    body.set('email', String(formData.get('email') ?? ''));
+    body.set('ssh-key', String(formData.get('ssh-key') ?? ''));
+    body.set('bhawan', String(formData.get('bhawan') ?? ''));
+    await axiosInstance.post('/auth/register', body.toString(), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
     return createSuccessResponse('User registered successfully');
   } catch (err) {
@@ -121,7 +135,7 @@ export async function handleUserRegistration(
         success: false,
         message: 'Failed to create user',
         errors: {
-          general: data.message,
+          general: apiErrorMessage(data),
         },
       };
     }

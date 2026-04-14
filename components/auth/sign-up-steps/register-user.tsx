@@ -3,7 +3,9 @@ import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { useStepper } from '@/components/ui/stepper';
 import { handleUserRegistration } from '@/lib/api/auth/sign-up';
+import { BHAWAN_OPTIONS } from '@/lib/constants';
 import { useEmailStore } from '@/lib/stores/email-store';
+import { cn } from '@/lib/utils';
 import { useActionState, useEffect } from 'react';
 import { toast } from 'sonner';
 
@@ -48,6 +50,33 @@ const RegisterUser = () => {
         defaultValue={state?.inputs?.username}
         required
       />
+      <div className="space-y-2 w-full">
+        <label htmlFor="bhawan" className="text-sm font-medium leading-none">
+          Bhawan
+        </label>
+        <select
+          id="bhawan"
+          name="bhawan"
+          required
+          defaultValue={state?.inputs?.bhawan ?? ''}
+          className={cn(
+            'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+          )}
+        >
+          <option value="" disabled>
+            Select bhawan
+          </option>
+          {BHAWAN_OPTIONS.map((b) => (
+            <option key={b} value={b}>
+              {b}
+            </option>
+          ))}
+        </select>
+        {state?.errors?.bhawan ? (
+          <p className="text-sm text-destructive">{state.errors.bhawan}</p>
+        ) : null}
+      </div>
       <AuthInput
         name="ssh-key"
         label="SSH Key"

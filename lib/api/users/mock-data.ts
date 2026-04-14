@@ -9,6 +9,7 @@ export const MOCK_USERS: UserInfo[] = [
     email: 'captain_hook1818@example.com',
     role: 'contestant',
     status: 0,
+    bhawan: 'RJB',
   },
   {
     id: 2,
@@ -18,6 +19,7 @@ export const MOCK_USERS: UserInfo[] = [
     email: 'hashkat@example.com',
     role: 'contestant',
     status: 0,
+    bhawan: 'RKB',
   },
   {
     id: 3,
@@ -27,6 +29,7 @@ export const MOCK_USERS: UserInfo[] = [
     email: 'lorem_1a_2y2s@example.com',
     role: 'contestant',
     status: 0,
+    bhawan: 'RJB',
   },
   {
     id: 4,
@@ -36,6 +39,7 @@ export const MOCK_USERS: UserInfo[] = [
     email: 'neon_ninja@example.com',
     role: 'contestant',
     status: 0,
+    bhawan: 'RKB',
   },
   {
     id: 5,
@@ -45,6 +49,7 @@ export const MOCK_USERS: UserInfo[] = [
     email: 'binary_wolf@example.com',
     role: 'contestant',
     status: 0,
+    bhawan: 'RJB',
   },
   {
     id: 6,
@@ -54,6 +59,7 @@ export const MOCK_USERS: UserInfo[] = [
     email: 'crypto_hawk@example.com',
     role: 'contestant',
     status: 0,
+    bhawan: 'RKB',
   },
   {
     id: 7,
@@ -63,6 +69,7 @@ export const MOCK_USERS: UserInfo[] = [
     email: 'meta_phantom@example.com',
     role: 'contestant',
     status: 0,
+    bhawan: 'RJB',
   },
   {
     id: 8,
@@ -72,6 +79,7 @@ export const MOCK_USERS: UserInfo[] = [
     email: 'sorcery_king@example.com',
     role: 'contestant',
     status: 0,
+    bhawan: 'RKB',
   },
   {
     id: 9,
@@ -81,6 +89,7 @@ export const MOCK_USERS: UserInfo[] = [
     email: 'dark_magician@example.com',
     role: 'contestant',
     status: 0,
+    bhawan: 'RJB',
   },
   {
     id: 10,
@@ -90,6 +99,7 @@ export const MOCK_USERS: UserInfo[] = [
     email: 'white_hat@example.com',
     role: 'contestant',
     status: 0,
+    bhawan: 'RKB',
   },
   // The last 35 users will have 0 points
   ...Array(35)
@@ -104,6 +114,7 @@ export const MOCK_USERS: UserInfo[] = [
         email: `user_${rank}@example.com`,
         role: 'contestant',
         status: 0,
+        bhawan: index % 2 === 0 ? 'RJB' : 'RKB',
       } satisfies UserInfo; // Use 'satisfies' for type checking
     }),
 ];

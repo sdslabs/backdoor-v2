@@ -16,6 +16,7 @@ export interface User {
   score: number;
   rank: number;
   email: string;
+  bhawan: string;
   challenges: ChallengeSolveResp[];
 }
 
