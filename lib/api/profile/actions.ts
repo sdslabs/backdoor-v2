@@ -222,7 +222,7 @@ export async function resolveCurrentUserProfile(): Promise<UserProfile | null> {
 export async function getCurrentUser(): Promise<UserProfile> {
   const profile = await resolveCurrentUserProfile();
   if (!profile) {
-    redirect('/');
+    redirect('/login');
   }
   return profile;
 }

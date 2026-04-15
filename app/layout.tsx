@@ -20,7 +20,7 @@ export default function RootLayout({
         className={`${geistMono.variable} ${nunitoSans.variable} ${yukari.variable} antialiased font-sans`}
       >
         <Providers>
-          <main className="container mx-auto">{children}</main>
+          <main className="min-h-screen w-full">{children}</main>
         </Providers>
         <Toaster />
       </body>

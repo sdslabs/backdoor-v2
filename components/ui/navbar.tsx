@@ -2,7 +2,6 @@
 
 import {
   FilePenLineIcon,
-  LogOut,
   LucideIcon,
   Medal,
   Swords,
@@ -18,7 +17,6 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import NotificationPopover from '@/components/notification/notification-popover';
 import { CompetitionNavbarTimer } from '@/components/ui/competition-navbar-timer';
-import { useAuthStore } from '@/lib/stores/auth-store';
 
 // Types
 interface NavPages {
@@ -39,18 +37,7 @@ interface NavbarActions {
   sideActions: SideAction[];
 }
 
-export type NavbarCompetitionGate =
-  | {
-      mode: 'pre';
-      competitionName: string;
-      targetEpochMs: number;
-    }
-  | {
-      mode: 'post';
-      competitionName: string;
-    };
-
-/** Shown in the full nav (not on the contestant gate screen). */
+/** Shown in the dashboard nav. */
 export type NavbarCompetitionTimer =
   | {
       kind: 'countdown';
@@ -144,51 +131,19 @@ const ADMIN_ACTIONS: NavbarActions = {
 
 const Navbar: React.FC<{
   sessionAdminNav: boolean;
-  competitionGate?: NavbarCompetitionGate;
   competitionTimer?: NavbarCompetitionTimer;
-}> = ({ sessionAdminNav, competitionGate, competitionTimer }) => {
+}> = ({ sessionAdminNav, competitionTimer }) => {
   const pathname = usePathname();
-  const logout = useAuthStore((s) => s.logout);
   const { pages, sideActions } = sessionAdminNav ? ADMIN_ACTIONS : USER_ACTIONS;
-
-  if (competitionGate) {
-    return (
-      <div className="flex flex-row items-center py-4 gap-4 bg-background/70 backdrop-blur-md shadow-lg px-4">
-        <h1 className="text-2xl font-display text-primary shrink-0">hydra</h1>
-        <span className="text-sm text-muted-foreground truncate max-w-[min(40vw,14rem)]">
-          {competitionGate.competitionName}
-        </span>
-        <div className="flex flex-1 flex-row items-center justify-center min-w-0">
-          {competitionGate.mode === 'pre' ? (
-            <CompetitionNavbarTimer
-              targetEpochMs={competitionGate.targetEpochMs}
-              label="Starts in"
-            />
-          ) : (
-            <span className="text-sm font-medium text-muted-foreground">
-              Competition has ended
-            </span>
-          )}
-        </div>
-        <Button
-          type="button"
-          size="sm"
-          variant="outline"
-          className="ml-auto shrink-0 cursor-pointer normal-case gap-2"
-          onClick={() => logout()}
-        >
-          <LogOut className="size-4" />
-          Log out
-        </Button>
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-row items-center py-4 gap-4 bg-background/70 backdrop-blur-md shadow-lg">
-      <h1 className="text-2xl font-display text-primary w-36 text-right pr-4">
+      <Link
+        href="/"
+        className="inline-block w-36 pr-4 text-right font-display text-2xl text-primary transition-opacity hover:opacity-80"
+      >
         hydra
-      </h1>
+      </Link>
       <div className="flex flex-row items-center gap-2">
         {pages.map((page) => (
           <Link href={page.href} key={page.label} prefetch>

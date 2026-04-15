@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { AuthInput } from '@/components/ui/auth-input';
 import { loginAction } from '@/lib/api/auth/login';
 import { toast } from 'sonner';
-import { redirect } from 'next/navigation';
 import { useAuthStore } from '@/lib/stores/auth-store';
 import { Spinner } from '@/components/ui/spinner';
 
@@ -18,7 +17,8 @@ export default function LoginTab() {
       toast.success('Login successful!');
       setIsLoggedIn(true);
       setRole(loginState.role);
-      redirect('/dashboard');
+      // Full navigation: `redirect()` does not run reliably from `useEffect` in a client component.
+      window.location.assign('/dashboard/challenge');
     }
   }, [loginState, setIsLoggedIn, setRole]);
 

@@ -15,5 +15,5 @@ async function fetchCompetitionInfoOnce(): Promise<CompetitionInfo | null> {
   }
 }
 
-/** Deduped per request; used by dashboard layout and competition page. */
+/** Deduped per request; used by dashboard layout and public home. */
 export const getCompetitionInfoSSR = cache(fetchCompetitionInfoOnce);

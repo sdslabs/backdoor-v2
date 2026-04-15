@@ -29,7 +29,7 @@ export async function createAuthenticatedServerAxios() {
       if (error.response && error.response.status === 403) {
         cookiesList.delete('auth');
         cookiesList.delete(SESSION_USERNAME_COOKIE);
-        redirect('/');
+        redirect('/login');
       }
       return Promise.reject(error);
     }

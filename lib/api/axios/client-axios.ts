@@ -27,7 +27,7 @@ export async function createAuthenticatedClientAxios(): Promise<AxiosInstance> {
       if (error.response && error.response.status === 403) {
         Cookies.remove('auth');
         Cookies.remove(SESSION_USERNAME_COOKIE);
-        window.location.href = '/';
+        window.location.href = '/login';
       }
       return Promise.reject(error);
     }

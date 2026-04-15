@@ -9,15 +9,24 @@ import {
 } from '@/lib/competition/schedule';
 import { isPrivilegedNavbarRoleFromToken } from '@/lib/server/jwt-role-edge';
 
-const COMPETITION_PATH = '/dashboard/competition';
-
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  if (pathname === '/dashboard/competition') {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
+
+  if (pathname === '/login') {
+    const token = request.cookies.get('auth')?.value;
+    if (token && isPrivilegedNavbarRoleFromToken(token)) {
+      return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
+  }
 
   if (pathname.startsWith('/dashboard')) {
     const token = request.cookies.get('auth')?.value;
     if (!token) {
-      return NextResponse.redirect(new URL('/', request.url));
+      return NextResponse.redirect(new URL('/login', request.url));
     }
 
     if (!isPrivilegedNavbarRoleFromToken(token)) {
@@ -35,35 +44,21 @@ export async function middleware(request: NextRequest) {
       }
 
       if (phase === 'pre' || phase === 'post') {
-        if (!pathname.startsWith(COMPETITION_PATH)) {
-          return NextResponse.redirect(new URL(COMPETITION_PATH, request.url));
-        }
-      } else if (phase === 'active') {
-        if (pathname.startsWith(COMPETITION_PATH)) {
-          return NextResponse.redirect(
-            new URL('/dashboard/challenge', request.url)
-          );
-        }
+        return NextResponse.redirect(new URL('/login', request.url));
       }
     }
   }
 
   if (pathname === '/') {
     const token = request.cookies.get('auth')?.value;
-    if (token) {
+    if (token && isPrivilegedNavbarRoleFromToken(token)) {
       return NextResponse.redirect(new URL('/dashboard', request.url));
     }
   }
 
-  const requestHeaders = new Headers(request.headers);
-  if (pathname.startsWith('/dashboard')) {
-    requestHeaders.set('x-dashboard-pathname', pathname);
-  }
-  return NextResponse.next({
-    request: { headers: requestHeaders },
-  });
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/dashboard', '/dashboard/:path*', '/'],
+  matcher: ['/dashboard', '/dashboard/:path*', '/', '/login'],
 };
