@@ -1,0 +1,12 @@
+services:
+  beast-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_BACKEND_URI: https://hydra.sdslabs.co/server
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      NODE_ENV: production
+    restart: on-failure

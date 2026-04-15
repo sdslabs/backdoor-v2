@@ -1,14 +1,20 @@
 export const ENVIROMENT = process.env.NODE_ENV;
 
-export const BASE_URL =
-  ENVIROMENT === 'development'
-    ? `${process.env.NEXT_PUBLIC_BACKEND_URI_DEV}`
-    : `${process.env.NEXT_PUBLIC_BACKEND_URI_PROD}`;
+/** Set at Docker/CI build time to pin the public API origin (overrides dev/prod split). */
+function publicBackendBase(): string {
+  const pinned = process.env.NEXT_PUBLIC_BACKEND_URI?.trim();
+  if (pinned) return pinned;
+  if (ENVIROMENT === 'development') {
+    return `${process.env.NEXT_PUBLIC_BACKEND_URI_DEV ?? ''}`;
+  }
+  return `${process.env.NEXT_PUBLIC_BACKEND_URI_PROD ?? ''}`;
+}
 
-export const API_BASE_URL =
-  ENVIROMENT === 'development'
-    ? `${process.env.NEXT_PUBLIC_BACKEND_URI_DEV}/api`
-    : `${process.env.NEXT_PUBLIC_BACKEND_URI_PROD}/api`;
+const backendBase = publicBackendBase();
+
+export const BASE_URL = backendBase;
+
+export const API_BASE_URL = `${backendBase.replace(/\/$/, '')}/api`;
 
 /** Set on login; read server-side in `getCurrentUser`. */
 export const SESSION_USERNAME_COOKIE = 'username';
