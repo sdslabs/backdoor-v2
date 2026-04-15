@@ -1,5 +1,10 @@
 import { LocalScheduleTimes } from '@/components/home/local-schedule-times';
 import { beastTimeToMillis } from '@/lib/competition/schedule';
+import {
+  HYDRA_ABOUT_PARAGRAPHS,
+  HYDRA_PRIZE_BULLETS,
+  HYDRA_PRIZES_INTRO,
+} from '@/lib/home/hydra-static-copy';
 import { getCompetitionInfoSSR } from '@/lib/server/competition-info';
 
 export default async function HomePage() {
@@ -18,31 +23,29 @@ export default async function HomePage() {
           <h2 className="font-display text-2xl text-foreground sm:text-3xl">
             About
           </h2>
-          {info?.about ? (
-            <p className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground sm:text-base">
-              {info.about}
-            </p>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              No description has been published yet.
-            </p>
-          )}
+          <div className="flex flex-col gap-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
+            {HYDRA_ABOUT_PARAGRAPHS.map((paragraph, i) => (
+              <p key={i}>{paragraph}</p>
+            ))}
+          </div>
         </div>
 
         <div className="flex min-h-0 flex-col gap-10 overflow-y-auto py-8 pl-4 sm:py-10 md:min-h-[min(60vh,32rem)] md:pl-8">
           <div>
             <h2 className="mb-4 font-display text-2xl text-foreground sm:text-3xl">
-              Prizes
+              Prizes and Recognition
             </h2>
-            {info?.prizes ? (
-              <p className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground sm:text-base">
-                {info.prizes}
-              </p>
-            ) : (
-              <p className="text-sm text-muted-foreground">
-                No prize information yet.
-              </p>
-            )}
+            <p className="mb-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
+              {HYDRA_PRIZES_INTRO}
+            </p>
+            <ul className="list-disc space-y-3 pl-5 text-sm leading-relaxed text-muted-foreground sm:text-base">
+              {HYDRA_PRIZE_BULLETS.map(({ title, body }) => (
+                <li key={title}>
+                  <span className="font-medium text-foreground">{title}:</span>{' '}
+                  {body}
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div>

@@ -108,6 +108,17 @@ function apiErrorMessage(data: unknown): string {
   return 'Request failed';
 }
 
+/** Beast returns DB errors verbatim in `error`; normalize common cases for the UI. */
+function formatRegisterApiError(raw: string): string {
+  if (
+    /uni_users_email/i.test(raw) ||
+    /duplicate key.*uni_users_email/i.test(raw)
+  ) {
+    return 'This email is already registered. Use Log in instead of signing up again.';
+  }
+  return raw;
+}
+
 export async function handleUserRegistration(
   prevState: unknown,
   formData: FormData
@@ -135,7 +146,7 @@ export async function handleUserRegistration(
         success: false,
         message: 'Failed to create user',
         errors: {
-          general: apiErrorMessage(data),
+          general: formatRegisterApiError(apiErrorMessage(data)),
         },
       };
     }
