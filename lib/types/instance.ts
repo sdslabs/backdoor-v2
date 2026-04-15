@@ -31,15 +31,6 @@ export interface InstanceChallenge {
   hints?: { id: number; points: number; description: string }[];
 }
 
-// API response types
-export interface HTTPErrorResp {
-  error: string;
-}
-
-export interface HTTPPlainResp {
-  message: string;
-}
-
 // Check solution response (for sadserver challenges)
 export interface CheckSolutionResponse {
   message: string;

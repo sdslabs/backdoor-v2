@@ -1,4 +1,5 @@
-import { InstanceResponse, HTTPPlainResp, CheckSolutionResponse } from '@/lib/types/instance';
+import { InstanceResponse, CheckSolutionResponse } from '@/lib/types/instance';
+import type { HTTPPlainResp } from '@/lib/types/http-responses';
 import { getAuthenticatedAxios } from '../axios';
 
 // User instance mutations
@@ -138,7 +139,9 @@ export const adminKillChallengeInstances = async (
 ): Promise<HTTPPlainResp> => {
   try {
     const axios = await getAuthenticatedAxios();
-    const res = await axios.delete(`/admin/instances/challenge/${challengeName}`);
+    const res = await axios.delete(
+      `/admin/instances/challenge/${challengeName}`
+    );
     console.log('Admin kill challenge instances response:', res.data);
     return res.data;
   } catch (err) {

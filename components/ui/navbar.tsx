@@ -2,6 +2,7 @@
 
 import {
   FilePenLineIcon,
+  LogOut,
   LucideIcon,
   Medal,
   Swords,
@@ -16,6 +17,8 @@ import { Button } from './button';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import NotificationPopover from '@/components/notification/notification-popover';
+import { CompetitionNavbarTimer } from '@/components/ui/competition-navbar-timer';
+import { useAuthStore } from '@/lib/stores/auth-store';
 
 // Types
 interface NavPages {
@@ -35,6 +38,26 @@ interface NavbarActions {
   pages: NavPages[];
   sideActions: SideAction[];
 }
+
+export type NavbarCompetitionGate =
+  | {
+      mode: 'pre';
+      competitionName: string;
+      targetEpochMs: number;
+    }
+  | {
+      mode: 'post';
+      competitionName: string;
+    };
+
+/** Shown in the full nav (not on the contestant gate screen). */
+export type NavbarCompetitionTimer =
+  | {
+      kind: 'countdown';
+      targetEpochMs: number;
+      label: string;
+    }
+  | { kind: 'ended' };
 
 // User and admin configs
 const USER_ACTIONS: NavbarActions = {
@@ -119,11 +142,47 @@ const ADMIN_ACTIONS: NavbarActions = {
   ],
 };
 
-const Navbar: React.FC<{ sessionAdminNav: boolean }> = ({
-  sessionAdminNav,
-}) => {
+const Navbar: React.FC<{
+  sessionAdminNav: boolean;
+  competitionGate?: NavbarCompetitionGate;
+  competitionTimer?: NavbarCompetitionTimer;
+}> = ({ sessionAdminNav, competitionGate, competitionTimer }) => {
   const pathname = usePathname();
+  const logout = useAuthStore((s) => s.logout);
   const { pages, sideActions } = sessionAdminNav ? ADMIN_ACTIONS : USER_ACTIONS;
+
+  if (competitionGate) {
+    return (
+      <div className="flex flex-row items-center py-4 gap-4 bg-background/70 backdrop-blur-md shadow-lg px-4">
+        <h1 className="text-2xl font-display text-primary shrink-0">hydra</h1>
+        <span className="text-sm text-muted-foreground truncate max-w-[min(40vw,14rem)]">
+          {competitionGate.competitionName}
+        </span>
+        <div className="flex flex-1 flex-row items-center justify-center min-w-0">
+          {competitionGate.mode === 'pre' ? (
+            <CompetitionNavbarTimer
+              targetEpochMs={competitionGate.targetEpochMs}
+              label="Starts in"
+            />
+          ) : (
+            <span className="text-sm font-medium text-muted-foreground">
+              Competition has ended
+            </span>
+          )}
+        </div>
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          className="ml-auto shrink-0 cursor-pointer normal-case gap-2"
+          onClick={() => logout()}
+        >
+          <LogOut className="size-4" />
+          Log out
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-row items-center py-4 gap-4 bg-background/70 backdrop-blur-md shadow-lg">
@@ -147,7 +206,21 @@ const Navbar: React.FC<{ sessionAdminNav: boolean }> = ({
           </Link>
         ))}
       </div>
-      <div className="flex flex-row items-center gap-2 ml-auto">
+      {competitionTimer ? (
+        <div className="flex flex-1 min-w-0 flex-row items-center justify-center px-2">
+          {competitionTimer.kind === 'countdown' ? (
+            <CompetitionNavbarTimer
+              targetEpochMs={competitionTimer.targetEpochMs}
+              label={competitionTimer.label}
+            />
+          ) : (
+            <span className="text-sm font-medium text-muted-foreground whitespace-nowrap">
+              Competition has ended
+            </span>
+          )}
+        </div>
+      ) : null}
+      <div className="flex flex-row items-center gap-2 ml-auto shrink-0">
         {sideActions.map((action, index) => {
           if (action.type === 'link') {
             return (

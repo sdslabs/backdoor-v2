@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { useStepper } from '@/components/ui/stepper';
 import { handleUserRegistration } from '@/lib/api/auth/sign-up';
-import { BHAWAN_OPTIONS } from '@/lib/constants';
+import { BHAWAN_LABELS, BHAWAN_OPTIONS } from '@/lib/constants';
 import { useEmailStore } from '@/lib/stores/email-store';
 import { cn } from '@/lib/utils';
 import { useActionState, useEffect } from 'react';
@@ -69,7 +69,7 @@ const RegisterUser = () => {
           </option>
           {BHAWAN_OPTIONS.map((b) => (
             <option key={b} value={b}>
-              {b}
+              {BHAWAN_LABELS[b]}
             </option>
           ))}
         </select>
