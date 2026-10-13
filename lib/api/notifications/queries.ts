@@ -1,10 +1,10 @@
 import { Notification } from '@/lib/types';
-import { getUnauthenticatedAxios } from '../axios';
+import { getAuthenticatedAxios } from '../axios';
 
 const fetchRecentNotifications = async () => {
-  const axios = getUnauthenticatedAxios();
+  const axios = await getAuthenticatedAxios();
   const res = await axios.get('/notification/available');
-  console.log(res);
+  // console.log(res);
   if (!res) {
     throw new Error('Failed to fetch notifications');
   }
