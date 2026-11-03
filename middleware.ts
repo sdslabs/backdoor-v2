@@ -2,23 +2,18 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname.startsWith('/dashboard')) {
-    const token = request.cookies.get('auth')?.value;
-    if (!token) {
-      return NextResponse.redirect(new URL('/', request.url));
-    }
-  }
-
+  // Temporarily serve the splash for every page without removing existing routes.
   if (request.nextUrl.pathname === '/') {
-    const token = request.cookies.get('auth')?.value;
-    if (token) {
-      return NextResponse.redirect(new URL('/dashboard', request.url));
-    }
+    return NextResponse.next();
   }
 
-  return NextResponse.next();
+  const url = request.nextUrl.clone();
+  url.pathname = '/';
+  return NextResponse.rewrite(url);
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/'],
+  matcher: [
+    '/((?!api(?:/|$)|_next(?:/|$)|favicon.ico$|robots.txt$|sitemap.xml$).*)',
+  ],
 };

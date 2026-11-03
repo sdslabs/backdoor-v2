@@ -1,15 +1,6 @@
 import type { NextConfig } from 'next';
 
-const nextConfig: NextConfig = {
-  redirects: async () => {
-    return [
-      {
-        source: '/dashboard',
-        destination: '/dashboard/challenge',
-        permanent: true,
-      },
-    ];
-  },
-};
+// Page routing is temporarily handled by the splash middleware.
+const nextConfig: NextConfig = {};
 
 export default nextConfig;

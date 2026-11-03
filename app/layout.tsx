@@ -6,8 +6,9 @@ import { Toaster } from '@/components/ui/sonner';
 import Providers from './providers';
 
 export const metadata: Metadata = {
-  title: 'Backdoor',
-  description: 'A CTF platform for everyone',
+  title: 'Hydra',
+  description:
+    'A fork of backdoor. Stay tuned for competitions and further information.',
 };
 
 export default function RootLayout({
