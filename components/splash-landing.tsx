@@ -4,7 +4,7 @@ export default function SplashLanding() {
   return (
     <section className="min-h-screen flex flex-col items-center justify-center gap-8 px-4">
       <h1 className="text-8xl sm:text-9xl font-display text-primary text-center">
-        hydra
+        beast
       </h1>
       <p className="max-w-sm text-center text-muted-foreground">
         Stay tuned for upcoming competitions and further information.
